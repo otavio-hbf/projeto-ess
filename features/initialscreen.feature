@@ -35,5 +35,5 @@ Scenario: Personalized Recommendations
     And the user has an established listening history
     When the home page is loaded
     Then the page should display personalized recommendations based on the user's listening preferences
-    And the recommendations should include a mix of familiar and potentially new artists, playlist or genres
+    And the recommendations should include a mix of familiar and potentially new artists or genres
     And the user should be able to easily access and play the recommended content
