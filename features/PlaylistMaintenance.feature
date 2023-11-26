@@ -23,7 +23,16 @@ And finds the song "Construção"
 When the option to add to the playlist is selected
 And the user chooses the playlist "Breakfast" from the existing playlist options
 Then the song "Construção" is added to the playlist "Breakfast"
-And visually confirmed to the user.
+And visually confirmed to the user
+
+Scenario: Excluding Songs from a Playlist
+Given the user with login "Pedro" accesses the "Playlist Library" page
+And selects the playlist "Chill Vibes" from the list of playlists
+When the user chooses the option to manage songs in the playlist
+And selects the song "Relaxing Melody" to be removed
+And confirms the exclusion
+Then the song "Relaxing Melody" is no longer part of the playlist "Chill Vibes"
+And a confirmation of the song exclusion is displayed to the user
 
 Scenario: Failure in Updating Song in the Playlist
 Given the user with login "Pedro" accesses the "Breakfast" playlist page
