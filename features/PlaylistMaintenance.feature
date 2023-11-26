@@ -36,5 +36,5 @@ Scenario: Falha na Exclusão de Playlist
 Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists"
 When seleciona a opção para excluir a playlist “Café da Manhã”
 And uma interrupção na conexão com o servidor acontece
-Then uma mensagem de erro é exibida, indicando que a exclusão não pôde ser concluída devido a uma falha no servidor
+Then uma mensagem de erro é exibida, indicando que a exclusão não pôde ser concluída devido a uma falha na internet
 And playlist “Café da Manhã” permanece na lista de playlists
