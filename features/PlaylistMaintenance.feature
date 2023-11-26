@@ -1,50 +1,60 @@
-Feature: Manutenção da biblioteca de playlists
-As a usuário cadastrado no aplicativo
-I want to ser capaz de criar, editar e excluir músicas em playlists
-So that eu possa personalizar e agrupar as músicas que escuto
+Feature: Playlist Library Maintenance
+As a registered user in the application
+I want to be able to create, edit, and delete songs in playlists
+So that I can customize and group the songs I listen to
 
-Scenario: Criação de playlists
-Given o usuário com login "Pedro" acessa a página "Biblioteca de playlists"
-When o campo de "Nova playlist+" é selecionado 
-And o usuário insere o nome "Sessões da tarde"
-And confirma a criação
-Then a playlist recém-criada é exibida ao usuário
-And  usuário recebe a opção de adicionar músicas à playlist recém-criada
+Scenario: Playlist Creation
+Given the user with login "Pedro" accesses the "Playlist Library" page
+When the "New Playlist+" field is selected
+And the user enters the name "Afternoon Sessions"
+And confirms the creation
+Then the newly created playlist is displayed to the user
+And the user receives the option to add songs to the newly created playlist
 
-Scenario: Exclusão de Playlists
-Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists"
-And na lista de playlists, o usuário seleciona a opção para excluir a playlist “Café da Manhã”
-When a confirmação de exclusão da playlist “Café da Manhã” é assentida pelo usuário
-Then a playlist “Café da Manhã” é removida da página "Biblioteca de playlists" do usuário
+Scenario: Playlist Deletion
+Given the user with login "Pedro" accesses the "Playlist Library" page
+And in the list of playlists, the user selects the option to delete the playlist "Breakfast"
+When the confirmation to delete the playlist "Breakfast" is accepted by the user
+Then the playlist "Breakfast" is removed from the user's "Playlist Library" page
 
-Scenario: Adição de uma música em um playlist
-Given o usuário com login “Pedro” acessa a página de busca por músicas.
-And encontra a música “Construção”
-When a opção para adicionar à playlist é selecionada
-And o usuário escolhe a playlist “Café da Manhã” das opções de playlists existentes
-Then a música “Construção” é adicionada à playlist “Café da Manhã” 
-And confirmada visualmente para o usuário.
+Scenario: Adding a Song to a Playlist
+Given the user with login "Pedro" accesses the music search page.
+And finds the song "Construção"
+When the option to add to the playlist is selected
+And the user chooses the playlist "Breakfast" from the existing playlist options
+Then the song "Construção" is added to the playlist "Breakfast"
+And visually confirmed to the user.
 
-Scenario: Falha na atualização de música na playlist
-Given o usuário com login “Pedro” acessa a página da playlist “Café da Manhã”
-When tenta reorganizar a ordem da música “Construção”
-And ocorre uma interrupção na conexão com o servidor
-Then uma mensagem de erro é exibida, informando ao usuário sobre a falha na atualização da ordem da música
-And o estado anterior da ordem das músicas na playlist é mantido.
+Scenario: Failure in Updating Song in the Playlist
+Given the user with login "Pedro" accesses the "Breakfast" playlist page
+When trying to rearrange the order of the song "Construção"
+And there is an interruption in the connection with the server
+Then an error message is displayed, informing the user about the failure to update the song order
+And the previous state of the song order in the playlist is maintained.
 
+<<<<<<< HEAD
 Scenario: Falha na exclusão de playlist
 Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists"
 When seleciona a opção para excluir a playlist “Café da Manhã”
 And uma interrupção na conexão com o servidor acontece
 Then uma mensagem de erro é exibida, indicando que a exclusão não pôde ser concluída devido a uma falha na internet
 And playlist “Café da Manhã” permanece na lista de playlists
+=======
+Scenario: Failure in Playlist Deletion
+Given the user with login "Pedro" accesses the "Playlist Library" page
+When selecting the option to delete the playlist "Breakfast"
+And an interruption in the connection with the server occurs
+Then an error message is displayed, indicating that the deletion could not be completed due to a server failure
+And the playlist "Breakfast" remains in the list of playlists
+>>>>>>> b774f7e (fix: translate the code to english in PlaylistMaintenance)
 
-Scenario: Reorganização da ordem das músicas em uma playlist
-Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists"
-When seleciona a playlist "Favoritas da Semana" para reorganizar
-And arrasta e solta a música “Construção” para a primeira da lista
-Then a ordem atualizada das músicas é salva automaticamente na playlist
+Scenario: Reorganization of Song Order in a Playlist
+Given the user with login "Pedro" accesses the "Playlist Library" page
+When selecting the playlist "Weekly Favorites" to rearrange
+And drags and drops the song "Construção" to the first in the list
+Then the updated order of songs is automatically saved in the playlist
 
+<<<<<<< HEAD
 Scenario: Renomear playlist
 Given que o usuário com login "Pedro" está na página "Biblioteca de Playlists"
 When ele localiza a playlist chamada "Treino Intenso"
@@ -52,3 +62,12 @@ And escolhe a opção de editar o nome da playlist
 And insere o novo nome desejado "Favoritas da Semana"
 And confirma a atualização
 Then a playlist é exibida com o novo nome "Favoritas da Semana" na lista de playlists do usuário
+=======
+Scenario: Playlist Name Update
+Given the user with login "Pedro" accesses the "Playlist Library" page
+When locating the playlist "Intense Workout"
+And selecting the option to edit the playlist name
+And entering the new desired name "Weekly Favorites"
+And confirming the update
+Then the playlist is displayed with the new name "Weekly Favorites" in the user's playlist list
+>>>>>>> b774f7e (fix: translate the code to english in PlaylistMaintenance)
