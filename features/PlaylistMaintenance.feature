@@ -24,3 +24,10 @@ When a opção para adicionar à playlist é selecionada
 And o usuário escolhe a playlist “Café da Manhã” das opções de playlists existentes
 Then a música “Construção” é adicionada à playlist “Café da Manhã” 
 And confirmada visualmente para o usuário.
+
+Scenario: Falha na atualização de música na playlist
+Given o usuário com login “Pedro” acessa a página da playlist “Café da Manhã”
+When tenta reorganizar a ordem da música “Construção”
+And ocorre uma interrupção na conexão com o servidor
+Then uma mensagem de erro é exibida, informando ao usuário sobre a falha na atualização da ordem da música
+And o estado anterior da ordem das músicas na playlist é mantido.
