@@ -44,3 +44,11 @@ Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists
 When seleciona a playlist "Favoritas da Semana" para reorganizar
 And arrasta e solta a música “Construção” para a primeira da lista
 Then a ordem atualizada das músicas é salva automaticamente na playlist
+
+Scenario: Atualização de nome de playlist
+Given o usuário com login “Pedro” acessa a página "Biblioteca de playlists"
+When localiza a playlist "Treino Intenso"
+And seleciona a opção para editar o nome da playlist
+And insere o novo nome "Favoritas da Semana" desejado
+And confirma a atualização
+Then a playlist é exibida com o novo nome "Favoritas da Semana" na lista de playlists do usuário
