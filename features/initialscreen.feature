@@ -31,7 +31,7 @@ Scenario: Loading or Display Issues
     And the home page should not display the expected content correctly
 
 Scenario: Personalized Recommendations
-    Given the user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSobeMais"
+    Given the user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
     And the user has an established listening history
     When the home page is loaded
     Then the page should display personalized recommendations based on the user's listening preferences
