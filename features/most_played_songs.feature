@@ -4,6 +4,15 @@ Feature: Most Played Songs
     I want see my most played songs of the month
     So that I can create new playlists and get to know my taste in music
 
+Scenario: User requests a new playlist of the most played songs of the month
+    Given I'm logged in as an user
+    And I have the songs "Aquarela", "Lenha", and "Yellow Submarine" in my most played songs
+    When I request a new playlist of my most played songs
+    Then the system generates a playlist titled "Top Hits"
+    And includes "Aquarela", "Lenha", and "Yellow Submarine" in the playlist
+    And allows me to play the playlist
+    And allows me to save it for future listening
+
 Scenario: New user who has never played a song before
     Given I've created a new account with user "pedro", password "123"
     And I logged in with user "pedro", password "123"
