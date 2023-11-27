@@ -33,3 +33,4 @@ Feature: Gerar link para páginas
 		Given: C
 		When: C
 		Then: C
+	Cenário: Commit 1 da branch dev
