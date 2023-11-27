@@ -1,0 +1,4 @@
+Feature: Gerar link para páginas
+	As: um usuário do batucast
+	I want to: gerar links para faixas específicas ou playlists
+	So that: eu possa compartilhar faixas específicas ou playlists com outras pessoas.
