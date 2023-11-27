@@ -13,6 +13,15 @@ Scenario: User requests a new playlist of the most played songs of the month
     And allows me to play the playlist
     And allows me to save it for future listening
 
+Scenario: User requests a new playlist based on most played genre
+    Given I'm logged in as an user
+    And I have songs from the genres "Rock", "Pop", and "Jazz" in my most played list
+    When I request a new playlist based on the most played genre
+    Then the system identifies the predominant genre among my most played songs
+    And generates a playlist titled with the genre name
+    And allows me to play the playlist
+    And allows me to save it for future listening
+
 Scenario: New user who has never played a song before
     Given I've created a new account with user "pedro", password "123"
     And I logged in with user "pedro", password "123"
