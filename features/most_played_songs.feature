@@ -32,3 +32,4 @@ Scenario: User has disabled tracking of play history
     Then the system displays an empty list
     And the system indicates that play history tracking is disabled
     And does not provide any most played song information
+    And throws an internal error
