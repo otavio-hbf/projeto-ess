@@ -26,7 +26,7 @@ Scenario: User asks for detailed stats
     And I played the song "Aquarela", which is 3 minutes long, 4 times
     When I select "Detailed Statistics"
     Then the system will correctly calculate the total play time of my songs
-    And the system will correctly calculate my most played genre
+    And will correctly calculate my most played genre
 
 Scenario: User attempts to access most played songs without logging in
     Given I am not logged into the system
