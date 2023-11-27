@@ -5,7 +5,7 @@ Feature: Most Played Songs
     So that I can create new playlists and get to know my taste in music
 
 Scenario: User requests a new playlist of the most played songs of the month
-    Given I'm logged in as an user
+    Given I'm logged in with user "pedro", password "123"
     And I have the songs "Aquarela", "Lenha", and "Yellow Submarine" in my most played songs
     When I request a new playlist of my most played songs
     Then the system generates a playlist titled "Top Hits"
