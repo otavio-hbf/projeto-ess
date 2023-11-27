@@ -35,7 +35,7 @@ Scenario: User attempts to access most played songs without logging in
     And does not show any song statistics or information
 
 Scenario: User has disabled tracking of play history
-    Given I am logged in
+    Given I am logged in with user "pedro", password "123"
     And I have disabled the tracking of my play history in settings
     When I attempt to view my most played songs
     Then the system displays an empty list
