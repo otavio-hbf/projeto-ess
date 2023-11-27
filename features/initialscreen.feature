@@ -37,3 +37,12 @@ Scenario: Personalized Recommendations
     Then the page should display personalized recommendations based on the user's listening preferences
     And the recommendations should include a mix of familiar and potentially new artists or genres
     And the user should be able to easily access and play the recommended content
+
+Scenario: New Releases Section
+    Given the user is logged with login "ohbfinho" and password "oSportNaoSubiu" in to the music streaming service
+    And the home page is loaded
+    When the user navigates to the "New Releases" section
+    Then the user should see a collection of recently released albums and singles
+    And each release card should include the album or single artwork, artist name, and release details
+    And the user should be able to preview or add any new release to their library directly from the home page
+
