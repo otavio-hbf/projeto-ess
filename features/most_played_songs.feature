@@ -33,3 +33,9 @@ Scenario: User has disabled tracking of play history
     And the system indicates that play history tracking is disabled
     And does not provide any most played song information
     And throws an internal error
+
+Scenario: User asks for most played songs
+    Given I am logged in with user "pedro", password "123"
+    And I have played songs before
+    When I open my most played songs
+    Then the system will display me a list of all my most played songs of the month
