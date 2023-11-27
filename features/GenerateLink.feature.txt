@@ -23,3 +23,8 @@ Feature: Gerar link para páginas
 		And: Ocorre um erro ao copiar o link gerado para a área de transferência
 		Then: Será gerado um link para a faixa "Abacaxi de Irará"
 		And: Na área de transferência de "Arnaldo" estará um link para a faixa "Wire Sponge Theme".
+
+	Cenário: Cenário Experimental:
+		Given: A
+		When: A
+		Then: A
