@@ -8,7 +8,7 @@ Feature: Gerar link para páginas
 		When: Ele solicita a criação de um link de acesso para a faixa “Abacaxi de Irará” 
 		Then: O link para a faixa “Abacaxi de Irará” será copiado para a área de transferência de Arnaldo
 
-	Cenário: Falha na Disponibilidade da Faixa:
+	Cenário: Falha na Disponibilidade da Faixa
 		Given: Usuário de nome “Arnaldo” se encontra na página da faixa “Abacaxi de Irará”
 		And: Em sua área de transferência está um link para a faixa "Wire Sponge Theme"
 		When: Ele solicita a criação de um link de acesso para a faixa “Abacaxi de Irará”
@@ -16,7 +16,7 @@ Feature: Gerar link para páginas
 		Then: Não será gerado um link para a faixa "Abacaxi de Irará"
 		And: Na área de transferência de "Arnaldo" estará um link para a faixa "Wire Sponge Theme".
 
-	Cenário: Falha ao copiar para a área de transferência:
+	Cenário: Falha ao copiar para a área de transferência
 		Given: Usuário de nome “Arnaldo” se encontra na página da faixa “Abacaxi de Irará”
 		And: Em sua área de transferência está um link para a faixa "Wire Sponge Theme"
 		When: Ele solicita a criação de um link de acesso para a faixa “Abacaxi de Irará”
@@ -24,3 +24,13 @@ Feature: Gerar link para páginas
 		Then: Será gerado um link para a faixa "Abacaxi de Irará"
 		And: Na área de transferência de "Arnaldo" estará um link para a faixa "Wire Sponge Theme".
 		And: B
+
+	Cenário: Cenário Experimental:
+		Given: A
+		When: A
+		Then: A
+
+	Cenário: Final:
+		Given: C
+		When: C
+		Then: C
