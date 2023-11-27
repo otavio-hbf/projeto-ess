@@ -7,3 +7,11 @@ Feature: Gerar link para páginas
 		Given: Usuário de nome “Arnaldo” se encontra na página da faixa “Abacaxi de Irará”
 		When: Ele solicita a criação de um link de acesso para a faixa “Abacaxi de Irará” 
 		Then: O link para a faixa “Abacaxi de Irará” será copiado para a área de transferência de Arnaldo
+
+	Cenário: Falha na Disponibilidade da Faixa:
+		Given: Usuário de nome “Arnaldo” se encontra na página da faixa “Abacaxi de Irará”.
+		And: Em sua área de transferência está um link para a faixa "Wire Sponge Theme".
+		When: Ele solicita a criação de um link de acesso para a faixa “Abacaxi de Irará”.
+		And: A faixa se econtra temporariamente indisponível no sistema.
+		Then: Não será gerado um link para a faixa "Abacaxi de Irará".
+		And: Na área de transferência de "Arnaldo" estará um link para a faixa "Wire Sponge Theme".
