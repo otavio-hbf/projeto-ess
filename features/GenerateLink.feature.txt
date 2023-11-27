@@ -34,3 +34,5 @@ Feature: Gerar link para páginas
 		When: C
 		Then: C
 	Cenário: Commit 1 da branch dev
+
+	Cenário: Commit 2 da branch dev
