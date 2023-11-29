@@ -8,3 +8,4 @@ Given o sistema possui a conta de e-mail “ze@gmail.com” e senha “ze123” 
 When o sistema recebe uma tentativa de login com os campos de e-mail  e senha preenchidos com “ze@gmail.com” e “ze123”, respectivamente
 Then o sistema confirma que essa conta possui cadastro
 And o sistema permite o acesso do aplicativo
+And o sistema abre o aplicativo na tela inicial
