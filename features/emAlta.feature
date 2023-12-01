@@ -1,4 +1,5 @@
 #segue abaixo a feature.
+#segue também os scenarios
 
 Feature: Em alta
 As um usuário
@@ -8,7 +9,6 @@ So that eu possa ver os hits do momento.
 Scenario 1: Acessar as músicas que estão em alta
 Given o usuário com login ABestetica e senha chuva123 está na aba do “em alta”
 When usuário tentar acessar as músicas em alta através de uma requisição GET
-
 
 Scenario 2: Na aba de top músicas, clicar no botão “voltar”
 Given o usuário com login ABestetica e senha chuva123 está na aba do “top músicas”
