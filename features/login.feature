@@ -22,6 +22,13 @@ And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
 “ze123”
 When preencho o campo de email com “ze@gmail.com”
 And preencho o campo de senha com “ze123”
+<<<<<<< HEAD
 Then sou encaminhado para página incial do aplicativo
 
 13-main
+=======
+Then sou encaminhado para a página incial do aplicativo
+
+13-1-dev
+13-2-dev
+>>>>>>> dev
