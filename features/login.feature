@@ -22,4 +22,4 @@ And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
 “ze123”
 When preencho o campo de email com “ze@gmail.com”
 And preencho o campo de senha com “ze123”
-Then sou encaminhado para a página incial do aplicativo
+Then sou encaminhado para página incial do aplicativo
