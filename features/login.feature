@@ -1,51 +1,46 @@
-Feature: Login dos usuários
-As a usuário cadastrado no aplicativo
-I want to entrar no aplicativo usando meu e-mail e senha cadastrados
-Then após login, tenho acesso as funcionalidades do aplicativo
+Feature: Users login
+As a user registered on the application
+I want to log into the application using my registered email and password
+Then after logging in, I have access to the application's features
 
-Scenario: Login realizado com sucesso
-Given estou na página de “Login”
-And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
-“ze123”
-When preencho o campo de email com “ze@gmail.com”
-And preencho o campo de senha com “ze123”
-Then sou encaminhado para página incial do aplicativo
+Scenario: Login successful
+Given I am on the “Login” page
+And there is a registered user with the email “ze@gmail.com” and password “ze123”
+When I fill in the email field with “ze@gmail.com”
+And I fill in the password field with “ze123”
+Then I am redirected to the application's home page
 
-Scenario: Tentativa de login com e-mail e/ou senha incorretos
-Given estou na página de “Login”
-And não existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
-“ze321”
-When preencho o campo de email com “ze@gmail.com”
-And preencho o campo de senha com “ze321”
-Then aparece a mensagem "e-mail ou senha incorretos" na tela
-And permaneço na tela de login
+Scenario: Attempt to login with incorrect email and/or password
+Given I am on the “Login” page
+And there is no registered user with the email “ze@gmail.com” and password “ze321”
+When I fill in the email field with “ze@gmail.com”
+And I fill in the password field with “ze321”
+Then a login failure message appears
+And I remain on the login screen
 
-Scenario: tentativa de login com campo de e-mail e/ou senha em branco
-Given estou na página de "Login"
-And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
-“ze123”
-When preencho o campo de email com “ze@gmail.com”
-And deixo o campo de senha em branco
-And aperto em no botão de entrar
-Then aparece uma mensagem de falha no login
+Scenario: login attempt with blank email and/or password field
+Given I am on the "Login" page
+And there is a registered user with the email “ze@gmail.com” and password “ze123”
+When I fill in the email field with “ze@gmail.com”
+And I leave the password field blank
+And I click on the enter button
+Then a login failure message appears
 
-Scenario: Redefinição de senha
-Given estou na página de "Login"
-And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
-“ze123”
-When aperto no link de "esqueci a senha"
-And preencho o campo de e-mail com "ze@gmail.com"
-And um e-mail é enviado para "ze@gmail.com" com o código "3334"
-And preencho o campo do código com "3334"
-And preencho o campo de nova senha com "ze456"
-Then aparece uma mensagem de confirmação de nova senha
+Scenario: Password reset
+Given I am on the "Login" page
+And there is a registered user with the email “ze@gmail.com” and password “ze123”
+When I click on the "forgot password" link
+And I fill in the email field with "ze@gmail.com"
+And an email is sent to "ze@gmail.com" with the code "3334"
+And I fill in the code field with "3334"
+And I fill in the new password field with "ze456"
+Then a new password confirmation message appears
 
-Scenario: Tentativa de redefinição de senha com código errado
-Given estou na página de "Login"
-And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
-“ze123”
-When aperto no link de "esqueci a senha"
-And preencho o campo de e-mail com "ze@gmail.com"
-And um e-mail é enviado para "ze@gmail.com" com o código "3334"
-And preencho o campo do código com "4445"
-Then aparece uma mensagem de erro e tente novamente
+Scenario: Attempting to reset password with wrong code
+Given I am on the "Login" page
+And there is a registered user with the email “ze@gmail.com” and password “ze123”
+When I click on the "forgot password" link
+And I fill in the email field with "ze@gmail.com"
+And an email is sent to "ze@gmail.com" with the code "3334"
+And I fill in the code field with "4445"
+Then a login failure message appears
