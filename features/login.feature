@@ -22,13 +22,13 @@ And existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
 “ze123”
 When preencho o campo de email com “ze@gmail.com”
 And preencho o campo de senha com “ze123”
-<<<<<<< HEAD
 Then sou encaminhado para página incial do aplicativo
 
-13-main
-=======
-Then sou encaminhado para a página incial do aplicativo
-
-13-1-dev
-13-2-dev
->>>>>>> dev
+Scenario: Tentativa de login com e-mail e/ou senha incorretos
+Given estou na página de “Login”
+And não existe um usuário cadastrado com o e-mail “ze@gmail.com” e senha
+“ze321”
+When preencho o campo de email com “ze@gmail.com”
+And preencho o campo de senha com “ze321”
+Then aparece a mensagem "e-mail ou senha incorretos" na tela
+And permaneço na tela de login
