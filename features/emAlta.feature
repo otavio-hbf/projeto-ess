@@ -17,11 +17,19 @@ When usuário clica no botão “voltar”
 And uma requisição GET é enviada ao servidor
 Then usuário é redirecionado para a aba principal do “em alta”
 
+<<<<<<< HEAD
 #...ajuste
+=======
+>>>>>>> dev
 Scenario 3: Acessar os artistas que estão em alta
 Given o usuário com login ABestetica e senha chuva123 está na aba do “top artistas”
 When usuário tentar acessar os artistas que estão em alta através de uma requisição GET
 Then usuário é redirecionado para aba dos top artistas.
 
+<<<<<<< HEAD
 #ateração branch main
 #alteração 1 feita na branch dev
+=======
+#alteração 1 feita na branch dev
+#alteração 2 feita na branch dev
+>>>>>>> dev
