@@ -22,3 +22,5 @@ Scenario 3: Acessar os artistas que estão em alta
 Given o usuário com login ABestetica e senha chuva123 está na aba do “top artistas”
 When usuário tentar acessar os artistas que estão em alta através de uma requisição GET
 Then usuário é redirecionado para aba dos top artistas.
+
+#ateração branch main
