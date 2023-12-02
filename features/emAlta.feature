@@ -23,3 +23,4 @@ When usuário tentar acessar os artistas que estão em alta através de uma requ
 Then usuário é redirecionado para aba dos top artistas.
 
 #alteração 1 feita na branch dev
+#alteração 2 feita na branch dev
