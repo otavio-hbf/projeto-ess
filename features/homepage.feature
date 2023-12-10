@@ -1,6 +1,6 @@
 Feature: Initial Screen/Homepage
     As an user
-    I want to see recommended content and the contents I already" consume, and be able to access other important pages
+    I want to see recommended content and the contents I already consume, and be able to access other important pages
     So that I can find and enjoy content easily
 
     Scenario: Landing in the home page
