@@ -1,17 +1,17 @@
 Feature: Initial Screen/Homepage
     As an user
-    I want to see recommended content and the contents I already consume and be able to access other important pages
+    I want to see recommended content and the contents I already" consume, and be able to access other important pages
     So that I can find and enjoy content easily
 
-    Scenario: Landing in the initial page
+    Scenario: Landing in the home page
         Given I am a user with login "ohbfinho" and password "oSportNaoSubiu"
-        And I have already logged and the app before
-        When I access the app
+        And I have already logged at the website before
+        When I access the website
         Then I am at the initial page
 
     Scenario: Acessing personal page
         Given I am a user with login "ohbfinho" and password "oSportNaoSubiu"
-        And I have already logged and the app before
+        And I have already logged and the website before
         When I access the personal page
         Then My playlist, data and other information is shown to me
 
@@ -39,11 +39,16 @@ Feature: Initial Screen/Homepage
         And the recommendations should include a mix of familiar and potentially new artists or genres
         And the user should be able to easily access and play the recommended content
 
-    Scenario: New Releases Section
-        Given the user is logged with login "ohbfinho" and password "oSportNaoSubiu" in to the music streaming service
-        And the home page is loaded
-        When the user navigates to the "New Releases" section
-        Then the user should see a collection of recently released albums and singles
-        And each release card should include the album or single artwork, artist name, and release details
-        And the user should be able to preview or add any new release to their library directly from the home page
+    Scenario: Searching for Specific Content
+        Given The user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+        And The user is at the homepage
+        And They use the search bar to look for specific content
+        Then The search results should display relevant artists, albums, and playlists
+        And I should be able to click on any result to access detailed information or play the content.
+
+
+
+
+
+
 
