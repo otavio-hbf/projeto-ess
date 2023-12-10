@@ -4,16 +4,16 @@ I want to: see recommended content and the contents I already consume.
 And: also being able to access other important pages.
 
 Scenario: Landing in the home page
-	Given: I am a user with login "ohbfinho" and password "oSportNaoSubiu"
-	And: I have already logged at the website before
-	When: I access the website
-	Then: I am at the initial page 
+	Given I am a user with login "ohbfinho" and password "oSportNaoSubiu"
+	And I have already logged at the website before
+	When I access the website
+	Then I am at the initial page 
 
 Scenario: Acessing personal page
-	Given: I am a user with login "ohbfinho" and password "oSportNaoSubiu"
-	And: I have already logged and the website before
-	When: I access the personal page
-	Then: My playlist, data and other information is shown to me
+	Given I am a user with login "ohbfinho" and password "oSportNaoSubiu"
+	And I have already logged and the website before
+	When I access the personal page
+	Then My playlist, data and other information is shown to me
 
 Scenario: Content Update Failure
     	Given the user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
@@ -40,11 +40,11 @@ Scenario: Personalized Recommendations
     	And the user should be able to easily access and play the recommended content
 
 Scenario: Searching for Specific Content
-	Given: The user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
-	And: The user is at the homepage
-	And: They use the search bar to look for specific content
-	Then: The search results should display relevant artists, albums, and playlists
-	And: I should be able to click on any result to access detailed information or play the content.
+	Given The user is connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+	And The user is at the homepage
+	And They use the search bar to look for specific content
+	Then The search results should display relevant artists, albums, and playlists
+	And I should be able to click on any result to access detailed information or play the content.
 
 
 
