@@ -1,6 +1,6 @@
 Feature: Hot
 As an user
-I want to the top songs, artists, podcasts and playlists
+I want to the be able to access the top songs, artists, podcasts and playlists
 So that i can see the current most listened songs, artists, podcasts or playlists.
 
 Scenario: Access the top songs
@@ -34,3 +34,9 @@ And the container of "songs" shows the top 50 current songs, indicating the butt
 When the user clicks the options of "see less" of the top songs
 Then the list of the 50 current most played songs is not shown anymore
 And the screen displays the container of songs with only the top 5 preview.
+
+Scenario: Back to main menu
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees the "back to menu" button at the end of the page
+When she clicks it
+Then the user is redirected to the main menu
