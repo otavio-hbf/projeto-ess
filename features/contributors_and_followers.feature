@@ -18,5 +18,12 @@ Feature: Contributors and Followers
 	When the user "Thiago" selects the field "add contributors"
 	And sends an invite to the user with login "Otavio" to be a contributor
         And the user "Otavio" accepts the invite
-	Then anY user that enters the "AMV music" playlist page can see the name "Otavio" listed as contributor, alongside some aditional information
+	Then any user that enters the "AMV music" playlist page can see the name "Otavio" listed as contributor, alongside some aditional information
+
+    Scenario: Following a playlist
+        Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
+        And the user "Thiago" is not the owner of the playlist "Shrek soundtrack"
+        And the playlist "Shrek soundtrack" is public
+        When the "follow" field is selected
+        Then any user that enter the "Shrek soundtrack" playlist page can see the name "Thiago" listed as follower
         
