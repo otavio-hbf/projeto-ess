@@ -42,5 +42,11 @@ Feature: Contributors and Followers
         And the user "Otavio" is listed as the owner of that playlist
         When the user "Thiago" selects the name of the owner
 	Then the user "Thiago" will end up in the profile page for user "Otavio"
+
+    Scenario: Accessing the profile page of a contributor from the playlist page
+        Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
+        And the user "Pedro" is listed as one of the contributors of that playlist
+        When the user "Thiago" selects the name of the user "Pedro" in the list of contributors
+	Then the user "Thiago" will end up in the profile page for user "Pedro"
  
         
