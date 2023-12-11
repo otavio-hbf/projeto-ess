@@ -48,5 +48,11 @@ Feature: Contributors and Followers
         And the user "Pedro" is listed as one of the contributors of that playlist
         When the user "Thiago" selects the name of the user "Pedro" in the list of contributors
 	Then the user "Thiago" will end up in the profile page for user "Pedro"
+
+    Scenario: Accessing the profile page of a follower from the playlist page
+        Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
+        And the user "Luan" is listed as one of the followers of that playlist
+        When the user "Thiago" selects the name of the user "Luan" in the list of followers
+	Then the user "Thiago" will end up in the profile page for user "Luan"
  
         
