@@ -1,35 +1,36 @@
-#segue abaixo a feature.
-#segue também os scenarios
+Feature: Hot
+As an user
+I want to the top songs, artists, podcasts and playlists
+So that i can see the current most listened songs, artists, podcasts or playlists.
 
-Feature: Em alta
-As um usuário
-I want to ver as músicas, playlists, podcasts e artistas que estão em alta
-So that eu possa ver os hits do momento.
+Scenario 1: Access the top songs
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
+When the user clicks the options of "see more" of the top songs
+Then a list of the 50 current most played songs is shown.
 
-Scenario 1: Acessar as músicas que estão em alta
-Given o usuário com login ABestetica e senha chuva123 está na aba do “em alta”
-When usuário tentar acessar as músicas em alta através de uma requisição GET
-Then usuário é redirecionado para aba das top músicas.
+Scenario 2: Access the top artists
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
+When the user clicks the options of "see more" of the top artists
+Then a list of the 50 current most listened artists is shown.
 
-Scenario 2: Na aba de top músicas, clicar no botão “voltar”
-Given o usuário com login ABestetica e senha chuva123 está na aba do “top músicas”
-When usuário clica no botão “voltar”
-And uma requisição GET é enviada ao servidor
-Then usuário é redirecionado para a aba principal do “em alta”
+Scenario 3: Access the top podcasts
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
+When the user clicks the options of "see more" of the top podcasts
+Then a list of the 50 current most played podcasts is shown.
 
-<<<<<<< HEAD
-#...ajuste
-=======
->>>>>>> dev
-Scenario 3: Acessar os artistas que estão em alta
-Given o usuário com login ABestetica e senha chuva123 está na aba do “top artistas”
-When usuário tentar acessar os artistas que estão em alta através de uma requisição GET
-Then usuário é redirecionado para aba dos top artistas.
+Scenario 4: Access the top playlists
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
+When the user clicks the options of "see more" of the top playlists
+Then a list of the 50 current most played playlists is shown.
 
-<<<<<<< HEAD
-#ateração branch main
-#alteração 1 feita na branch dev
-=======
-#alteração 1 feita na branch dev
-#alteração 2 feita na branch dev
->>>>>>> dev
+Scenario 5: View less songs
+Given the user with login ABestetica and password chuva123 is in the "hot" page
+And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
+And the container of "songs" shows the top 50 current songs, indicating the button "see more" was pressed
+When the user clicks the options of "see less" of the top songs
+Then the list of the 50 current most played songs is not shown anymore
+And the screen displays the container of songs with only the top 5 preview.
