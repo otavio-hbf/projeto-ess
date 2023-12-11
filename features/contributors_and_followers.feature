@@ -37,6 +37,12 @@ Feature: Contributors and Followers
         When the "follow" field is selected
         Then any user that enter the "Shrek soundtrack" playlist page can see the name "Thiago" listed as follower
 
+    Scenario: Failure in following a playlist as its owner
+        Given the user with login "Thiago" is the owner of the playlist "AMV music"
+        And accesses the page of the playlist "AMV music"
+        When the "follow" field is selected
+        Then an error message will be displayed, warning the owner can't follow their own playlist
+
     Scenario: Accessing the owner's profile page from the playlist page
         Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
         And the user "Otavio" is listed as the owner of that playlist
