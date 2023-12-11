@@ -36,4 +36,11 @@ Feature: Contributors and Followers
         And the playlist "Shrek soundtrack" is public
         When the "follow" field is selected
         Then any user that enter the "Shrek soundtrack" playlist page can see the name "Thiago" listed as follower
+
+    Scenario: Accessing the owner's profile page from the playlist page
+        Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
+        And the user "Otavio" is listed as the owner of that playlist
+        When the user "Thiago" selects the name of the owner
+	Then the user "Thiago" will end up in the profile page for user "Otavio"
+ 
         
