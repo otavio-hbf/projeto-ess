@@ -20,6 +20,16 @@ Feature: Contributors and Followers
         And the user "Otavio" accepts the invite
 	Then any user that enters the "AMV music" playlist page can see the name "Otavio" listed as contributor, alongside some aditional information
 
+    Scenario: Declining invite to be a contributor
+        Given the user with login "Thiago" is the owner of the playlist "AMV music"
+        And accesses the page of the playlist "AMV music"
+        And the playlist "AMV music" is public
+        And the list of followers for the playlist "AMV music" is currently empty
+	When the user "Thiago" selects the field "add contributors"
+	And sends an invite to the user with login "Otavio" to be a contributor
+        And the user "Otavio" doesn't accept the invite
+	Then any user that enters the "AMV music" playlist page will see the list of contributors as empty
+
     Scenario: Following a playlist
         Given the user with login "Thiago" is currently on the page of the playlist "Shrek soundtrack"
         And the user "Thiago" is not the owner of the playlist "Shrek soundtrack"
