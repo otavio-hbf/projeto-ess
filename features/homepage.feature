@@ -1,7 +1,6 @@
 Feature: Initial Screen (Home Page)
 As a user
 I want to see recommended content and the contents I already consume.
-And I want to be able to play those contents
 And also being able to access other important pages.
 
 Scenario: Landing in the home page
@@ -11,14 +10,14 @@ Scenario: Landing in the home page
 	Then I am at the initial page
 
 Scenario: Playing content
-	Given I am a user and I am connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+	Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
 	And I am at the homepage
 	When I select the song "Spongebob Theme Song" by the artist "Lil’ SPB", displayed on the homepage
 	Then Its starts to play
 	And the play bar is now apparent 
 
 Scenario: Pausing
-	Given I am a user and I am connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+	Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
 	And I am at the homepage
 	And the song "Spongebob Theme Song" by the artist "Lil’ SPB" is currently playing
 	And the play bar apparent, showing it's buttons
@@ -39,7 +38,7 @@ Scenario: Connection Update Failure
     	And the home page should display the previously loaded content
 
 Scenario: Personalized Recommendations
-   	Given I am connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+   	Given I am logged with login "ohbfinho" and password "oSportNaoSubiu"
     	And I have an established listening history
     	When the home page is loaded
     	Then the page should display personalized recommendations based on my listening preferences
@@ -47,7 +46,7 @@ Scenario: Personalized Recommendations
     	And I should be able to easily access and play the recommended content
 
 Scenario: Searching for Specific Content
-	Given I am connected to the music streaming service with login "ohbfinho" and password "oSportNaoSubiu"
+	Given I am logged with login "ohbfinho" and password "oSportNaoSubiu"
 	And I am at the homepage
 	When I use the search bar to look for specific content, such as "Podcasts sobre Engenharia de Software"
 	Then The search results should display relevant artists, albums, and playlists
