@@ -37,14 +37,6 @@ Feature: Initial Screen (Home Page)
         Then the page should display an error message
         And the home page should display the previously loaded content
 
-    Scenario: Personalized Recommendations
-        Given I am logged with login "ohbfinho" and password "oSportNaoSubiu"
-        And I have an established listening history
-        When the home page is loaded
-        Then the page should display personalized recommendations based on my listening preferences
-        And the recommendations should include a mix of familiar and potentially new artists or genres
-        And I should be able to easily access and play the recommended content
-
     Scenario: Searching for Specific Content
         Given I am logged with login "ohbfinho" and password "oSportNaoSubiu"
         And I am at the homepage

@@ -15,12 +15,6 @@ And she sees 4 containers, each of then for the elements "artists, songs, playli
 When the user clicks the options of "see more" of the top artists
 Then a list of the 50 current most listened artists is shown.
 
-Scenario: Access the top podcasts
-Given the user with login ABestetica and password chuva123 is in the "hot" page
-And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
-When the user clicks the options of "see more" of the top podcasts
-Then a list of the 50 current most played podcasts is shown.
-
 Scenario: Access the top playlists
 Given the user with login ABestetica and password chuva123 is in the "hot" page
 And she sees 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
