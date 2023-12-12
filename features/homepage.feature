@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Feature: Initial Screen (Home Page)
 As a user
 I want to see recommended content and the contents I already consume.
@@ -51,7 +52,6 @@ Scenario: Searching for Specific Content
 	When I use the search bar to look for specific content, such as "Podcasts sobre Engenharia de Software"
 	Then The search results should display relevant artists, albums, and playlists
 	And I should be able to click on any result to access detailed information or play the content.
-
 
 Scenario: Searching for a private playlist
 	Given I am logged with login "ohbfinho" and password "oSportNaoSubiu"
