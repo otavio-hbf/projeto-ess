@@ -11,7 +11,7 @@ Feature: Contributors and Followers
         And I select the option to make the playlist public
         And I confirm the creation
         Then I'm now on the "AMV music" playlist page
-        And I can see the name "Thiago" listed as the owner
+        And I can see the name "Thiago" listed as the owner of the playlist "AMV music"
 
     Scenario: Adding contributors to a playlist
         Given I'm logged with login "Thiago" and password "123123"
@@ -23,7 +23,7 @@ Feature: Contributors and Followers
 	And I send an invite to the user with login "Otavio" to be a contributor
         And the user "Otavio" accepts the invite
 	Then I'm now on the page of the playlist "AMV music"
-        And I can see the name "Otavio" listed as contributor
+        And I can see the name "Otavio" listed as contributor to the playlist "AMV music"
 
     Scenario: Declining invite to be a contributor
         Given I'm logged with login "Thiago" and password "123123"
@@ -35,7 +35,7 @@ Feature: Contributors and Followers
 	And I send an invite to the user with login "Otavio" to be a contributor
         And the user "Otavio" doesn't accept the invite
         Then I'm now on the page of the playlist "AMV music"
-	And I see the list of contributors as empty
+	And I see the list of contributors to the playlist "AMV music" as empty
 
     Scenario: Failure in sending an invite to be a contributor
         Given I'm logged with login "Thiago" and password "123123"
@@ -48,23 +48,39 @@ Feature: Contributors and Followers
         And an interruption in the connection with the server occurs
 	Then I see an error message warning the invite couldn't be sent due to a server issue
         And I'm now on the page of the playlist "AMV music"
-        And I see the list of contributors as empty
+        And I see the list of contributors to the playlist "AMV music" as empty
 
     Scenario: Following a playlist
         Given I'm logged with login "Thiago" and password "123123" 
         And I'm currently on the page of the playlist "Shrek soundtrack"
         And I'm not the owner of the playlist "Shrek soundtrack"
         And the playlist "Shrek soundtrack" is public
+        And the list of followers of the playlist "Shrek soundtrack" is currently empty
         When I select the "follow" field
         Then I'm now on the page of the playlist "Shrek soundtrack"
-        And I can see the name "Thiago" listed as follower
+        And I can see the name "Thiago" listed as follower of the playlist "Shrek soundtrack"
+
+    Scenario: Failure in following a playlist
+        Given I'm logged with login "Thiago" and password "123123" 
+        And I'm currently on the page of the playlist "Shrek soundtrack"
+        And I'm not the owner of the playlist "Shrek soundtrack"
+        And the playlist "Shrek soundtrack" is public
+        And the list of followers of the playlist "Shrek soundtrack" is currently empty
+        When I select the "follow" field
+        And an interruption in the connection with the server occurs
+        Then I'm now on the page of the playlist "Shrek soundtrack"
+        And I can see an error message warning I wasn't registered as a follower due to a serve error 
+        And I can see the list of followers of the playlist "Shrek soundtrack" as empty
 
     Scenario: Failure in following a playlist as its owner
         Given I'm logged with login "Thiago" and password "123123"
         And I'm the the owner of the playlist "AMV music"
         And I'm on the page of the playlist "AMV music"
+        And the list of followers of the playlist "AMV music" is currently empty
         When I select the "follow" field
-        Then I can see an error message warning the owner can't follow their own playlist
+        Then I'm now on the page of the playlist "AMV music"
+        And I can see an error message warning the owner can't follow their own playlist
+        And I can see the list of followers of the playlist "AMV music" as empty
 
     Scenario: Accessing the owner's profile page from the playlist page
         Given I'm logged with login "Thiago" and password "123123"
