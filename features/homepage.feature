@@ -1,6 +1,7 @@
 Feature: Initial Screen (Home Page)
 As a user
 I want to see recommended content and the contents I already consume.
+And I want to be able to play those contents
 And also being able to access other important pages.
 
 Scenario: Landing in the home page
