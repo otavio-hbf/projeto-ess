@@ -31,7 +31,7 @@ Scenario: Acessing personal page
 	When I access the personal page
 	Then My playlist, data and other information is shown to me
 
-Scenario: Connection Update Failure
+Scenario: Connection Failure
     	Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
 	When the internet connection is not available
     	Then the page should display an error message 
