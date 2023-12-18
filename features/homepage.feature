@@ -1,4 +1,4 @@
-Feature: Initial Screen (Home Page)
+Feature: Personalized Home Page
         As a user
         I want to see recommended content and the contents I already consume.
         And also being able to access other important pages.
