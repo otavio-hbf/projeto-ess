@@ -13,23 +13,23 @@ Feature: Initial Screen (Home Page)
         Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
         And I am at the homepage
         When I select the song "Spongebob Theme Song" by the artist "Lil’ SPB", displayed on the homepage
-        Then Its starts to play
-        And the play bar is now apparent
+        Then the song "Spongebob Theme Song" by the artist "Lil’ SPB" starts to play
+        And the Playbar is apparent
 
     Scenario: Pausing
         Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
         And I am at the homepage
         And the song "Spongebob Theme Song" by the artist "Lil’ SPB" is currently playing
-        And the play bar apparent, showing it's buttons
-        When I pause the music
-        Then it stops
+        And the Playbar is apparent
+        When I pause the song "Spongebob Theme Song" by the artist "Lil’ SPB"
+        Then the song currently playing stops
         And the option to continue is shown
 
     Scenario: Acessing personal page
         Given I am a user with login "ohbfinho" and password "oSportNaoSubiu"
         And I have already logged and the website before
         When I access the personal page
-        Then My playlist, data and other information is shown to me
+        Then My playlists, data and other information is shown to me
 
     Scenario: Connection Failure
         Given I am a user and I am logged with login "ohbfinho" and password "oSportNaoSubiu"
