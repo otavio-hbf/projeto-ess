@@ -1,4 +1,3 @@
-
 Feature: Users login
     As a user registered on the application
     I want to log into the application using my registered email and password

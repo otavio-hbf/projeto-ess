@@ -43,6 +43,21 @@ Feature: Most Played Songs
         Then the system displays an error message prompting me to log in
         And does not show any song statistics or information
 
+    Scenario: User turns off tracking of play history
+        Given I am logged in with user "pedro", password "123"
+        When I go to settings
+        And I choose to turn off the tracking of my play history
+        Then the system confirms that play history tracking is turned off
+        And my future plays are not recorded in my play history
+
+    Scenario: User clears play history
+        Given I am logged in with user "pedro", password "123"
+        And I have the songs "Yellow Submarine" and "Clair de Lune" in my play history
+        When I go to settings
+        And I select the option to clear my play history
+        Then the system deletes all my previously stored play history
+        And now I do not have any songs in my play history
+
     Scenario: User has disabled tracking of play history
         Given I am logged in with user "pedro", password "123"
         And I have disabled the tracking of my play history in settings
