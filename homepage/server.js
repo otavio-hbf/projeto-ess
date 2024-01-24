@@ -20,12 +20,6 @@ server.get('/feed', () =>{
     return 'PAGINA INICIAL:\nEscutas Recentes:\nFor you:'
 })
 
-// const server = createServer((request, response) =>{
-//     response.write('Pelo Sport Nada')
-//     console.log('Tudoo!!')
-//     return response.end()
-// } )
-
 server.listen({
     port: 3333,
 })
