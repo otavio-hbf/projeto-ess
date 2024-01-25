@@ -32,6 +32,12 @@ server.get('/feed/userpage/:userid', (request, reply) =>{
     return reply.send('PAGINA DO USUARIO:\nAqui uma abobrinha sobre você ->')
 })
 
+server.get('/feed/track/:trackid', (request, reply) =>{
+    const trackId = request.params.trackid;
+    console.log(trackId)
+    return reply.send('Uma musiquinha qualquer lalalala!!!')
+})
+
 server.listen({
     port: 3333,
 })
