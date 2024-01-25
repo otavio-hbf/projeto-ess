@@ -16,19 +16,19 @@ import {fastify} from 'fastify'
 const server = fastify()
 
 //homepage
-server.get('/feed', () =>{
-    return 'PAGINA INICIAL:\nEscutas Recentes:\nFor you:'
+server.get('/feed', (request, reply) =>{
+    return reply.send('PAGINA INICIAL:\nEscutas Recentes:\nFor you:')
 })
 
 //search bar
-server.get('/feed/search', () =>{
-    return 'PAGINA DE PESQUISA:\nPesquise aqui sua musica ->'
+server.get('/feed/search', (request, reply) =>{
+    return reply.send('PAGINA DE PESQUISA:\nPesquise aqui sua musica ->')
 })
 
 server.get('/feed/search/:filter', (request, reply) =>{
     const filter = request.params.filter
     console.log(filter)
-    return 'PAGINA DE PESQUISA (com filtro):\nPesquise aqui sua musica (com filtro)->'
+    return reply.send('PAGINA DE PESQUISA (com filtro):\nPesquise aqui sua musica (com filtro)->')
 })
 
 //userpage precisa de um parametro para identificar qual eh o usuario em questao
