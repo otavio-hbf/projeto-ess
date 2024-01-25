@@ -25,6 +25,12 @@ server.get('/feed/search', () =>{
     return 'PAGINA DE PESQUISA:\nPesquise aqui sua musica ->'
 })
 
+server.get('/feed/search/:filter', (request, reply) =>{
+    const filter = request.params.filter
+    console.log(filter)
+    return 'PAGINA DE PESQUISA (com filtro):\nPesquise aqui sua musica (com filtro)->'
+})
+
 //userpage precisa de um parametro para identificar qual eh o usuario em questao
 server.get('/feed/userpage/:userid', (request, reply) =>{
     const userId = request.params.userid;
