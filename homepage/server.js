@@ -25,6 +25,13 @@ server.get('/feed/search', (request, reply) =>{
     return reply.send('PAGINA DE PESQUISA:\nPesquise aqui sua musica ->')
 })
 
+//search bar
+server.post('/feed/search', (request, reply) =>{ 
+
+    console.log('Search query made.');
+    return reply.status(200).send()
+})
+
 server.get('/feed/search/:filter', (request, reply) =>{
     const filter = request.params.filter
     console.log(filter)
