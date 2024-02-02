@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { Result, SuccessResult } from '../utils/result';
-import TestService from '../services/test.service';
-import TestEntity from '../entities/test.entity';
+import { Router, Request, Response } from "express";
+import { Result, SuccessResult } from "../utils/result";
+import TestService from "../services/test.service";
+import TestEntity from "../entities/test.entity";
 
 class TestController {
-  private prefix: string = '/tests';
+  private prefix: string = "/tests";
   public router: Router;
   private testService: TestService;
 

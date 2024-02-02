@@ -1,9 +1,9 @@
-import SongEntity from '../entities/song.entity';
-import BaseRepository from './base.repository';
+import SongEntity from "../entities/song.entity";
+import BaseRepository from "./base.repository";
 
 class SongRepository extends BaseRepository<SongEntity> {
   constructor() {
-    super('songs');
+    super("songs");
   }
 
   public async getSongs(): Promise<SongEntity[]> {

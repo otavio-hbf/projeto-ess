@@ -1,4 +1,4 @@
-import BaseModel from './base.model';
+import BaseModel from "./base.model";
 
 export default class SongModel extends BaseModel {
   title: string;
@@ -7,7 +7,7 @@ export default class SongModel extends BaseModel {
   genre: string;
 
   constructor(data: SongModel) {
-    super(data.id || '');
+    super(data.id || "");
     this.title = data.title;
     this.duration = data.duration;
     this.artist = data.artist;

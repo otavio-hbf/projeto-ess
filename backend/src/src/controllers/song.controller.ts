@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { Result, SuccessResult } from '../utils/result';
-import SongService from '../services/song.service';
-import SongEntity from '../entities/song.entity';
+import { Router, Request, Response } from "express";
+import { Result, SuccessResult } from "../utils/result";
+import SongService from "../services/song.service";
+import SongEntity from "../entities/song.entity";
 
 class SongController {
-  private prefix: string = '/songs';
+  private prefix: string = "/songs";
   public router: Router;
   private songService: SongService;
 

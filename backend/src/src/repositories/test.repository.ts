@@ -1,9 +1,9 @@
-import TestEntity from '../entities/test.entity';
-import BaseRepository from './base.repository';
+import TestEntity from "../entities/test.entity";
+import BaseRepository from "./base.repository";
 
 class TestRepository extends BaseRepository<TestEntity> {
   constructor() {
-    super('tests');
+    super("tests");
   }
 
   public async getTests(): Promise<TestEntity[]> {

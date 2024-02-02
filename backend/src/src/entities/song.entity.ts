@@ -1,4 +1,4 @@
-import BaseEntity from './base.entity';
+import BaseEntity from "./base.entity";
 
 export default class SongEntity extends BaseEntity {
   title: string;
@@ -7,7 +7,7 @@ export default class SongEntity extends BaseEntity {
   genre: string;
 
   constructor(data: SongEntity) {
-    super(data.id || '');
+    super(data.id || "");
     this.title = data.title;
     this.duration = data.duration;
     this.artist = data.artist;

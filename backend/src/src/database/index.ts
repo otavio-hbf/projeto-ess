@@ -1,5 +1,5 @@
-import SongEntity from '../entities/song.entity';
-import TestEntity from '../entities/test.entity';
+import SongEntity from "../entities/song.entity";
+import TestEntity from "../entities/test.entity";
 
 export default class Database {
   data: { [key: string]: any[] };
@@ -24,33 +24,33 @@ export default class Database {
     Database.getInstance().data = {
       tests: [
         new TestEntity({
-          id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
-          name: 'Test Seed',
+          id: "89ecc32a-aec7-4b71-adfd-03287e4ca74f",
+          name: "Test Seed",
         }),
       ],
       songs: [
         new SongEntity({
-          id: '1',
-          title: 'Peanut',
+          id: "1",
+          title: "Peanut",
           duration: 45,
           artist: "Spongebob",
-          genre: "Rock"
+          genre: "Rock",
         }),
         new SongEntity({
-          id: '2',
-          title: 'Watermelon',
+          id: "2",
+          title: "Watermelon",
           duration: 23,
           artist: "Spongebob",
-          genre: "MPB"
+          genre: "MPB",
         }),
         new SongEntity({
-          id: '3',
-          title: 'Apple',
+          id: "3",
+          title: "Apple",
           duration: 78,
           artist: "Spongebob",
-          genre: "MPB"
+          genre: "MPB",
         }),
-      ]
+      ],
     };
   }
 }

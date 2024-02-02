@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 export abstract class Result {
   msg: string;
@@ -38,7 +38,7 @@ export class SuccessResult extends Result {
     code?: number;
     data?: any;
   }) {
-    super({ msg, msgCode: msgCode || 'success', code: code || 200 });
+    super({ msg, msgCode: msgCode || "success", code: code || 200 });
     this.data = data;
   }
 
@@ -57,7 +57,7 @@ export class FailureResult extends Result {
     msgCode?: any;
     code?: number;
   }) {
-    super({ msg, msgCode: msgCode || 'failure', code: code || 500 });
+    super({ msg, msgCode: msgCode || "failure", code: code || 500 });
   }
 
   handle(res: Response) {

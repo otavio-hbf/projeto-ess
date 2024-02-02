@@ -1,8 +1,8 @@
-import pino from 'pino';
+import pino from "pino";
 
 const logger = pino(
   {
-    level: process.env.ENV === 'PROD' ? 'info' : 'debug',
+    level: process.env.ENV === "PROD" ? "info" : "debug",
   },
   process.stdout
 );

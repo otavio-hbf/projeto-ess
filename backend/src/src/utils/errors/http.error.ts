@@ -18,8 +18,8 @@ export abstract class HttpError extends Error {
     super(msg);
     this.msg = msg;
     this.status = status;
-    this.msgCode = msgCode || 'failure';
-    this.slug = slug || 'http-error';
+    this.msgCode = msgCode || "failure";
+    this.slug = slug || "http-error";
   }
 
   toString() {
@@ -29,25 +29,25 @@ export abstract class HttpError extends Error {
 
 export class HttpBadRequestError extends HttpError {
   constructor({ msg, msgCode }: { msg: string; msgCode?: any }) {
-    super({ status: 400, msg, msgCode, slug: 'bad-request' });
+    super({ status: 400, msg, msgCode, slug: "bad-request" });
   }
 }
 
 export class HttpUnauthorizedError extends HttpError {
   constructor({ msg, msgCode }: { msg: string; msgCode?: any }) {
-    super({ status: 401, msg, msgCode, slug: 'unauthorized' });
+    super({ status: 401, msg, msgCode, slug: "unauthorized" });
   }
 }
 
 export class HttpForbiddenError extends HttpError {
   constructor({ msg, msgCode }: { msg: string; msgCode?: any }) {
-    super({ status: 403, msg, msgCode, slug: 'forbidden' });
+    super({ status: 403, msg, msgCode, slug: "forbidden" });
   }
 }
 
 export class HttpNotFoundError extends HttpError {
   constructor({ msg, msgCode }: { msg: string; msgCode?: any }) {
-    super({ status: 404, msg, msgCode, slug: 'not-found' });
+    super({ status: 404, msg, msgCode, slug: "not-found" });
   }
 }
 
@@ -55,9 +55,9 @@ export class HttpInternalServerError extends HttpError {
   constructor({ msg, msgCode }: { msg?: string; msgCode?: any } = {}) {
     super({
       status: 500,
-      msg: msg || 'Internal Server Error',
+      msg: msg || "Internal Server Error",
       msgCode,
-      slug: 'internal-server',
+      slug: "internal-server",
     });
   }
 }
@@ -66,9 +66,9 @@ export class HttpNotImplementedError extends HttpError {
   constructor({ msg, msgCode }: { msg?: string; msgCode?: any } = {}) {
     super({
       status: 501,
-      msg: msg || 'Not Implemented Error',
+      msg: msg || "Not Implemented Error",
       msgCode,
-      slug: 'not-implemented',
+      slug: "not-implemented",
     });
   }
 }

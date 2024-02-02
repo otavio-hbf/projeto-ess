@@ -1,11 +1,11 @@
-import TestEntity from '../entities/test.entity';
-import TestModel from '../models/test.model';
-import OtherRepository from '../repositories/other.repository';
-import TestRepository from '../repositories/test.repository';
-import { HttpNotFoundError } from '../utils/errors/http.error';
+import TestEntity from "../entities/test.entity";
+import TestModel from "../models/test.model";
+import OtherRepository from "../repositories/other.repository";
+import TestRepository from "../repositories/test.repository";
+import { HttpNotFoundError } from "../utils/errors/http.error";
 
 class TestServiceMessageCode {
-  public static readonly test_not_found = 'test_not_found';
+  public static readonly test_not_found = "test_not_found";
 }
 
 class TestService {
@@ -41,7 +41,7 @@ class TestService {
 
     if (!testEntity) {
       throw new HttpNotFoundError({
-        msg: 'Test not found',
+        msg: "Test not found",
         msgCode: TestServiceMessageCode.test_not_found,
       });
     }
@@ -63,7 +63,7 @@ class TestService {
 
     if (!testEntity) {
       throw new HttpNotFoundError({
-        msg: 'Test not found',
+        msg: "Test not found",
         msgCode: TestServiceMessageCode.test_not_found,
       });
     }

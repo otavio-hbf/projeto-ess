@@ -1,18 +1,18 @@
-import express from 'express';
-import 'express-async-errors';
-import cors from 'cors';
-import logger from './logger';
-import setupRoutes from './routes/index';
-import { HttpError } from './utils/errors/http.error';
-import { FailureResult } from './utils/result';
-import Database from './database';
+import express from "express";
+import "express-async-errors";
+import cors from "cors";
+import logger from "./logger";
+import setupRoutes from "./routes/index";
+import { HttpError } from "./utils/errors/http.error";
+import { FailureResult } from "./utils/result";
+import Database from "./database";
 
 const app: express.Express = express();
 app.use(express.json());
 
 app.use(
   cors({
-    origin: '*',
+    origin: "*",
   })
 );
 

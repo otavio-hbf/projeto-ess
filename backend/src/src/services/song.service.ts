@@ -1,18 +1,16 @@
-import SongRepository from '../repositories/song.repository';
-import SongModel from '../models/song.model';
-import { HttpNotFoundError } from '../utils/errors/http.error';
-import SongEntity from '../entities/song.entity';
+import SongRepository from "../repositories/song.repository";
+import SongModel from "../models/song.model";
+import { HttpNotFoundError } from "../utils/errors/http.error";
+import SongEntity from "../entities/song.entity";
 
 class SongServiceMessageCode {
-  public static readonly song_not_found = 'song_not_found';
+  public static readonly song_not_found = "song_not_found";
 }
 
 class SongService {
   private songRepository: SongRepository;
 
-  constructor(
-    songRepository: SongRepository,
-  ) {
+  constructor(songRepository: SongRepository) {
     this.songRepository = songRepository;
   }
 
@@ -29,7 +27,7 @@ class SongService {
 
     if (!songEntity) {
       throw new HttpNotFoundError({
-        msg: 'Song not found',
+        msg: "Song not found",
         msgCode: SongServiceMessageCode.song_not_found,
       });
     }
@@ -51,7 +49,7 @@ class SongService {
 
     if (!songEntity) {
       throw new HttpNotFoundError({
-        msg: 'Song not found',
+        msg: "Song not found",
         msgCode: SongServiceMessageCode.song_not_found,
       });
     }

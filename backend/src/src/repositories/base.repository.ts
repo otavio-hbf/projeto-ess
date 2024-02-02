@@ -1,7 +1,7 @@
-import Database from '../database';
-import BaseEntity from '../entities/base.entity';
-import { HttpInternalServerError } from '../utils/errors/http.error';
-import { v4 as uuidv4 } from 'uuid';
+import Database from "../database";
+import BaseEntity from "../entities/base.entity";
+import { HttpInternalServerError } from "../utils/errors/http.error";
+import { v4 as uuidv4 } from "uuid";
 
 type FilterFunction<T> = (item: T) => boolean;
 
