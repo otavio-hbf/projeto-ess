@@ -1,5 +1,6 @@
 import SongEntity from "../entities/song.entity";
 import TestEntity from "../entities/test.entity";
+import UserEntity from "../entities/user.entity";
 
 export default class Database {
   data: { [key: string]: any[] };
@@ -51,6 +52,14 @@ export default class Database {
           genre: "MPB",
         }),
       ],
+      users: [
+        new UserEntity({
+          id: "1",
+          name: "Alfonso",
+          email: "alfonso@gmail.com",
+          password: "123456"
+        })
+      ]
     };
   }
 }
