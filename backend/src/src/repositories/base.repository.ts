@@ -18,7 +18,7 @@ export default class BaseRepository<T extends BaseEntity> {
   private async validateData(data: T): Promise<void> {
     const errors = await validate(data);
     if (errors.length > 0) {
-      throw new TypeError('Data is incomplete or not of the correct type');
+      throw new TypeError("Data is incomplete or not of the correct type");
     }
   }
 
