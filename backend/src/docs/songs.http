@@ -1,11 +1,14 @@
 ### GET todas as musicas
-
 GET http://localhost:5001/api/songs
 
 ### GET uma musica
-
 GET http://localhost:5001/api/songs/2
 
-### GET usuario
-
+### GET usuarios
 GET http://localhost:5001/api/users
+
+### GET historicos
+GET http://localhost:5001/api/histories
+
+### GET historico do user 1
+GET http://localhost:5001/api/user/1/history

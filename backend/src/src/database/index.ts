@@ -1,3 +1,4 @@
+import HistoryEntity from "../entities/history.entity";
 import SongEntity from "../entities/song.entity";
 import TestEntity from "../entities/test.entity";
 import UserEntity from "../entities/user.entity";
@@ -57,9 +58,52 @@ export default class Database {
           id: "1",
           name: "Alfonso",
           email: "alfonso@gmail.com",
-          password: "123456"
-        })
-      ]
+          password: "123456",
+        }),
+        new UserEntity({
+          id: "2",
+          name: "João",
+          email: "joao@gmail.com",
+          password: "789456",
+        }),
+      ],
+      history: [
+        new HistoryEntity({
+          id: "",
+          user_id: "1",
+          song_id: "2",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "1",
+          song_id: "2",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "1",
+          song_id: "2",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "2",
+          song_id: "3",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "2",
+          song_id: "1",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "1",
+          song_id: "2",
+        }),
+        new HistoryEntity({
+          id: "",
+          user_id: "1",
+          song_id: "3",
+        }),
+      ],
     };
   }
 }

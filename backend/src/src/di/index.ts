@@ -1,7 +1,9 @@
+import HistoryRepository from "../repositories/history.repository";
 import OtherRepository from "../repositories/other.repository";
 import SongRepository from "../repositories/song.repository";
 import TestRepository from "../repositories/test.repository";
 import UserRepository from "../repositories/user.repository";
+import HistoryService from "../services/history.service";
 import SongService from "../services/song.service";
 import TestService from "../services/test.service";
 import UserService from "../services/user.service";
@@ -32,4 +34,11 @@ di.registerRepository(UserRepository, new UserRepository());
 di.registerService(
   UserService,
   new UserService(di.getRepository(UserRepository))
+);
+
+// History
+di.registerRepository(HistoryRepository, new HistoryRepository());
+di.registerService(
+  HistoryService,
+  new HistoryService(di.getRepository(HistoryRepository))
 );

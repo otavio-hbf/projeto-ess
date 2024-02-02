@@ -6,6 +6,8 @@ import SongController from "../controllers/song.controller";
 import SongService from "../services/song.service";
 import UserController from "../controllers/user.controller";
 import UserService from "../services/user.service";
+import HistoryController from "../controllers/history.controller";
+import HistoryService from "../services/history.service";
 
 const router = Router();
 const prefix = "/api";
@@ -16,5 +18,6 @@ export default (app: Express) => {
     new TestController(router, di.getService(TestService)).router,
     new SongController(router, di.getService(SongService)).router,
     new UserController(router, di.getService(UserService)).router,
+    new HistoryController(router, di.getService(HistoryService)).router
   );
 };
