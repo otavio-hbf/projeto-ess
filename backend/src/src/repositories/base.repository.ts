@@ -2,6 +2,7 @@ import Database from "../database";
 import BaseEntity from "../entities/base.entity";
 import { HttpInternalServerError } from "../utils/errors/http.error";
 import { v4 as uuidv4 } from "uuid";
+import { validate } from "class-validator";
 
 type FilterFunction<T> = (item: T) => boolean;
 
@@ -14,8 +15,17 @@ export default class BaseRepository<T extends BaseEntity> {
     this.db = Database.getInstance();
   }
 
+  private async validateData(data: T): Promise<void> {
+    const errors = await validate(data);
+    if (errors.length > 0) {
+      throw new TypeError('Data is incomplete or not of the correct type');
+    }
+  }
+
   public async add(data: T): Promise<T> {
     try {
+      await this.validateData(data);
+
       if (!this.db.data[this.prefix]) {
         this.db.data[this.prefix] = [];
       }
@@ -26,7 +36,7 @@ export default class BaseRepository<T extends BaseEntity> {
       this.db.data[this.prefix].push(newItem);
       return newItem;
     } catch (e) {
-      throw new HttpInternalServerError();
+      throw e;
     }
   }
 

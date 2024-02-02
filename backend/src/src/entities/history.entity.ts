@@ -1,9 +1,12 @@
 import BaseEntity from "./base.entity";
 import SongEntity from "./song.entity";
 import UserEntity from "./user.entity";
+import { IsString } from "class-validator";
 
 export default class HistoryEntity extends BaseEntity {
+  @IsString()
   user_id: string;
+  @IsString()
   song_id: string;
 
   constructor(data: HistoryEntity) {
