@@ -59,14 +59,14 @@ export default class Database {
           name: "Alfonso",
           email: "alfonso@gmail.com",
           password: "123456",
-          history_tracking: true
+          history_tracking: true,
         }),
         new UserEntity({
           id: "2",
           name: "João",
           email: "joao@gmail.com",
           password: "789456",
-          history_tracking: true
+          history_tracking: true,
         }),
       ],
       history: [

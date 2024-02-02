@@ -33,8 +33,8 @@ class HistoryController {
     //   this.updateHistory(req, res)
     // );
     this.router.delete(
-      `${this.prefix}/:id/${this.suffix}`,
-      (req: Request, res: Response) => this.deleteHistory(req, res)
+      `${this.prefix}/:id${this.suffix}`,
+      (req: Request, res: Response) => this.deleteUserHistory(req, res)
     );
   }
 
@@ -90,6 +90,14 @@ class HistoryController {
 
   private async deleteHistory(req: Request, res: Response) {
     await this.historyService.deleteHistory(req.params.id);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+    }).handle(res);
+  }
+
+  private async deleteUserHistory(req: Request, res: Response) {
+    await this.historyService.deleteUserHistory(req.params.id);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

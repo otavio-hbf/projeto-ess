@@ -89,6 +89,10 @@ class HistoryService {
   public async deleteHistory(id: string): Promise<void> {
     await this.historyRepository.deleteHistory(id);
   }
+
+  public async deleteUserHistory(id: string): Promise<void> {
+    await this.historyRepository.deleteUserHistory(id);
+  }
 }
 
 export default HistoryService;

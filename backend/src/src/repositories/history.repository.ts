@@ -28,6 +28,10 @@ class HistoryRepository extends BaseRepository<HistoryEntity> {
   public async deleteHistory(id: string): Promise<void> {
     await this.delete((item) => item.id !== id);
   }
+
+  public async deleteUserHistory(id: string): Promise<void> {
+    await this.delete((item) => item.user_id !== id);
+  }
 }
 
 export default HistoryRepository;
