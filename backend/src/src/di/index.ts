@@ -40,5 +40,8 @@ di.registerService(
 di.registerRepository(HistoryRepository, new HistoryRepository());
 di.registerService(
   HistoryService,
-  new HistoryService(di.getRepository(HistoryRepository))
+  new HistoryService(
+    di.getRepository(HistoryRepository),
+    di.getRepository(SongRepository)
+  )
 );

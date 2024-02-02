@@ -5,6 +5,7 @@ import HistoryEntity from "../entities/history.entity";
 
 class HistoryController {
   private prefix: string = "/user";
+  private hot: string = "/hot";
   private suffix: string = "/history";
   public router: Router;
   private historyService: HistoryService;
@@ -26,12 +27,15 @@ class HistoryController {
       (req: Request, res: Response) => this.getUserHistory(req, res)
     );
 
+    this.router.get(
+      `${this.prefix}/:id${this.hot}`,
+      (req: Request, res: Response) => this.getUserMostPlayed(req, res)
+    );
+
     this.router.post(this.suffix, (req: Request, res: Response) =>
       this.createHistory(req, res)
     );
-    // this.router.put(`${this.prefix}/:id/${this.sufix}`, (req: Request, res: Response) =>
-    //   this.updateHistory(req, res)
-    // );
+
     this.router.delete(
       `${this.prefix}/:id${this.suffix}`,
       (req: Request, res: Response) => this.deleteUserHistory(req, res)
@@ -53,6 +57,17 @@ class HistoryController {
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: histories,
+    }).handle(res);
+  }
+
+  private async getUserMostPlayed(req: Request, res: Response) {
+    const mostPlayed = await this.historyService.getUserMostPlayed(
+      req.params.id
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: mostPlayed,
     }).handle(res);
   }
 
