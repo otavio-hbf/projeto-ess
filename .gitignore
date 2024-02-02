@@ -149,3 +149,6 @@ yarn.lock
 .pnp.*
 yarn.lock
 .editorconfig
+
+.env.development
+.env.production

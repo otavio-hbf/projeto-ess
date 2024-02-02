@@ -1,16 +1,17 @@
-import sql from './db.js'
+import sql from "./db.js"
 
-// sql`DROP TABLE IF EXISTS videos;`.then(() => {
+// sql`DROP TABLE IF EXISTS songs;`.then(() => {
 //     console.log('Tabela apagada!')
 // })
 
 sql`
-    CREATE TABLE videos (
-        id          TEXT PRIMARY KEY,
-        title       TEXT,
-        description TEXT,
-        duration    INTEGER
-    );
-`.then(() => {
-    console.log('Tabela criada')
+CREATE TABLE songs (
+    title TEXT,
+    artist TEXT,
+    id TEXT,
+    genre TEXT,
+    duration INTEGER
+);
+`.then(() =>{
+    console.log('Table created.')
 })
