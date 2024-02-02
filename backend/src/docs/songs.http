@@ -1,0 +1,7 @@
+### GET todas as musicas
+
+GET http://localhost:5001/api/songs
+
+### GET uma musica
+
+GET http://localhost:5001/api/songs/2
