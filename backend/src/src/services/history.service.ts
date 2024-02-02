@@ -34,7 +34,9 @@ class HistoryService {
   }
 
   public async getUserHistory(id: string): Promise<HistoryModel[]> {
-    const historiesEntity = (await this.historyRepository.getHistories()).filter((item) => item.user_id === id);
+    const historiesEntity = (
+      await this.historyRepository.getHistories()
+    ).filter((item) => item.user_id === id);
 
     const historiesModel = historiesEntity.map(
       (history) => new HistoryModel(history)
