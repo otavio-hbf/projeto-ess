@@ -3,6 +3,9 @@ import HistoryModel from "../models/history.model";
 import { HttpNotFoundError } from "../utils/errors/http.error";
 import HistoryEntity from "../entities/history.entity";
 import UserRepository from "../repositories/user.repository";
+import MostPlayedModel from "../models/most_played.model";
+import SongRepository from "../repositories/song.repository";
+import { log } from "console";
 
 class HistoryServiceMessageCode {
   public static readonly history_not_found = "history_not_found";
@@ -11,16 +14,16 @@ class HistoryServiceMessageCode {
 class HistoryService {
   private historyRepository: HistoryRepository;
   //   private userRepository: UserRepository;
-  //   private songRepository: SongRepository;
+  private songRepository: SongRepository;
 
   constructor(
-    historyRepository: HistoryRepository
+    historyRepository: HistoryRepository,
     // userRepository: UserRepository
-    // songRepository: SongRepository
+    songRepository: SongRepository
   ) {
     this.historyRepository = historyRepository;
     // this.userRepository = userRepository;
-    // this.songRepository = songRepository;
+    this.songRepository = songRepository;
   }
 
   public async getHistories(): Promise<HistoryModel[]> {
@@ -43,6 +46,37 @@ class HistoryService {
     );
 
     return historiesModel;
+  }
+
+  public async getUserMostPlayed(id: string): Promise<MostPlayedModel[]> {
+    const historiesEntity = (
+      await this.historyRepository.getHistories()
+    ).filter((item) => item.user_id === id);
+
+    // if song is found in history, increment times_played, create new mostPlayedModel if not found
+    const mostPlayedModel: MostPlayedModel[] = [];
+
+    for (const history of historiesEntity) {
+      const song = await this.songRepository.getSong(history.song_id);
+      const songName = song?.title;
+
+      const existingMostPlayed = mostPlayedModel.find(
+        (item) => item.song_id === history.song_id
+      );
+
+      if (existingMostPlayed?.times_played) {
+        existingMostPlayed.times_played++;
+      } else {
+        const newMostPlayed = new MostPlayedModel({
+          song_id: history.song_id,
+          song_name: songName,
+          times_played: 1,
+        });
+        mostPlayedModel.push(newMostPlayed);
+      }
+    }
+
+    return mostPlayedModel;
   }
 
   public async getHistory(id: string): Promise<HistoryModel> {
@@ -88,6 +122,10 @@ class HistoryService {
 
   public async deleteHistory(id: string): Promise<void> {
     await this.historyRepository.deleteHistory(id);
+  }
+
+  public async deleteUserHistory(id: string): Promise<void> {
+    await this.historyRepository.deleteUserHistory(id);
   }
 }
 
