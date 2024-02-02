@@ -33,8 +33,7 @@ yarn install
 Run the follow scripts
 
 ```
-chmod +x .husky/pre-commit
-chmod +x .husky/pre-push
+corepack enable
 ```
 
 ```
