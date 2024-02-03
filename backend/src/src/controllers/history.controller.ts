@@ -6,6 +6,7 @@ import HistoryEntity from "../entities/history.entity";
 class HistoryController {
   private prefix: string = "/user";
   private hot: string = "/hot";
+  private statistics: string = "/statistics";
   private suffix: string = "/history";
   public router: Router;
   private historyService: HistoryService;
@@ -30,6 +31,11 @@ class HistoryController {
     this.router.get(
       `${this.prefix}/:id${this.hot}`,
       (req: Request, res: Response) => this.getUserMostPlayed(req, res)
+    );
+
+    this.router.get(
+      `${this.prefix}/:id${this.statistics}`,
+      (req: Request, res: Response) => this.getUserStatistics(req, res)
     );
 
     this.router.post(this.suffix, (req: Request, res: Response) =>
@@ -61,13 +67,24 @@ class HistoryController {
   }
 
   private async getUserMostPlayed(req: Request, res: Response) {
-    const mostPlayed = await this.historyService.getUserMostPlayed(
+    const mostPlayed = await this.historyService.getUserMostPlayedList(
       req.params.id
     );
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: mostPlayed,
+    }).handle(res);
+  }
+
+  private async getUserStatistics(req: Request, res: Response) {
+    const statistics = await this.historyService.getUserStatistics(
+      req.params.id
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: statistics,
     }).handle(res);
   }
 

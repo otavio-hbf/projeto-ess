@@ -32,10 +32,10 @@ Feature: Most Played Songs
     Scenario: User asks for detailed stats
         Given I've created a new account with user "pedro", password "123"
         And I logged in with user "pedro", password "123"
-        And I played the song "Aquarela", which is "3" minutes long, "4" times
+        And I played the song "Aquarela", which is "3" minutes long, "4" times, and is from the genre "MPB" and artist "Toquinho"
         When I select "Detailed Statistics"
         Then the system will correctly calculate the total play time of my songs as "12" minutes
-        And will correctly calculate my most played genre as "MPB"
+        And will correctly calculate my most played genre as "MPB", and my most played song as "Aquarela"
 
     Scenario: User attempts to access most played songs without logging in
         Given I am not logged into the system

@@ -6,6 +6,7 @@ import UserRepository from "../repositories/user.repository";
 import MostPlayedModel from "../models/most_played.model";
 import SongRepository from "../repositories/song.repository";
 import { log } from "console";
+import StatisticsModel from "../models/statistics.model";
 
 class HistoryServiceMessageCode {
   public static readonly history_not_found = "history_not_found";
@@ -48,17 +49,29 @@ class HistoryService {
     return historiesModel;
   }
 
-  public async getUserMostPlayed(id: string): Promise<MostPlayedModel[]> {
-    const historiesEntity = (
-      await this.historyRepository.getHistories()
-    ).filter((item) => item.user_id === id);
+  public async getUserMostPlayedList(id: string): Promise<MostPlayedModel[]> {
+    let historiesEntity = await this.historyRepository.getHistories();
+    if (!historiesEntity) {
+      throw new HttpNotFoundError({
+        msg: "History not found",
+        msgCode: HistoryServiceMessageCode.history_not_found,
+      });
+    } else {
+      historiesEntity = historiesEntity.filter((item) => item.user_id === id);
+    }
 
     // if song is found in history, increment times_played, create new mostPlayedModel if not found
     const mostPlayedModel: MostPlayedModel[] = [];
 
     for (const history of historiesEntity) {
       const song = await this.songRepository.getSong(history.song_id);
-      const songName = song?.title;
+
+      // If the song is not found in database, skip it
+      if (!song) {
+        continue;
+      }
+
+      const songName = song.title;
 
       const existingMostPlayed = mostPlayedModel.find(
         (item) => item.song_id === history.song_id
@@ -70,6 +83,8 @@ class HistoryService {
         const newMostPlayed = new MostPlayedModel({
           song_id: history.song_id,
           song_name: songName,
+          song_duration: song?.duration,
+          song_genre: song?.genre,
           times_played: 1,
         });
         mostPlayedModel.push(newMostPlayed);
@@ -77,6 +92,44 @@ class HistoryService {
     }
 
     return mostPlayedModel;
+  }
+
+  public async getUserStatistics(id: string): Promise<StatisticsModel> {
+    const mostPlayedList = await this.getUserMostPlayedList(id);
+    // iterate through mostPlayedList to find the most played song genre. also, keep track of the total duration of all songs
+
+    let mostPlayedSong: MostPlayedModel | undefined;
+    let mostPlayedGenre: string | undefined;
+    let totalDuration: number = 0;
+
+    for (const mostPlayed of mostPlayedList) {
+      if (mostPlayed) {
+        // find most played song
+        if (
+          !mostPlayedSong ||
+          mostPlayed.times_played > mostPlayedSong.times_played
+        ) {
+          mostPlayedSong = mostPlayed;
+        }
+
+        // find most played genre
+        if (!mostPlayedGenre) {
+          mostPlayedGenre = mostPlayed.song_genre;
+        } else if (mostPlayed.times_played > mostPlayedSong.times_played) {
+          mostPlayedGenre = mostPlayed.song_genre;
+        }
+
+        // find total duration
+        totalDuration +=
+          mostPlayed.song_duration * mostPlayed.times_played || 0;
+      }
+    }
+
+    return new StatisticsModel({
+      most_played_genre_name: mostPlayedGenre,
+      most_played_song_name: mostPlayedSong?.song_name,
+      play_duration: totalDuration,
+    });
   }
 
   public async getHistory(id: string): Promise<HistoryModel> {
