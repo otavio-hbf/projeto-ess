@@ -37,6 +37,7 @@ export default class Database {
           duration: 45,
           artist: "Spongebob",
           genre: "Rock",
+          currently_playing: false,
         }),
         new SongEntity({
           id: "2",
@@ -44,6 +45,7 @@ export default class Database {
           duration: 23,
           artist: "Spongebob",
           genre: "MPB",
+          currently_playing: false,
         }),
         new SongEntity({
           id: "3",
@@ -51,6 +53,7 @@ export default class Database {
           duration: 78,
           artist: "Spongebob",
           genre: "MPB",
+          currently_playing: false,
         }),
       ],
       users: [
@@ -60,6 +63,7 @@ export default class Database {
           email: "alfonso@gmail.com",
           password: "123456",
           history_tracking: true,
+          listening_to: "",
         }),
         new UserEntity({
           id: "2",
@@ -67,6 +71,7 @@ export default class Database {
           email: "joao@gmail.com",
           password: "789456",
           history_tracking: true,
+          listening_to: "",
         }),
       ],
       history: [

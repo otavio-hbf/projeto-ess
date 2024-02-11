@@ -62,6 +62,12 @@ class UserService {
   public async deleteUser(id: string): Promise<void> {
     await this.userRepository.deleteUser(id);
   }
+
+  public async listenTo(user_id: string, song_id: string): Promise<UserModel> {
+    const userEntity = await this.userRepository.listenTo(user_id, song_id);
+    const userModel = new UserModel(userEntity);
+    return userModel;
+  }
 }
 
 export default UserService;
