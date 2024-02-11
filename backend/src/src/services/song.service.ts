@@ -62,6 +62,18 @@ class SongService {
   public async deleteSong(id: string): Promise<void> {
     await this.songRepository.deleteSong(id);
   }
+
+  public async searchSongs(keyword: string): Promise<SongModel[]> {
+    const songsEntity = await this.songRepository.searchSongs(keyword);
+    const songsModel = songsEntity.map((song) => new SongModel(song));
+    return songsModel;
+  }
+
+  public async playPauseSong(id: string): Promise<SongModel> {
+    const songEntity = await this.songRepository.playPauseSong(id);
+    const songModel = new SongModel(songEntity);
+    return songModel;
+  }
 }
 
 export default SongService;
