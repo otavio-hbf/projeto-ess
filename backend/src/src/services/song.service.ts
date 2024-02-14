@@ -63,12 +63,14 @@ class SongService {
     await this.songRepository.deleteSong(id);
   }
 
-  public async searchSongs(keyword: string, filter?:string): Promise<SongModel[]> {
+  public async searchSongs(
+    keyword: string,
+    filter?: string
+  ): Promise<SongModel[]> {
     let songsEntity;
-    if(filter){
+    if (filter) {
       songsEntity = await this.songRepository.searchSongs(keyword, filter);
-    }
-    else{
+    } else {
       songsEntity = await this.songRepository.searchSongs(keyword);
     }
 

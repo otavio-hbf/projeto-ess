@@ -69,15 +69,13 @@ class SongController {
     if (!keyword) {
       return res.status(400).json({ error: "Keyword is required" });
     }
-    
+
     let songs;
-    if(filter){
+    if (filter) {
       songs = await this.songService.searchSongs(keyword, filter);
-    }
-    else{
+    } else {
       songs = await this.songService.searchSongs(keyword);
     }
-    
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
