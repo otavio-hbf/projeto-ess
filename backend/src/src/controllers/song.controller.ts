@@ -29,9 +29,6 @@ class SongController {
       this.getSong(req, res)
     );
 
-    this.router.get(`${this.prefix}/:id/play`, (req: Request, res: Response) =>
-      this.playPauseSong(req, res)
-    );
 
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createSong(req, res)
@@ -83,14 +80,6 @@ class SongController {
     }).handle(res);
   }
 
-  public async playPauseSong(req: Request, res: Response) {
-    const song = await this.songService.playPauseSong(req.params.id);
-
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: song,
-    }).handle(res);
-  }
 
   private async createSong(req: Request, res: Response) {
     const song = await this.songService.createSong(new SongEntity(req.body));
