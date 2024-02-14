@@ -63,8 +63,15 @@ class SongService {
     await this.songRepository.deleteSong(id);
   }
 
-  public async searchSongs(keyword: string): Promise<SongModel[]> {
-    const songsEntity = await this.songRepository.searchSongs(keyword);
+  public async searchSongs(keyword: string, filter?:string): Promise<SongModel[]> {
+    let songsEntity;
+    if(filter){
+      songsEntity = await this.songRepository.searchSongs(keyword, filter);
+    }
+    else{
+      songsEntity = await this.songRepository.searchSongs(keyword);
+    }
+
     const songsModel = songsEntity.map((song) => new SongModel(song));
     return songsModel;
   }

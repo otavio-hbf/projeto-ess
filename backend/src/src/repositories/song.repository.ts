@@ -29,12 +29,23 @@ class SongRepository extends BaseRepository<SongEntity> {
     await this.delete((item) => item.id !== id);
   }
   // Implementing search function
-  public async searchSongs(keyword: string): Promise<SongEntity[]> {
-    return await this.findAll(
-      (item) =>
-        item.title.toLowerCase().includes(keyword.toLowerCase()) ||
-        item.artist.toLowerCase().includes(keyword.toLowerCase())
-    );
+  public async searchSongs(keyword: string, filter?:string): Promise<SongEntity[]> {
+
+    if(!filter){
+      return await this.findAll(
+        (item) =>
+          item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          item.artist.toLowerCase().includes(keyword.toLowerCase())
+      );
+    }
+    else{
+      return await this.findAll(
+        (item) =>
+          (item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          item.artist.toLowerCase().includes(keyword.toLowerCase())) &&
+          item.genre.toLowerCase().includes(filter.toLowerCase())
+      );
+    }
   }
 
   public async playPauseSong(id: string): Promise<SongEntity> {

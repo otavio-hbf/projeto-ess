@@ -64,12 +64,20 @@ class SongController {
 
   private async searchSongs(req: Request, res: Response) {
     const keyword: string = req.query.keyword as string;
+    const filter: string = req.query.filter as string;
 
     if (!keyword) {
       return res.status(400).json({ error: "Keyword is required" });
     }
-
-    const songs = await this.songService.searchSongs(keyword);
+    
+    let songs;
+    if(filter){
+      songs = await this.songService.searchSongs(keyword, filter);
+    }
+    else{
+      songs = await this.songService.searchSongs(keyword);
+    }
+    
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
