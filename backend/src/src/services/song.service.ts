@@ -77,8 +77,6 @@ class SongService {
     const songsModel = songsEntity.map((song) => new SongModel(song));
     return songsModel;
   }
-
-
 }
 
 export default SongService;

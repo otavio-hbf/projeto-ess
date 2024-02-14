@@ -29,7 +29,6 @@ class SongController {
       this.getSong(req, res)
     );
 
-
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createSong(req, res)
     );
@@ -79,7 +78,6 @@ class SongController {
       data: songs,
     }).handle(res);
   }
-
 
   private async createSong(req: Request, res: Response) {
     const song = await this.songService.createSong(new SongEntity(req.body));

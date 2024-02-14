@@ -48,19 +48,6 @@ class SongRepository extends BaseRepository<SongEntity> {
       );
     }
   }
-
-  public async playPauseSong(id: string): Promise<SongEntity> {
-    const song = await this.getSong(id);
-
-    if (song) {
-      song.currently_playing = !song.currently_playing;
-
-      await this.updateSong(id, song);
-      return song;
-    } else {
-      throw new Error("Song not found");
-    }
-  }
 }
 
 export default SongRepository;

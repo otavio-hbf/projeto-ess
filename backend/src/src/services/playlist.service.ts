@@ -81,6 +81,21 @@ class PlaylistService {
   public async deletePlaylist(id: string): Promise<void> {
     await this.playlistRepository.deletePlaylist(id);
   }
+
+  public async searchPlaylists(
+    keyword: string,
+    filter?: string
+  ): Promise<PlaylistModel[]> {
+    let playlistsEntity;
+    if (filter) {
+      playlistsEntity = await this.playlistRepository.searchPlaylists(keyword, filter);
+    } else {
+      playlistsEntity = await this.playlistRepository.searchPlaylists(keyword);
+    }
+
+    const playlistsModel = playlistsEntity.map((playlist) => new PlaylistModel(playlist));
+    return playlistsModel;
+  }
 }
 
 export default PlaylistService;
