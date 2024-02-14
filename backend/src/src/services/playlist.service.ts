@@ -88,12 +88,17 @@ class PlaylistService {
   ): Promise<PlaylistModel[]> {
     let playlistsEntity;
     if (filter) {
-      playlistsEntity = await this.playlistRepository.searchPlaylists(keyword, filter);
+      playlistsEntity = await this.playlistRepository.searchPlaylists(
+        keyword,
+        filter
+      );
     } else {
       playlistsEntity = await this.playlistRepository.searchPlaylists(keyword);
     }
 
-    const playlistsModel = playlistsEntity.map((playlist) => new PlaylistModel(playlist));
+    const playlistsModel = playlistsEntity.map(
+      (playlist) => new PlaylistModel(playlist)
+    );
     return playlistsModel;
   }
 }

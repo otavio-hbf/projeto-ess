@@ -87,7 +87,7 @@ class PlaylistController {
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
   }
-  
+
   private async searchPlaylists(req: Request, res: Response) {
     const keyword: string = req.query.keyword as string;
 

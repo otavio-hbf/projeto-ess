@@ -5,7 +5,7 @@ export default class PlaylistModel extends BaseModel {
   name: string;
   songs: string[]; // IDs das músicas na playlist
   createdBy: string; // ID do usuário que criou a playlist
-  private : boolean;
+  private: boolean;
 
   constructor(data: PlaylistModel) {
     super(data.id);
