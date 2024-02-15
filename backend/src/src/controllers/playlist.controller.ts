@@ -5,6 +5,7 @@ import PlaylistEntity from "../entities/playlist.entity";
 
 class PlaylistController {
   private prefix: string = "/playlists";
+  private sufix: string = "/search";
   public router: Router;
   private playlistService: PlaylistService;
 
@@ -15,6 +16,11 @@ class PlaylistController {
   }
 
   private initRoutes() {
+    this.router.get(
+      `${this.prefix}${this.sufix}`,
+      (req: Request, res: Response) => this.searchPlaylists(req, res)
+    );
+
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getPlaylists(req, res)
     );
@@ -79,6 +85,21 @@ class PlaylistController {
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
+    }).handle(res);
+  }
+
+  private async searchPlaylists(req: Request, res: Response) {
+    const keyword: string = req.query.keyword as string;
+
+    if (!keyword) {
+      return res.status(400).json({ error: "Keyword is required" });
+    }
+
+    const playlists = await this.playlistService.searchPlaylists(keyword);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: playlists,
     }).handle(res);
   }
 }

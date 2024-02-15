@@ -18,9 +18,12 @@ class UserController {
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getUsers(req, res)
     );
-
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getUser(req, res)
+    );
+    this.router.get(
+      `${this.prefix}/:user_id/listen/:song_id`,
+      (req: Request, res: Response) => this.listenTo(req, res)
     );
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createUser(req, res)
@@ -77,6 +80,18 @@ class UserController {
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
+    }).handle(res);
+  }
+
+  private async listenTo(req: Request, res: Response) {
+    const user = await this.userService.listenTo(
+      req.params.user_id,
+      req.params.song_id
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: user,
     }).handle(res);
   }
 }

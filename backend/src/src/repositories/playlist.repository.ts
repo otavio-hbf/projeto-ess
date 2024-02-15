@@ -28,6 +28,16 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
   public async deletePlaylist(id: string): Promise<void> {
     await this.delete((item) => item.id === id);
   }
+
+  public async searchPlaylists(
+    keyword: string,
+    filter?: string
+  ): Promise<PlaylistEntity[]> {
+    return await this.findAll(
+      (item) =>
+        item.name.toLowerCase().includes(keyword.toLowerCase()) && !item.private
+    );
+  }
 }
 
 export default PlaylistRepository;

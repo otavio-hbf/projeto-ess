@@ -46,7 +46,9 @@ class PlaylistService {
 
     if (errors.length > 0) {
       // Handle validation errors
-      throw new TypeError("Playlist data is incomplete or not of the correct type");
+      throw new TypeError(
+        "Playlist data is incomplete or not of the correct type"
+      );
     }
 
     const playlistEntity = await this.playlistRepository.createPlaylist(data);
@@ -59,7 +61,10 @@ class PlaylistService {
     id: string,
     data: PlaylistEntity
   ): Promise<PlaylistModel> {
-    const playlistEntity = await this.playlistRepository.updatePlaylist(id, data);
+    const playlistEntity = await this.playlistRepository.updatePlaylist(
+      id,
+      data
+    );
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
@@ -75,6 +80,26 @@ class PlaylistService {
 
   public async deletePlaylist(id: string): Promise<void> {
     await this.playlistRepository.deletePlaylist(id);
+  }
+
+  public async searchPlaylists(
+    keyword: string,
+    filter?: string
+  ): Promise<PlaylistModel[]> {
+    let playlistsEntity;
+    if (filter) {
+      playlistsEntity = await this.playlistRepository.searchPlaylists(
+        keyword,
+        filter
+      );
+    } else {
+      playlistsEntity = await this.playlistRepository.searchPlaylists(keyword);
+    }
+
+    const playlistsModel = playlistsEntity.map(
+      (playlist) => new PlaylistModel(playlist)
+    );
+    return playlistsModel;
   }
 }
 
