@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Result, SuccessResult } from "../utils/result";
+import { FailureResult, Result, SuccessResult } from "../utils/result";
 import PlaylistService from "../services/playlist.service";
 import PlaylistEntity from "../entities/playlist.entity";
 
@@ -58,14 +58,22 @@ class PlaylistController {
   }
 
   private async createPlaylist(req: Request, res: Response) {
-    const playlist = await this.playlistService.createPlaylist(
-      new PlaylistEntity(req.body)
-    );
-
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: playlist,
-    }).handle(res);
+    try {
+      const playlist = await this.playlistService.createPlaylist(
+        new PlaylistEntity(req.body)
+      );
+  
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlist,
+      }).handle(res);
+    } catch (error) {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        msgCode: "playlist_creation_failure",
+        code: 500,
+      }).handle(res);
+    }
   }
 
   private async updatePlaylist(req: Request, res: Response) {

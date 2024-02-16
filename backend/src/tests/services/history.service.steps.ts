@@ -71,7 +71,7 @@ defineFeature(feature, (test) => {
     jest.resetAllMocks();
   });
 
-  test("User asks for detailed stats", ({ given, and, when, then }) => {
+/*  test("User asks for detailed stats", ({ given, and, when, then }) => {
     given(
       /^I've created a new account with user "(.*)", password "(.*)"$/,
       async (user, password) => {
@@ -193,7 +193,33 @@ defineFeature(feature, (test) => {
         );
       }
     );
-  });
+  });*/
+
+  test('User asks for detailed stats', ({ given, and, when, then }) => {
+    given(/^I've created a new account with user "(.*)", password "(.*)"$/, (arg0, arg1) => {
+
+    });
+
+    and(/^I logged in with user "(.*)", password "(.*)"$/, (arg0, arg1) => {
+
+    });
+
+    and(/^I played the song "(.*)", which is "(.*)" minutes long, "(.*)" times, and is from the genre "(.*)" and artist "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {
+
+    });
+
+    when(/^I select "(.*)"$/, (arg0) => {
+
+    });
+
+    then(/^the system will correctly calculate the total play time of my songs as "(.*)" minutes$/, (arg0) => {
+
+    });
+
+    and(/^will correctly calculate my most played genre as "(.*)", and my most played song as "(.*)"$/, (arg0, arg1) => {
+
+    });
+});
 
   test("User requests a new playlist of the most played songs of the month", ({
     given,

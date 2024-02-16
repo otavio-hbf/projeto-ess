@@ -141,6 +141,13 @@ export default class Database {
           createdBy: "2", // User ID 2 created this playlist
           private: true,
         }),
+        new PlaylistEntity({
+          id: "123",
+          name: "Afternoon Sessions",
+          songs: [],
+          createdBy: "Pedro",
+          private: true,
+        }),
       ],
     };
   }
