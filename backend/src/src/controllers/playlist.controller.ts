@@ -59,10 +59,20 @@ class PlaylistController {
 
   private async createPlaylist(req: Request, res: Response) {
     try {
-      const playlist = await this.playlistService.createPlaylist(
-        new PlaylistEntity(req.body)
-      );
+      const { name, createdBy } = req.body;
+  
+      // Validar se o nome e o createdBy estão presentes
+      if (!name) {
+        return res.status(400).json({ error: "A name is required for playlist creation" });
+      }
 
+      // Validar o createdBy estão presentes
+      if (!createdBy) {
+        return res.status(400).json({ error: "A valid userID is required for playlist creation" });
+      }
+  
+      const playlist = await this.playlistService.createPlaylist(new PlaylistEntity(req.body));
+  
       return new SuccessResult({
         msg: Result.transformRequestOnMsg(req),
         data: playlist,
@@ -75,7 +85,7 @@ class PlaylistController {
       }).handle(res);
     }
   }
-
+  
   private async updatePlaylist(req: Request, res: Response) {
     const playlist = await this.playlistService.updatePlaylist(
       req.params.id,

@@ -11,6 +11,6 @@ export default class PlaylistEntity extends BaseEntity {
     this.name = data.name;
     this.songs = data.songs || [];
     this.createdBy = data.createdBy;
-    this.private = data.private;
+    this.private = data.private || false;
   }
 }
