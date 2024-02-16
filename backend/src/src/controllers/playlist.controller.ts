@@ -62,7 +62,7 @@ class PlaylistController {
       const playlist = await this.playlistService.createPlaylist(
         new PlaylistEntity(req.body)
       );
-  
+
       return new SuccessResult({
         msg: Result.transformRequestOnMsg(req),
         data: playlist,
