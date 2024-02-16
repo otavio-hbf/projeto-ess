@@ -86,7 +86,6 @@ class PlaylistService {
     const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
     const playlistRepository: PlaylistRepository = new PlaylistRepository();
 
-
     if (!(playlistEntity.followers.indexOf(userId) > -1)) {
       playlistEntity.followers.push(userId);
       await playlistRepository.updatePlaylist(playlistId, playlistEntity);
