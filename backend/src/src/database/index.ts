@@ -38,7 +38,6 @@ export default class Database {
           duration: 45,
           artist: "Spongebob",
           genre: "Rock",
-          currently_playing: false,
         }),
         new SongEntity({
           id: "2",
@@ -46,7 +45,6 @@ export default class Database {
           duration: 23,
           artist: "Spongebob",
           genre: "MPB",
-          currently_playing: false,
         }),
         new SongEntity({
           id: "3",
@@ -54,7 +52,6 @@ export default class Database {
           duration: 78,
           artist: "Spongebob",
           genre: "MPB",
-          currently_playing: false,
         }),
       ],
       users: [

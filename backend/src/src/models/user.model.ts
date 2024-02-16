@@ -4,7 +4,7 @@ export default class UserModel extends BaseModel {
   name: string;
   email: string;
   history_tracking: boolean;
-  listening_to: string;
+  listening_to: string | null;
 
   constructor(data: UserModel) {
     super(data.id || "");

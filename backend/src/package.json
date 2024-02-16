@@ -7,7 +7,7 @@
     "build": "tsc -p .",
     "prod": "node dist/src/index.js",
     "test": "env-cmd -f .env.test jest --verbose --coverage  --config ./jest.config.js --detectOpenHandles",
-    "prettier": "prettier --write src/**/*.{ts,js}",
+    "prettier": "prettier --write --end-of-line lf src/**/*.{ts,js}",
     "lint": "eslint **/*.ts --report-unused-disable-directives --max-warnings 0 --fix",
     "postinstall": "yarn husky",
     "prepack": "yarn pinst --disable",
