@@ -1,17 +1,8 @@
 Feature: Playlist Service
    
     Scenario: Create a New Playlist
-        Given the PlaylistService returns a logged-in user with name "Pedro" and password "Password123"
-        When a "POST" request is sent to "/playlists" with the data:
-        """
-        {
-            "name": "Afternoon Sessions",
-            "user": {
-                "name": "Pedro",
-                "password": "Password123"
-            }
-        }
-        """
+        Given a user with id "123" is logged-in
+        When a "POST" request is sent to "/api/playlists" with the playlist name "Afternoon Sessions" and user id "123"
         Then the response status should be "201"
         And the response JSON should contain the created playlist with name "Afternoon Sessions"
 
