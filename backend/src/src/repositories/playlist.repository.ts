@@ -38,6 +38,39 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
         item.name.toLowerCase().includes(keyword.toLowerCase()) && !item.private
     );
   }
+
+  public async followPlaylist(
+    playlistId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        playlist.followers.push(userId);
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async unfollowPlaylist(
+    playlistId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        playlist.followers = playlist.followers.filter(
+          (followerId) => followerId !== userId
+        );
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
 
 export default PlaylistRepository;

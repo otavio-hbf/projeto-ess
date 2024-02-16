@@ -82,6 +82,28 @@ class PlaylistService {
     await this.playlistRepository.deletePlaylist(id);
   }
 
+  async followPlaylist(playlistId: string, userId: string): Promise<void> {
+    const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
+    const playlistRepository: PlaylistRepository = new PlaylistRepository();
+
+
+    if (!(playlistEntity.followers.indexOf(userId) > -1)) {
+      playlistEntity.followers.push(userId);
+      await playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    }
+  }
+
+  async unfollowPlaylist(playlistId: string, userId: string): Promise<void> {
+    const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
+    const playlistRepository: PlaylistRepository = new PlaylistRepository();
+
+    const index: number = playlistEntity.followers.indexOf(userId);
+    if (index !== -1) {
+      playlistEntity.followers.splice(index, 1);
+      await playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    }
+  }
+
   public async searchPlaylists(
     keyword: string,
     filter?: string
