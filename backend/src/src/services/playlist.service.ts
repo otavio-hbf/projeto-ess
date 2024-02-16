@@ -1,6 +1,9 @@
 import PlaylistRepository from "../repositories/playlist.repository";
 import PlaylistModel from "../models/playlist.model";
-import { HttpNotFoundError } from "../utils/errors/http.error";
+import {
+  HttpNotFoundError,
+  HttpUnauthorizedError,
+} from "../utils/errors/http.error";
 import PlaylistEntity from "../entities/playlist.entity";
 import { validate } from "class-validator";
 
@@ -78,7 +81,25 @@ class PlaylistService {
     return playlistModel;
   }
 
-  public async deletePlaylist(id: string): Promise<void> {
+  public async deletePlaylist(id: string, userId: string): Promise<void> {
+    const playlist = await this.playlistRepository.getPlaylist(id);
+
+    if (!playlist) {
+      // Trate o caso em que a playlist não existe
+      throw new HttpNotFoundError({
+        msg: "Playlist not found",
+        msgCode: PlaylistServiceMessageCode.playlist_not_found,
+      });
+    }
+
+    if (playlist.createdBy !== userId) {
+      // O usuário autenticado não é o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: Only the owner can delete the playlist",
+      });
+    }
+
+    // Lógica adicional, se necessário
     await this.playlistRepository.deletePlaylist(id);
   }
 
