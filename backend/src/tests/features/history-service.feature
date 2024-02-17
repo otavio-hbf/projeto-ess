@@ -12,10 +12,11 @@ Feature: History Service
         Then the history returned must have "1" item with song_id "4"
 
     Scenario: Delete an entry from an user history
-        Given the user with id "1" has a history entry with id "abc"
-        When the function deleteHistory is called with id "abc"
+        Given the user with id "1" has 3 history entries
+        When the function deleteHistory is called on one of the entry ids
         And the function getUserHistory is called with the user_id "1"
-        Then the history returned must not have the entry with id "abc"
+        Then the history returned must not have the entry that was deleted
+        And the user history must have 2 entries
 
     Scenario: Clear user history
         Given the user with id "1" has a history with "3" items

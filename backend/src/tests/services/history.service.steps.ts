@@ -14,6 +14,7 @@ import UserModel from "../../src/models/user.model";
 import StatisticsModel from "../../src/models/statistics.model";
 import Injector from "../../src/di/injector";
 import { di } from "../../src/di/index";
+import { mock } from "node:test";
 
 const feature = loadFeature("tests/features/history-service.feature");
 
@@ -137,22 +138,56 @@ defineFeature(feature, (test) => {
   });
 
   test("Delete an entry from an user history", ({ given, when, and, then }) => {
+    let deleted_entry: HistoryModel;
     given(
-      /^the user with id "(.*)" has a history entry with id "(.*)"$/,
-      (arg0, arg1) => {}
+      /^the user with id "(.*)" has (\d+) history entries$/,
+      async (user_id, entries) => {
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
+
+          // the entry to be deleted will be the last one
+          deleted_entry = await historyService.createHistory(mockHistoryEntity);
+        }
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          parseInt(entries)
+        );
+      }
     );
 
-    when(/^the function deleteHistory is called with id "(.*)"$/, (arg0) => {});
-
+    when(
+      "the function deleteHistory is called on one of the entry ids",
+      async () => {
+        jest.spyOn(mockHistoryRepository, "deleteHistory");
+        await historyService.deleteHistory(deleted_entry.id);
+        expect(mockHistoryRepository.deleteHistory).toHaveBeenCalledTimes(1);
+      }
+    );
+    let user_history: HistoryModel[];
     and(
       /^the function getUserHistory is called with the user_id "(.*)"$/,
-      (arg0) => {}
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        user_history = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
     );
 
     then(
-      /^the history returned must not have the entry with id "(.*)"$/,
-      (arg0) => {}
+      "the history returned must not have the entry that was deleted",
+      () => {
+        expect(user_history).not.toContain(deleted_entry);
+      }
     );
+
+    and(/^the user history must have (\d+) entries$/, (num_items) => {
+      expect(user_history.length).toBe(parseInt(num_items));
+    });
   });
 
   test("Clear user history", ({ given, when, then }) => {
