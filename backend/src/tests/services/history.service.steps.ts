@@ -98,7 +98,7 @@ defineFeature(feature, (test) => {
     );
   });
 
-  test("Add a new song to an user history", ({ given, when, then }) => {
+  test("Add a new song to a user history", ({ given, when, then }) => {
     let result: HistoryModel[] = [];
     given(
       /^the function createHistory was called with the user_id "(.*)" and the song_id "(.*)"$/,
@@ -137,7 +137,7 @@ defineFeature(feature, (test) => {
     );
   });
 
-  test("Delete an entry from an user history", ({ given, when, and, then }) => {
+  test("Delete an entry from a user history", ({ given, when, and, then }) => {
     let deleted_entry: HistoryModel;
     given(
       /^the user with id "(.*)" has (\d+) history entries$/,
@@ -241,7 +241,7 @@ defineFeature(feature, (test) => {
   test("Get user statistics", ({ given, when, then }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      async (user_id, table) => {        
+      async (user_id, table) => {
         // create songs and entries
         jest.spyOn(mockHistoryRepository, "createHistory");
         jest.spyOn(mockSongRepository, "createSong");
@@ -269,10 +269,15 @@ defineFeature(feature, (test) => {
             await historyService.createHistory(mockHistoryEntity);
           }
         }
-        expect(mockSongRepository.createSong).toHaveBeenCalledTimes(table.length);
+        expect(mockSongRepository.createSong).toHaveBeenCalledTimes(
+          table.length
+        );
 
         // total_songs added should be equal to the sum of each entry on table.times_played
-        let total_songs_added = table.reduce((counter: number, row: any) => counter + parseInt(row.times_played), 0);
+        let total_songs_added = table.reduce(
+          (counter: number, row: any) => counter + parseInt(row.times_played),
+          0
+        );
 
         expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
           total_songs_added
@@ -300,26 +305,3 @@ defineFeature(feature, (test) => {
     });
   });
 });
-
-// Test code for creating a new account with the given user and password
-// mockUserEntity = new UserEntity({
-//   id: "",
-//   name: user,
-//   email: "testEmail",
-//   password: password,
-//   history_tracking: true,
-//   listening_to: undefined
-// });
-
-// let expected = new UserModel(mockUserEntity as UserModel);
-
-// jest.spyOn(userService, "createUser");
-
-// await userService.createUser(mockUserEntity);
-
-// jest.spyOn(userService, "getUsers");
-
-// let users = await userService.getUsers();
-
-// expect(users).toEqual(expected);
-// await console.log(mockUserRepository.getUsers)

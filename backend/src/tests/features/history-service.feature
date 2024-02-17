@@ -6,12 +6,12 @@ Feature: History Service
         When o método getUserHistory do HistoryService for chamado com o id "1"
         Then o histórico retornado deve ter "3" itens com song_id "1", "2" e "3"
 
-    Scenario: Add a new song to an user history
+    Scenario: Add a new song to a user history
         Given the function createHistory was called with the user_id "1" and the song_id "4"
         When the function getUserHistory is called with the user_id "1"
         Then the history returned must have "1" item with song_id "4"
 
-    Scenario: Delete an entry from an user history
+    Scenario: Delete an entry from a user history
         Given the user with id "1" has 3 history entries
         When the function deleteHistory is called on one of the entry ids
         And the function getUserHistory is called with the user_id "1"
