@@ -23,25 +23,35 @@ class HistoryController {
       this.getHistories(req, res)
     );
 
+    // GET user history
+    // /user/:id/history
     this.router.get(
       `${this.prefix}/:id${this.suffix}`,
       (req: Request, res: Response) => this.getUserHistory(req, res)
     );
 
+    // GET most played
+    // /user/:id/hot
     this.router.get(
       `${this.prefix}/:id${this.hot}`,
       (req: Request, res: Response) => this.getUserMostPlayed(req, res)
     );
 
+    // GET statistics
+    // /user/:id/statistics
     this.router.get(
       `${this.prefix}/:id${this.statistics}`,
       (req: Request, res: Response) => this.getUserStatistics(req, res)
     );
 
+    // CREATE user history
+    // /user/history
     this.router.post(this.suffix, (req: Request, res: Response) =>
       this.createHistory(req, res)
     );
 
+    // DELETE user history
+    // /user/:id/history
     this.router.delete(
       `${this.prefix}/:id${this.suffix}`,
       (req: Request, res: Response) => this.deleteUserHistory(req, res)
