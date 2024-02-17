@@ -48,12 +48,12 @@ class PlaylistController {
     );
 
     this.router.put(
-        `${this.prefix}/addContributor/:playlistId/:userId`,
-        (req: Request, res: Response) => this.addContributor(req, res)
+      `${this.prefix}/addContributor/:playlistId/:userId`,
+      (req: Request, res: Response) => this.addContributor(req, res)
     );
     this.router.put(
-        `${this.prefix}/removeContributor/:playlistId/:userId`,
-        (req: Request, res: Response) => this.removeContributor(req, res)
+      `${this.prefix}/removeContributor/:playlistId/:userId`,
+      (req: Request, res: Response) => this.removeContributor(req, res)
     );
   }
 
@@ -164,11 +164,7 @@ class PlaylistController {
     const ownerId: string = req.body.ownerId;
 
     try {
-      await this.playlistService.removeContributor(
-        playlistId,
-        userId,
-        ownerId
-      );
+      await this.playlistService.removeContributor(playlistId, userId, ownerId);
       return new SuccessResult({
         msg: "Contributor removed successfully",
       }).handle(res);

@@ -14,7 +14,10 @@ class PlaylistService {
   private playlistRepository: PlaylistRepository;
   private userRepository: UserRepository;
 
-  constructor(playlistRepository: PlaylistRepository, userRepository: UserRepository) {
+  constructor(
+    playlistRepository: PlaylistRepository,
+    userRepository: UserRepository
+  ) {
     this.playlistRepository = playlistRepository;
     this.userRepository = userRepository;
   }
@@ -112,7 +115,6 @@ class PlaylistService {
     userId: string,
     ownerId: string
   ): Promise<void> {
-    
     // Checa se a playlist existe
     const playlist = await this.getPlaylist(playlistId);
     if (!playlist) {
@@ -120,8 +122,10 @@ class PlaylistService {
     }
 
     //Checa se a requisição está sendo feita pelo dono da playlist
-    if(ownerId !== playlist.createdBy) {
-      throw new Error("Only the playlist's owner has permission to add contributors");
+    if (ownerId !== playlist.createdBy) {
+      throw new Error(
+        "Only the playlist's owner has permission to add contributors"
+      );
     }
 
     // Checa se o usuário adicionado como contribuidor não é o próprio dono
