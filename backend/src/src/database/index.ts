@@ -2,6 +2,7 @@ import HistoryEntity from "../entities/history.entity";
 import SongEntity from "../entities/song.entity";
 import TestEntity from "../entities/test.entity";
 import UserEntity from "../entities/user.entity";
+import PlaylistEntity from "../entities/playlist.entity";
 
 export default class Database {
   data: { [key: string]: any[] };
@@ -60,6 +61,7 @@ export default class Database {
           email: "alfonso@gmail.com",
           password: "123456",
           history_tracking: true,
+          listening_to: "",
         }),
         new UserEntity({
           id: "2",
@@ -67,6 +69,7 @@ export default class Database {
           email: "joao@gmail.com",
           password: "789456",
           history_tracking: true,
+          listening_to: "",
         }),
       ],
       history: [
@@ -104,6 +107,40 @@ export default class Database {
           id: "",
           user_id: "1",
           song_id: "3",
+        }),
+      ],
+      playlists: [
+        new PlaylistEntity({
+          id: "1",
+          name: "My Favorites",
+          songs: ["1", "2", "3"], // Song IDs ranging from 1 to 3
+          createdBy: "1", // User ID 1 created this playlist
+          private: false,
+          followers: [],
+        }),
+        new PlaylistEntity({
+          id: "2",
+          name: "Road Trip Playlist",
+          songs: ["1", "2", "3"], // Song IDs ranging from 1 to 3
+          createdBy: "2", // User ID 2 created this playlist
+          private: false,
+          followers: [],
+        }),
+        new PlaylistEntity({
+          id: "3",
+          name: "Chill Vibes",
+          songs: ["2", "3"], // Song IDs ranging from 2 to 3
+          createdBy: "1", // User ID 1 created this playlist
+          private: false,
+          followers: [],
+        }),
+        new PlaylistEntity({
+          id: "4",
+          name: "Workout Beats",
+          songs: ["1", "3"], // Song IDs ranging from 1 to 3
+          createdBy: "2", // User ID 2 created this playlist
+          private: true,
+          followers: [],
         }),
       ],
     };

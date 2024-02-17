@@ -28,6 +28,26 @@ class SongRepository extends BaseRepository<SongEntity> {
   public async deleteSong(id: string): Promise<void> {
     await this.delete((item) => item.id !== id);
   }
+  // Implementing search function
+  public async searchSongs(
+    keyword: string,
+    filter?: string
+  ): Promise<SongEntity[]> {
+    if (!filter) {
+      return await this.findAll(
+        (item) =>
+          item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          item.artist.toLowerCase().includes(keyword.toLowerCase())
+      );
+    } else {
+      return await this.findAll(
+        (item) =>
+          (item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.artist.toLowerCase().includes(keyword.toLowerCase())) &&
+          item.genre.toLowerCase().includes(filter.toLowerCase())
+      );
+    }
+  }
 }
 
 export default SongRepository;

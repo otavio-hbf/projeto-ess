@@ -3,10 +3,12 @@ import OtherRepository from "../repositories/other.repository";
 import SongRepository from "../repositories/song.repository";
 import TestRepository from "../repositories/test.repository";
 import UserRepository from "../repositories/user.repository";
+import PlaylistRepository from "../repositories/playlist.repository";
 import HistoryService from "../services/history.service";
 import SongService from "../services/song.service";
 import TestService from "../services/test.service";
 import UserService from "../services/user.service";
+import PlaylistService from "../services/playlist.service";
 import Injector from "./injector";
 
 export const di = new Injector();
@@ -44,4 +46,11 @@ di.registerService(
     di.getRepository(HistoryRepository),
     di.getRepository(SongRepository)
   )
+);
+
+// Playlist
+di.registerRepository(PlaylistRepository, new PlaylistRepository());
+di.registerService(
+  PlaylistService,
+  new PlaylistService(di.getRepository(PlaylistRepository))
 );

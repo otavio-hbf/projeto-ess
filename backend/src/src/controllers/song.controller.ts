@@ -5,6 +5,7 @@ import SongEntity from "../entities/song.entity";
 
 class SongController {
   private prefix: string = "/songs";
+  private sufix: string = "/search";
   public router: Router;
   private songService: SongService;
 
@@ -15,6 +16,11 @@ class SongController {
   }
 
   private initRoutes() {
+    this.router.get(
+      `${this.prefix}${this.sufix}`,
+      (req: Request, res: Response) => this.searchSongs(req, res)
+    );
+
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getSongs(req, res)
     );
@@ -22,6 +28,7 @@ class SongController {
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getSong(req, res)
     );
+
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createSong(req, res)
     );
@@ -48,6 +55,27 @@ class SongController {
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: song,
+    }).handle(res);
+  }
+
+  private async searchSongs(req: Request, res: Response) {
+    const keyword: string = req.query.keyword as string;
+    const filter: string = req.query.filter as string;
+
+    if (!keyword) {
+      return res.status(400).json({ error: "Keyword is required" });
+    }
+
+    let songs;
+    if (filter) {
+      songs = await this.songService.searchSongs(keyword, filter);
+    } else {
+      songs = await this.songService.searchSongs(keyword);
+    }
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: songs,
     }).handle(res);
   }
 
