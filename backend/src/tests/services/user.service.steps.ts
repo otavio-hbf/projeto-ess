@@ -8,7 +8,7 @@ import UserRepository from "../../src/repositories/user.repository";
 import UserEntity from "../../src/entities/user.entity";
 import UserService from '../../src/services/user.service';
 
-const feature = loadFeature('../features/user-service.feature');
+const feature = loadFeature('tests/features/user-service.feature');
 const request = supertest(app);
 
 defineFeature(feature, (test) => {
@@ -26,36 +26,98 @@ defineFeature(feature, (test) => {
     });
 
     test('Registration successful', ({ given, when, then }) => {
-        given(/^the system does not have an account with the email "(.*)" registered$/, async(name) => {
-            
+        given('the system does not have an account with the email “ze@gmail.com” registered', () => {
+
         });
 
-        when(/^uma requisição post foi enviada para "(.*)" com o corpo da requisição sendo um JSON com nome "(.*)" email "(.*)" e senha "(.*)"$/, async (url, nome, email, password) => {
-            response = await request.post(url).send({
-                name: nome,
-                email: email,
-                password: password,
-            })
-            response.status
+        when(/^a "(.*)" request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {
+
         });
 
-        then(/^o sistema registra a nova conta de e-mail “(.*)" e senha "(.*)"$/, async (email, senha) => {
-            response = await request.get(url)
+        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
+
         });
     });
 
-    test('Login successful', ({ given, when, then }) => {
-        given(/^the system has the account with email “(.*)" and password "(.*)" registered$/, async(email, password) => {
-            response = 
-            expect(response);
+    test('Login successful', ({ given, when, then, and }) => {
+        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+
         });
 
-        when(/^the system receives a login attempt with the email and password fields filled in with "(.*)" and "(.*)", respectively$/, async (url, nome, email, password) => {
-            
+        when(/^a GET request was sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
+
         });
 
-        then(/^o sistema registra a nova conta de e-mail “(.*)" e senha “(.*)"$/, async (email, senha) => {
-            //msg: "login realizado com sucesso" [abstraindo a parte da homepage pois ainda nao foi criada]
+        then(/^the response status should be "(.*)"$/, (arg0) => {
+
+        });
+
+        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
+
+        });
+    });
+
+    test('Delete user', ({ given, when, and, then }) => {
+        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+
+        });
+
+        when(/^the system receives a request to delete the account with email "(.*)" and password "(.*)"$/, (arg0, arg1) => {
+
+        });
+
+        and(/^the system deletes the email account "(.*)"$/, (arg0) => {
+
+        });
+
+        then(/^the system does not have the email account "(.*)" registered$/, (arg0) => {
+
+        });
+    });
+
+    test('Update user', ({ given, when, then }) => {
+        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+
+        });
+
+        when(/^a PUT request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
+
+        });
+
+        then(/^the response status should be "(.*)"$/, (arg0) => {
+
+        });
+    });
+
+    test('Unsuccessful registration', ({ given, when, then }) => {
+        given('the system has an account with the email “ze@gmail.com” registered', () => {
+
+        });
+
+        when(/^a POST request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => { 
+
+        });
+
+        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
+
+        });
+    });
+
+    test('Unsuccessful login', ({ given, when, then, and }) => {
+        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+
+        });
+
+        when(/^a GET request was sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
+
+        });
+
+        then(/^the response status should be (\d+)$/, (arg0) => {
+
+        });
+
+        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
+
         });
     });
 });
