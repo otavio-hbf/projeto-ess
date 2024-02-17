@@ -209,7 +209,6 @@ class PlaylistController {
     }).handle(res);
   }
 
-
   private async addSongToPlaylist(req: Request, res: Response) {
     try {
       const playlistId = req.params.id;

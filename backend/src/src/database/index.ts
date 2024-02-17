@@ -148,6 +148,7 @@ export default class Database {
           songs: [],
           createdBy: "Pedro",
           private: true,
+          followers: [],
         }),
       ],
     };

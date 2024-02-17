@@ -52,6 +52,7 @@ defineFeature(feature, (test) => {
                 songs: [],
                 createdBy: "Pedro",
                 private: true,
+                followers: [],
             });
 
             jest.spyOn(mockPlaylistRepository, 'createPlaylist')
