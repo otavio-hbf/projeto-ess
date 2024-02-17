@@ -126,9 +126,9 @@ class HistoryService {
     }
 
     return new StatisticsModel({
-      most_played_genre_name: mostPlayedGenre,
-      most_played_song_name: mostPlayedSong?.song_name,
-      play_duration: totalDuration,
+      most_played_genre: mostPlayedGenre,
+      most_played_song: mostPlayedSong?.song_name,
+      time_played: totalDuration,
     });
   }
 

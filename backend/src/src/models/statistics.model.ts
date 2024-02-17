@@ -3,13 +3,13 @@ import SongModel from "./song.model";
 import UserModel from "./user.model";
 
 export default class StatisticsModel {
-  most_played_song_name?: string;
-  most_played_genre_name?: string;
-  play_duration?: number;
+  most_played_song?: string;
+  most_played_genre?: string;
+  time_played?: number;
 
   constructor(data: StatisticsModel) {
-    this.most_played_song_name = data.most_played_song_name;
-    this.most_played_genre_name = data.most_played_genre_name;
-    this.play_duration = data.play_duration;
+    this.most_played_song = data.most_played_song;
+    this.most_played_genre = data.most_played_genre;
+    this.time_played = data.time_played;
   }
 }
