@@ -290,13 +290,10 @@ defineFeature(feature, (test) => {
     );
 
     then("it must return the following statistics:", (table) => {
-      console.debug(table[0])
-      console.debug(userStatistics)
-
       let expected = new StatisticsModel({
-        play_duration: parseInt(table[0].play_duration),
-        most_played_genre_name: table[0].most_played_genre,
-        most_played_song_name: table[0].most_played_song,
+        time_played: parseInt(table[0].play_duration),
+        most_played_genre: table[0].most_played_genre,
+        most_played_song: table[0].most_played_song,
       });
 
       expect(userStatistics).toEqual(expected);
