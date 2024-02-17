@@ -19,6 +19,8 @@ import { di } from "../../src/di/index";
 import { mock } from "node:test";
 import { exitCode } from "process";
 import { HttpNotFoundError } from "../../src/utils/errors/http.error";
+import { addSongsToHistory } from "../utils/history.utils";
+import MostPlayedModel from "../../src/models/most_played.model";
 
 const feature = loadFeature("tests/features/history-service.feature");
 
@@ -250,46 +252,7 @@ defineFeature(feature, (test) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
       async (user_id, table) => {
-        // create songs and entries
-        jest.spyOn(mockHistoryRepository, "createHistory");
-        jest.spyOn(mockSongRepository, "createSong");
-
-        for (let row of table) {
-          // create songs
-          mockSongEntity = new SongEntity({
-            id: row.song_id,
-            title: row.title,
-            artist: row.artist,
-            duration: row.duration,
-            genre: row.genre,
-          });
-
-          let song = await songService.createSong(mockSongEntity);
-
-          // create history entries
-          mockHistoryEntity = new HistoryEntity({
-            id: "",
-            song_id: song.id,
-            user_id: user_id,
-          });
-
-          for (let i = 0; i < parseInt(row.times_played); i++) {
-            await historyService.createHistory(mockHistoryEntity);
-          }
-        }
-        expect(mockSongRepository.createSong).toHaveBeenCalledTimes(
-          table.length
-        );
-
-        // total_songs added should be equal to the sum of each entry on table.times_played
-        let total_songs_added = table.reduce(
-          (counter: number, row: any) => counter + parseInt(row.times_played),
-          0
-        );
-
-        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
-          total_songs_added
-        );
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
       }
     );
     let userStatistics: StatisticsModel;
@@ -356,11 +319,11 @@ defineFeature(feature, (test) => {
         expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(0);
       }
     );
-    
+
     let userHistory;
     and(
       /^the function getUserHistory is called with the user_id "(.*)"$/,
-      async(user_id) => {
+      async (user_id) => {
         jest.spyOn(mockHistoryRepository, "getHistories");
         userHistory = await historyService.getUserHistory(user_id);
         expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
@@ -369,6 +332,31 @@ defineFeature(feature, (test) => {
 
     then(/^the history returned must have (\d+) items$/, (entries) => {
       expect(userHistory.length).toBe(parseInt(entries));
+    });
+  });
+
+  test("User requests most played songs", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with the following items:$/,
+      async (user_id, table) => {
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
+      }
+    );
+
+    let most_played_songs: MostPlayedModel[];
+    when(
+      /^the function getUserMostPlayedList is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        most_played_songs = await historyService.getUserMostPlayedList(user_id);
+      }
+    );
+
+    then("it must return the following songs in order:", (table) => {
+      console.debug(most_played_songs, table)
+      for (let i = 0; i < table.length; i++) {
+        expect(most_played_songs[i].song_id).toBe(table[i].song_id);
+        expect(most_played_songs[i].times_played).toBe(parseInt(table[i].times_played));
+      }
     });
   });
 });
