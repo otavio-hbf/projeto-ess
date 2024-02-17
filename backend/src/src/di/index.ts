@@ -52,5 +52,5 @@ di.registerService(
 di.registerRepository(PlaylistRepository, new PlaylistRepository());
 di.registerService(
   PlaylistService,
-  new PlaylistService(di.getRepository(PlaylistRepository))
+  new PlaylistService(di.getRepository(PlaylistRepository), di.getRepository(UserRepository))
 );

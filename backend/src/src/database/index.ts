@@ -120,6 +120,7 @@ export default class Database {
           createdBy: "1", // User ID 1 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "2",
@@ -128,6 +129,7 @@ export default class Database {
           createdBy: "2", // User ID 2 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "3",
@@ -136,6 +138,7 @@ export default class Database {
           createdBy: "1", // User ID 1 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "4",
@@ -144,6 +147,7 @@ export default class Database {
           createdBy: "2", // User ID 2 created this playlist
           private: true,
           followers: [],
+          contributors: [],
         }),
       ],
     };

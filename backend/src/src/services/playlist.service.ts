@@ -3,16 +3,20 @@ import PlaylistModel from "../models/playlist.model";
 import { HttpNotFoundError } from "../utils/errors/http.error";
 import PlaylistEntity from "../entities/playlist.entity";
 import { validate } from "class-validator";
+import UserRepository from "../repositories/user.repository";
 
 class PlaylistServiceMessageCode {
   public static readonly playlist_not_found = "playlist_not_found";
+  public static readonly user_not_found = "user_not_found";
 }
 
 class PlaylistService {
   private playlistRepository: PlaylistRepository;
+  private userRepository: UserRepository;
 
-  constructor(playlistRepository: PlaylistRepository) {
+  constructor(playlistRepository: PlaylistRepository, userRepository: UserRepository) {
     this.playlistRepository = playlistRepository;
+    this.userRepository = userRepository;
   }
 
   public async getPlaylists(): Promise<PlaylistModel[]> {
@@ -100,6 +104,65 @@ class PlaylistService {
     if (index !== -1) {
       playlistEntity.followers.splice(index, 1);
       await playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    }
+  }
+
+  async addContributor(
+    playlistId: string,
+    userId: string,
+    ownerId: string
+  ): Promise<void> {
+    
+    // Checa se a playlist existe
+    const playlist = await this.getPlaylist(playlistId);
+    if (!playlist) {
+      throw new Error("Playlist not found");
+    }
+
+    //Checa se a requisição está sendo feita pelo dono da playlist
+    if(ownerId !== playlist.createdBy) {
+      throw new Error("Only the playlist's owner has permission to add contributors");
+    }
+
+    // Checa se o usuário adicionado como contribuidor não é o próprio dono
+    if (userId === ownerId) {
+      throw new Error("User cannot add itself as a contributor");
+    }
+
+    // Checa se o usuário já é um contribuidor
+    if (playlist.contributors.includes(userId)) {
+      throw new Error("User is already a contributor to this playlist");
+    }
+
+    //Checa se o usuário existe
+    const user = await this.userRepository.getUser(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    playlist.contributors.push(userId);
+    await this.updatePlaylist(playlistId, playlist);
+  }
+
+  async removeContributor(
+    playlistId: string,
+    userId: string,
+    ownerId: string
+  ): Promise<void> {
+    const playlist = await this.getPlaylist(playlistId);
+    if (!playlist) {
+      throw new Error("Playlist not found");
+    }
+
+    // Checa se o usuário é o dono
+    if (userId === ownerId) {
+      throw new Error("Owner cannot be removed as a contributor");
+    }
+
+    const index = playlist.contributors.indexOf(userId);
+    if (index !== -1) {
+      playlist.contributors.splice(index, 1);
+      await this.updatePlaylist(playlistId, playlist);
     }
   }
 
