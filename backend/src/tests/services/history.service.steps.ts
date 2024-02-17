@@ -1,7 +1,9 @@
 import { loadFeature, defineFeature } from "jest-cucumber";
 import HistoryRepository from "../../src/repositories/history.repository";
 import HistoryEntity from "../../src/entities/history.entity";
-import HistoryService from "../../src/services/history.service";
+import HistoryService, {
+  HistoryServiceMessageCode,
+} from "../../src/services/history.service";
 import OtherRepository from "../../src/repositories/other.repository";
 import HistoryModel from "../../src/models/history.model";
 import SongRepository from "../../src/repositories/song.repository";
@@ -15,6 +17,8 @@ import StatisticsModel from "../../src/models/statistics.model";
 import Injector from "../../src/di/injector";
 import { di } from "../../src/di/index";
 import { mock } from "node:test";
+import { exitCode } from "process";
+import { HttpNotFoundError } from "../../src/utils/errors/http.error";
 
 const feature = loadFeature("tests/features/history-service.feature");
 
@@ -48,7 +52,11 @@ defineFeature(feature, (test) => {
 
     injector.registerService(
       HistoryService,
-      new HistoryService(mockHistoryRepository, mockSongRepository)
+      new HistoryService(
+        mockHistoryRepository,
+        mockUserRepository,
+        mockSongRepository
+      )
     );
     historyService = injector.getService(HistoryService);
 
@@ -302,6 +310,65 @@ defineFeature(feature, (test) => {
       });
 
       expect(userStatistics).toEqual(expected);
+    });
+  });
+
+  test("History Tracking disabled", ({ given, and, when, then }) => {
+    let uid: string;
+    given(
+      /^the user with id "(.*)" has history tracking disabled$/,
+      async (user_id) => {
+        mockUserEntity = new UserEntity({
+          id: user_id,
+          name: "Test User",
+          email: "test",
+          history_tracking: false,
+          password: "123",
+        });
+
+        let user = await userService.createUser(mockUserEntity);
+        uid = user_id;
+
+        expect(user.history_tracking).toBe(false);
+      }
+    );
+
+    and("the user has no play history", async () => {
+      let history = await historyService.getUserHistory(uid);
+      expect(history.length).toBe(0);
+    });
+
+    when(
+      /^the function createHistory is called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
+        });
+
+        jest.spyOn(mockHistoryRepository, "createHistory");
+
+        await expect(
+          historyService.createHistory(mockHistoryEntity)
+        ).rejects.toThrow(HttpNotFoundError);
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(0);
+      }
+    );
+    
+    let userHistory;
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async(user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userHistory = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(/^the history returned must have (\d+) items$/, (entries) => {
+      expect(userHistory.length).toBe(parseInt(entries));
     });
   });
 });

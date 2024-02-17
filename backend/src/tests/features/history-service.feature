@@ -33,3 +33,10 @@ Feature: History Service
         Then it must return the following statistics:
             | most_played_song        | most_played_genre | play_duration |
             | Never Gonna Give You Up | Rock              | 1000          |
+
+    Scenario: History Tracking disabled
+        Given the user with id "1" has history tracking disabled
+        And the user has no play history
+        When the function createHistory is called with the user_id "1" and the song_id "4"
+        And the function getUserHistory is called with the user_id "1"
+        Then the history returned must have 0 items
