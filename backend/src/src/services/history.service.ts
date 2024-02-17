@@ -7,23 +7,25 @@ import MostPlayedModel from "../models/most_played.model";
 import SongRepository from "../repositories/song.repository";
 import { log } from "console";
 import StatisticsModel from "../models/statistics.model";
+import UserModel from "../models/user.model";
 
-class HistoryServiceMessageCode {
+export class HistoryServiceMessageCode {
   public static readonly history_not_found = "history_not_found";
+  public static readonly tracking_disabled = "tracking_disabled";
 }
 
 class HistoryService {
   private historyRepository: HistoryRepository;
-  //   private userRepository: UserRepository;
+  private userRepository: UserRepository;
   private songRepository: SongRepository;
 
   constructor(
     historyRepository: HistoryRepository,
-    // userRepository: UserRepository
+    userRepository: UserRepository,
     songRepository: SongRepository
   ) {
     this.historyRepository = historyRepository;
-    // this.userRepository = userRepository;
+    this.userRepository = userRepository;
     this.songRepository = songRepository;
   }
 
@@ -149,10 +151,25 @@ class HistoryService {
   }
 
   public async createHistory(data: HistoryEntity): Promise<HistoryModel> {
-    const historyEntity = await this.historyRepository.createHistory(data);
-    const historyModel = new HistoryModel(historyEntity);
+    const user = await this.userRepository.getUser(data.user_id);
+    // if (!user) {
+    //   throw new HttpNotFoundError({
+    //     msg: "User not found",
+    //     msgCode: HistoryServiceMessageCode.history_not_found,
+    //   });
+    // }
+    // !user é para facilitar os testes (criar históricos em usuários inexistentes), remover depois.
+    if (!user || user.history_tracking === true) {
+      const historyEntity = await this.historyRepository.createHistory(data);
+      const historyModel = new HistoryModel(historyEntity);
 
-    return historyModel;
+      return historyModel;
+    } else {
+      throw new HttpNotFoundError({
+        msg: "Tracking is disabled for this user",
+        msgCode: HistoryServiceMessageCode.tracking_disabled,
+      });
+    }
   }
 
   public async updateHistory(

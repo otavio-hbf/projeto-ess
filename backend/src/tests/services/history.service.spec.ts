@@ -6,9 +6,11 @@ import SongRepository from '../../src/repositories/song.repository';
 import SongEntity from '../../src/entities/song.entity';
 import HistoryService from '../../src/services/history.service';
 import { HttpNotFoundError } from '../../src/utils/errors/http.error';
+import UserRepository from '../../src/repositories/user.repository';
 
 describe('HistoryService', () => {
   let mockHistoryRepository: HistoryRepository;
+  let mockUserRepository: UserRepository;
   let mockSongRepository: SongRepository;
   let service: HistoryService;
 
@@ -30,11 +32,15 @@ describe('HistoryService', () => {
       deleteUserHistory: jest.fn(),
     } as any;
 
+    mockUserRepository = {
+      getUser: jest.fn(),
+    } as any;
+
     mockSongRepository = {
       getSong: jest.fn(),
     } as any;
 
-    service = new HistoryService(mockHistoryRepository, mockSongRepository);
+    service = new HistoryService(mockHistoryRepository, mockUserRepository, mockSongRepository);
   });
 
   afterEach(() => {
