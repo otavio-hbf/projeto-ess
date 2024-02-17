@@ -69,7 +69,8 @@ class PlaylistService {
 
   public async updatePlaylist(
     id: string,
-    data: PlaylistEntity
+    data: PlaylistEntity,
+    userId: string
   ): Promise<PlaylistModel> {
     const playlistEntity = await this.playlistRepository.updatePlaylist(
       id,
@@ -80,6 +81,13 @@ class PlaylistService {
       throw new HttpNotFoundError({
         msg: "Playlist not found",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
+      });
+    }
+
+    if (playlistEntity.createdBy !== userId) {
+      // O usuário autenticado não é o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: Only the owner can update the playlist",
       });
     }
 
@@ -106,7 +114,6 @@ class PlaylistService {
       });
     }
 
-    // Lógica adicional, se necessário
     await this.playlistRepository.deletePlaylist(id);
   }
 

@@ -101,20 +101,62 @@ class PlaylistController {
   }
 
   private async updatePlaylist(req: Request, res: Response) {
-    const playlist = await this.playlistService.updatePlaylist(
-      req.params.id,
-      new PlaylistEntity(req.body)
-    );
+    try {
+      const name = req.body.name;
+      const userId = req.body.userId;
 
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: playlist,
-    }).handle(res);
+      // Validar se o nome esta presentes
+      if (!name) {
+        return res
+          .status(400)
+          .json({ error: "A name is required to update playlist" });
+      }
+
+      // Validar o userId estão presentes
+      if (!userId) {
+        return res
+          .status(400)
+          .json({ error: "A valid userId is required to update playlist" });
+      }
+
+      const playlist = await this.playlistService.updatePlaylist(
+        req.params.id,
+        new PlaylistEntity(req.body),
+        userId
+      );
+
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlist,
+      }).handle(res);
+    } catch (error) {
+      if (error instanceof HttpUnauthorizedError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "update_playlist_unauthorized",
+          code: 403,
+        }).handle(res);
+      }
+
+      if (error instanceof HttpNotFoundError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "playlist_not_found",
+          code: 403,
+        }).handle(res);
+      }
+
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        msgCode: "playlist_update_failure",
+        code: 500,
+      }).handle(res);
+    }
   }
 
   private async deletePlaylist(req: Request, res: Response) {
     try {
-      const userId = req.body.id; // informação do ID do usuário na requisição
+      const userId = req.body.userId; // informação do ID do usuário na requisição
 
       await this.playlistService.deletePlaylist(req.params.id, userId);
 
@@ -157,9 +199,9 @@ class PlaylistController {
     try {
       const playlistId = req.params.id;
       const songId = req.params.songId;
-      const createdBy = req.body.userID; // informação do ID do usuário na requisição
+      const userId = req.body.userId; // informação do ID do usuário na requisição
 
-      if (!createdBy) {
+      if (!userId) {
         return res.status(400).json({
           error: "A valid userID is required to add songs in playlist",
         });
@@ -168,7 +210,7 @@ class PlaylistController {
       const updatedPlaylist = await this.playlistService.addSongToPlaylist(
         playlistId,
         songId,
-        createdBy
+        userId
       );
 
       return new SuccessResult({
