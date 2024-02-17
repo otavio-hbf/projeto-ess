@@ -75,14 +75,14 @@ defineFeature(feature, (test) => {
             song_id: song,
           });
           await historyService.createHistory(mockHistoryEntity);
-        }        
+        }
       }
     );
 
     when(
       /^o método getUserHistory do HistoryService for chamado com o id "(.*)"$/,
       async (user_id) => {
-      result = await historyService.getUserHistory(user_id);
+        result = await historyService.getUserHistory(user_id);
       }
     );
 
@@ -95,6 +95,92 @@ defineFeature(feature, (test) => {
         }
       }
     );
+  });
+
+  test("Add a new song to an user history", ({ given, when, then }) => {
+    let result: HistoryModel[] = [];
+    given(
+      /^the function createHistory was called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
+        });
+
+        jest.spyOn(mockHistoryRepository, "createHistory");
+
+        await historyService.createHistory(mockHistoryEntity);
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    when(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+
+        result = await historyService.getUserHistory(user_id);
+
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(
+      /^the history returned must have "(.*)" item with song_id "(.*)"$/,
+      (num_items, song_id) => {
+        expect(result.length).toBe(parseInt(num_items));
+        expect(result[0].song_id).toBe(song_id);
+      }
+    );
+  });
+
+  test("Delete an entry from an user history", ({ given, when, and, then }) => {
+    given(
+      /^the user with id "(.*)" has a history entry with id "(.*)"$/,
+      (arg0, arg1) => {}
+    );
+
+    when(/^the function deleteHistory is called with id "(.*)"$/, (arg0) => {});
+
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      (arg0) => {}
+    );
+
+    then(
+      /^the history returned must not have the entry with id "(.*)"$/,
+      (arg0) => {}
+    );
+  });
+
+  test("Clear user history", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with "(.*)" items$/,
+      (arg0, arg1) => {}
+    );
+
+    when(
+      /^the function deleteUserHistory is called with the user_id "(.*)"$/,
+      (arg0) => {}
+    );
+
+    then(/^the history returned must have "(.*)" items$/, (arg0) => {});
+  });
+
+  test("Get user statistics", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with the following items:$/,
+      (arg0, table) => {}
+    );
+
+    when(
+      /^the function getUserStatistics is called with the user_id "(.*)"$/,
+      (arg0) => {}
+    );
+
+    then("it must return the following statistics:", (table) => {});
   });
 });
 
