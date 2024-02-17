@@ -45,6 +45,10 @@ class PlaylistController {
       `${this.prefix}/:id/:songId`,
       (req: Request, res: Response) => this.addSongToPlaylist(req, res)
     );
+    this.router.delete(
+      `${this.prefix}/:id/:songId`,
+      (req: Request, res: Response) => this.removeSongToPlaylist(req, res)
+    );
   }
 
   private async getPlaylists(req: Request, res: Response) {
@@ -245,6 +249,61 @@ class PlaylistController {
       return new FailureResult({
         msg: Result.transformRequestOnMsg(req),
         msgCode: "add_song_failure",
+        code: 500,
+      }).handle(res);
+    }
+  }
+
+  private async removeSongToPlaylist(req: Request, res: Response) {
+    try {
+      const playlistId = req.params.id;
+      const songId = req.params.songId;
+      const userId = req.body.userId; // informação do ID do usuário na requisição
+
+      if (!userId) {
+        return res.status(400).json({
+          error: "A valid userID is required to add songs in playlist",
+        });
+      }
+
+      const updatedPlaylist = await this.playlistService.removeSongToPlaylist(
+        playlistId,
+        songId,
+        userId
+      );
+
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: updatedPlaylist,
+      }).handle(res);
+    } catch (error) {
+      if (error instanceof HttpUnauthorizedError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "playlist_remove_song_unauthorized",
+          code: 403,
+        }).handle(res);
+      }
+
+      if (error instanceof HttpNotFoundError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "entity_not_found",
+          code: 403,
+        }).handle(res);
+      }
+
+      if (error instanceof Error) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "song_do_not_exist_in_playlist",
+          code: 403,
+        }).handle(res);
+      }
+
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        msgCode: "remove_song_failure",
         code: 500,
       }).handle(res);
     }

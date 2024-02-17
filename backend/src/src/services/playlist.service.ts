@@ -194,6 +194,66 @@ class PlaylistService {
 
     return playlistModel;
   }
+
+  public async removeSongToPlaylist(
+    playlistId: string,
+    songIdToRemove: string,
+    userId: string
+  ): Promise<PlaylistModel> {
+    const playlistEntity = await this.playlistRepository.getPlaylist(
+      playlistId
+    );
+    const songEntity = await this.songRepository.getSong(songIdToRemove);
+
+    if (!playlistEntity) {
+      throw new HttpNotFoundError({
+        msg: "Playlist not found",
+        msgCode: PlaylistServiceMessageCode.playlist_not_found,
+      });
+    }
+
+    if (!songEntity) {
+      throw new HttpNotFoundError({
+        msg: "Song not found",
+        msgCode: PlaylistServiceMessageCode.song_not_found,
+      });
+    }
+
+    if (playlistEntity.createdBy !== userId) {
+      // O usuário autenticado não é o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: Only the owner can update the playlist",
+      });
+    }
+
+    // Verifique se a música está na playlist
+    if (!playlistEntity.songs.includes(songIdToRemove)) {
+      throw new Error("Song does not exist in the playlist");
+    } else {
+      // Remove a música da playlist
+      playlistEntity.songs = playlistEntity.songs.filter(
+        (songId) => songId !== songIdToRemove
+      );
+      await this.playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    }
+
+    // Atualiza a playlist no repositório
+    const updatedPlaylistEntity = await this.playlistRepository.updatePlaylist(
+      playlistId,
+      playlistEntity
+    );
+
+    if (!updatedPlaylistEntity) {
+      throw new HttpNotFoundError({
+        msg: "Playlist fail to remove song",
+        msgCode: PlaylistServiceMessageCode.playlist_not_found,
+      });
+    }
+
+    const playlistModel = new PlaylistModel(updatedPlaylistEntity);
+
+    return playlistModel;
+  }
 }
 
 export default PlaylistService;
