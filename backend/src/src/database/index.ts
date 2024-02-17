@@ -142,6 +142,14 @@ export default class Database {
           private: true,
           followers: [],
         }),
+        new PlaylistEntity({
+          id: "123",
+          name: "Afternoon Sessions",
+          songs: [],
+          createdBy: "Pedro",
+          private: true,
+          followers: [],
+        }),
       ],
     };
   }
