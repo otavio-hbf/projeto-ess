@@ -48,10 +48,13 @@ class PlaylistController {
     this.router.delete(
       `${this.prefix}/:id/:songId`,
       (req: Request, res: Response) => this.removeSongToPlaylist(req, res)
+    );
+
     this.router.post(
       `${this.prefix}/follow/:userId/:playlistId`,
       (req: Request, res: Response) => this.followPlaylist(req, res)
     );
+
     this.router.post(
       `${this.prefix}/unfollow/:userId/:playlistId`,
       (req: Request, res: Response) => this.unfollowPlaylist(req, res)
@@ -315,6 +318,7 @@ class PlaylistController {
         code: 500,
       }).handle(res);
     }
+  }
 
   private async followPlaylist(req: Request, res: Response) {
     const playlistId: string = req.params.playlistId;
