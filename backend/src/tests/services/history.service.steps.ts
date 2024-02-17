@@ -241,15 +241,66 @@ defineFeature(feature, (test) => {
   test("Get user statistics", ({ given, when, then }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      (arg0, table) => {}
-    );
+      async (user_id, table) => {        
+        // create songs and entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        jest.spyOn(mockSongRepository, "createSong");
 
+        for (let row of table) {
+          // create songs
+          mockSongEntity = new SongEntity({
+            id: row.song_id,
+            title: row.title,
+            artist: row.artist,
+            duration: row.duration,
+            genre: row.genre,
+          });
+
+          let song = await songService.createSong(mockSongEntity);
+
+          // create history entries
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: song.id,
+            user_id: user_id,
+          });
+
+          for (let i = 0; i < parseInt(row.times_played); i++) {
+            await historyService.createHistory(mockHistoryEntity);
+          }
+        }
+        expect(mockSongRepository.createSong).toHaveBeenCalledTimes(table.length);
+
+        // total_songs added should be equal to the sum of each entry on table.times_played
+        let total_songs_added = table.reduce((counter: number, row: any) => counter + parseInt(row.times_played), 0);
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          total_songs_added
+        );
+      }
+    );
+    let userStatistics: StatisticsModel;
     when(
       /^the function getUserStatistics is called with the user_id "(.*)"$/,
-      (arg0) => {}
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userStatistics = await historyService.getUserStatistics(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
     );
 
-    then("it must return the following statistics:", (table) => {});
+    then("it must return the following statistics:", (table) => {
+      console.debug(table[0])
+      console.debug(userStatistics)
+
+      let expected = new StatisticsModel({
+        play_duration: parseInt(table[0].play_duration),
+        most_played_genre_name: table[0].most_played_genre,
+        most_played_song_name: table[0].most_played_song,
+      });
+
+      expect(userStatistics).toEqual(expected);
+    });
   });
 });
 
