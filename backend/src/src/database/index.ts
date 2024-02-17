@@ -1,6 +1,5 @@
 import HistoryEntity from "../entities/history.entity";
 import SongEntity from "../entities/song.entity";
-import TestEntity from "../entities/test.entity";
 import UserEntity from "../entities/user.entity";
 import PlaylistEntity from "../entities/playlist.entity";
 
@@ -25,12 +24,6 @@ export default class Database {
 
   static seed() {
     Database.getInstance().data = {
-      tests: [
-        new TestEntity({
-          id: "89ecc32a-aec7-4b71-adfd-03287e4ca74f",
-          name: "Test Seed",
-        }),
-      ],
       songs: [
         new SongEntity({
           id: "1",
