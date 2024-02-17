@@ -45,6 +45,7 @@ di.registerService(
   HistoryService,
   new HistoryService(
     di.getRepository(HistoryRepository),
+    di.getRepository(UserRepository),
     di.getRepository(SongRepository)
   )
 );
@@ -53,7 +54,10 @@ di.registerService(
 di.registerRepository(PlaylistRepository, new PlaylistRepository());
 di.registerService(
   PlaylistService,
-  new PlaylistService(di.getRepository(PlaylistRepository))
+  new PlaylistService(
+    di.getRepository(PlaylistRepository),
+    di.getRepository(SongRepository)
+  )
 );
 
 //Hot Page

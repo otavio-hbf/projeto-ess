@@ -230,6 +230,7 @@ export default class Database {
           songs: ["1", "2", "3"], // Song IDs ranging from 1 to 3
           createdBy: "1", // User ID 1 created this playlist
           private: false,
+          followers: [],
         }),
         new PlaylistEntity({
           id: "2",
@@ -237,6 +238,7 @@ export default class Database {
           songs: ["1", "2", "3"], // Song IDs ranging from 1 to 3
           createdBy: "2", // User ID 2 created this playlist
           private: false,
+          followers: [],
         }),
         new PlaylistEntity({
           id: "3",
@@ -244,6 +246,7 @@ export default class Database {
           songs: ["2", "3"], // Song IDs ranging from 2 to 3
           createdBy: "1", // User ID 1 created this playlist
           private: false,
+          followers: [],
         }),
         new PlaylistEntity({
           id: "4",
@@ -251,6 +254,15 @@ export default class Database {
           songs: ["1", "3"], // Song IDs ranging from 1 to 3
           createdBy: "2", // User ID 2 created this playlist
           private: true,
+          followers: [],
+        }),
+        new PlaylistEntity({
+          id: "123",
+          name: "Afternoon Sessions",
+          songs: [],
+          createdBy: "Pedro",
+          private: true,
+          followers: [],
         }),
       ],
     };

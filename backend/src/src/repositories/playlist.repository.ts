@@ -26,7 +26,7 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
   }
 
   public async deletePlaylist(id: string): Promise<void> {
-    await this.delete((item) => item.id === id);
+    await this.delete((item) => item.id !== id);
   }
 
   public async searchPlaylists(
@@ -37,6 +37,38 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
       (item) =>
         item.name.toLowerCase().includes(keyword.toLowerCase()) && !item.private
     );
+  }
+
+  public async followPlaylist(
+    playlistId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        playlist.followers.push(userId);
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async unfollowPlaylist(
+    playlistId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        playlist.followers = playlist.followers.filter(
+          (followerId) => followerId !== userId
+        );
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
