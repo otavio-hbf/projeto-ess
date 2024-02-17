@@ -6,6 +6,7 @@ import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
 import UserEntity from "../../src/entities/user.entity";
 import SongRepository from "../../src/repositories/song.repository";
+import UserRepository from '../../src/repositories/user.repository';
 
 const feature = loadFeature('tests/features/playlist-service.feature');
 const request = supertest(app);
@@ -14,6 +15,7 @@ defineFeature(feature, (test) => {
     // Mock do repositório
     let mockPlaylistRepository: PlaylistRepository;
     let mockSongRepository: SongRepository;
+    let mockUserRepository: UserRepository;
 
     let playlistService: PlaylistService;
 
@@ -31,7 +33,7 @@ defineFeature(feature, (test) => {
             deletePlaylist: jest.fn(),
         } as any;
 
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository);
+        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
     });
 
     afterEach(() => {
