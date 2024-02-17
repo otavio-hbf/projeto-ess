@@ -80,7 +80,7 @@ describe('HistoryService', () => {
 
     jest
       .spyOn(mockSongRepository, 'getSong')
-      .mockResolvedValue(new SongEntity({ title: 'Test Song', duration: 4, artist: 'Spongebob', genre: 'Rock', id: '789', times_ever_played: 12, currently_playing: false }));
+      .mockResolvedValue(new SongEntity({ title: 'Test Song', duration: 4, artist: 'Spongebob', genre: 'Rock', id: '789', times_ever_played: 12}));
 
     const mostPlayed = await service.getUserMostPlayedList(id);
 

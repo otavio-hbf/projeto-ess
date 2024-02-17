@@ -1,7 +1,6 @@
 import { HttpNotFoundError } from "../utils/errors/http.error";
 import SongModel from "../models/song.model";
 import SongRepository from "../repositories/song.repository";
-
 class HotPageServiceMessageCode {
   public static readonly hotPage_not_found = "hotPage_not_found";
 }

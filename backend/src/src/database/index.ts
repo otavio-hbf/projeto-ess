@@ -38,7 +38,6 @@ export default class Database {
           duration: 45,
           artist: "Spongebob",
           genre: "Rock",
-          currently_playing: false,
           times_ever_played: 42,
         }),
         new SongEntity({
@@ -47,7 +46,6 @@ export default class Database {
           duration: 23,
           artist: "Spongebob",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 30,
         }),
         new SongEntity({
@@ -56,7 +54,6 @@ export default class Database {
           duration: 78,
           artist: "Spongebob",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 20,
         }),
         new SongEntity({
@@ -65,7 +62,6 @@ export default class Database {
           duration: 78,
           artist: "Victo e Leo",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 12,
         }),
         new SongEntity({
@@ -74,7 +70,6 @@ export default class Database {
           duration: 600,
           artist: "Legião Urbana",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 0,
         }),
         new SongEntity({
@@ -83,7 +78,6 @@ export default class Database {
           duration: 78,
           artist: "Alceu Valença",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 8,
         }),
         new SongEntity({
@@ -92,7 +86,6 @@ export default class Database {
           duration: 78,
           artist: "Red Hot Chili Peppers",
           genre: "Rock",
-          currently_playing: false,
           times_ever_played: 14,
         }),
         new SongEntity({
@@ -101,7 +94,6 @@ export default class Database {
           duration: 78,
           artist: "Legião Urbana",
           genre: "MPB",
-          currently_playing: false,
           times_ever_played: 5,
         }),
         new SongEntity({
@@ -110,7 +102,6 @@ export default class Database {
           duration: 78,
           artist: "50 cent",
           genre: "Rap",
-          currently_playing: false,
           times_ever_played: 22,
         }),
         new SongEntity({
@@ -119,7 +110,6 @@ export default class Database {
           duration: 78,
           artist: "Luiz Gonzaga",
           genre: "Forró",
-          currently_playing: false,
           times_ever_played: 500,
         }),
         new SongEntity({
@@ -128,7 +118,6 @@ export default class Database {
           duration: 78,
           artist: "John Dever",
           genre: "Country",
-          currently_playing: false,
           times_ever_played: 16,
         }),
         new SongEntity({
@@ -137,7 +126,6 @@ export default class Database {
           duration: 78,
           artist: "def",
           genre: "Country",
-          currently_playing: false,
           times_ever_played: 1,
         }),
         new SongEntity({
@@ -146,7 +134,6 @@ export default class Database {
           duration: 78,
           artist: "Pip",
           genre: "Country",
-          currently_playing: false,
           times_ever_played: 0,
         }),
         new SongEntity({
@@ -155,7 +142,6 @@ export default class Database {
           duration: 78,
           artist: "Rihanna",
           genre: "Pop",
-          currently_playing: false,
           times_ever_played: 90,
         }),
         new SongEntity({
@@ -164,7 +150,6 @@ export default class Database {
           duration: 78,
           artist: "Unknown",
           genre: "Classical",
-          currently_playing: false,
           times_ever_played: 50,
         }),
       ],
