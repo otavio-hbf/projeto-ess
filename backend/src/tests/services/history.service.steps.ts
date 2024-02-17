@@ -63,6 +63,7 @@ defineFeature(feature, (test) => {
   });
 
   test("Obter histórico de um usuário por id", ({ given, when, then }) => {
+    let result: HistoryModel[] = [];
     given(
       /^o método getUserHistory chamado com "(.*)" do HistoryService retorna um histórico com "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
       async (user_id, song_count, song_1, song_2, song_3) => {
@@ -74,21 +75,25 @@ defineFeature(feature, (test) => {
             song_id: song,
           });
           await historyService.createHistory(mockHistoryEntity);
-        }
-
-        const result = await historyService.getUserHistory(user_id);
-        expect(result.length).toBe(parseInt(song_count));
+        }        
       }
     );
 
     when(
       /^o método getUserHistory do HistoryService for chamado com o id "(.*)"$/,
-      (arg0) => {}
+      async (user_id) => {
+      result = await historyService.getUserHistory(user_id);
+      }
     );
 
     then(
       /^o histórico retornado deve ter "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
-      (arg0, arg1, arg2, arg3) => {}
+      (song_count, song_1, song_2, song_3) => {
+        expect(result.length).toBe(parseInt(song_count));
+        for (let song of result) {
+          expect([song_1, song_2, song_3]).toContain(song.song_id);
+        }
+      }
     );
   });
 });
