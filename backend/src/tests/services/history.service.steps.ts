@@ -352,7 +352,6 @@ defineFeature(feature, (test) => {
     );
 
     then("it must return the following songs in order:", (table) => {
-      console.debug(most_played_songs, table)
       for (let i = 0; i < table.length; i++) {
         expect(most_played_songs[i].song_id).toBe(table[i].song_id);
         expect(most_played_songs[i].times_played).toBe(parseInt(table[i].times_played));
