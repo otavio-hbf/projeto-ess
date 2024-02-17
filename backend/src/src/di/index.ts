@@ -9,6 +9,7 @@ import SongService from "../services/song.service";
 import TestService from "../services/test.service";
 import UserService from "../services/user.service";
 import PlaylistService from "../services/playlist.service";
+import HotPageService from "../services/hotPage.service";
 import Injector from "./injector";
 
 export const di = new Injector();
@@ -53,4 +54,11 @@ di.registerRepository(PlaylistRepository, new PlaylistRepository());
 di.registerService(
   PlaylistService,
   new PlaylistService(di.getRepository(PlaylistRepository))
+);
+
+//Hot Page
+di.registerRepository(SongRepository, new SongRepository());
+di.registerService(
+  HotPageService,
+  new HotPageService(di.getRepository(SongRepository))
 );
