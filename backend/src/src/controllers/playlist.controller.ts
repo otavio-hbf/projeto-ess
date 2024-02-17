@@ -355,7 +355,11 @@ class PlaylistController {
     const userId: string = req.body.userId;
 
     try {
-      await this.playlistService.addContributor(playlistId, contributorId, userId);
+      await this.playlistService.addContributor(
+        playlistId,
+        contributorId,
+        userId
+      );
       return new SuccessResult({
         msg: "Contributor added successfully",
       }).handle(res);
@@ -370,7 +374,11 @@ class PlaylistController {
     const userId: string = req.body.userId;
 
     try {
-      await this.playlistService.removeContributor(playlistId, contributorId, userId);
+      await this.playlistService.removeContributor(
+        playlistId,
+        contributorId,
+        userId
+      );
       return new SuccessResult({
         msg: "Contributor removed successfully",
       }).handle(res);
