@@ -73,16 +73,16 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
 
   public async addContributor(
     playlistId: string,
-    userId: string
+    contributorId: string
   ): Promise<void> {
     try {
       const playlist = await this.getPlaylist(playlistId);
       if (playlist) {
         // Checa se o usuário já é um contribuidor
-        if (playlist.followers.indexOf(userId) > -1) {
+        if (playlist.followers.indexOf(contributorId) > -1) {
           throw new Error("User is already a contributor to this playlist");
         }
-        playlist.contributors.push(userId);
+        playlist.contributors.push(contributorId);
         await this.updatePlaylist(playlistId, playlist);
       }
     } catch (error) {
@@ -92,12 +92,12 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
 
   public async removeContributor(
     playlistId: string,
-    userId: string
+    contributorId: string
   ): Promise<void> {
     try {
       const playlist = await this.getPlaylist(playlistId);
       if (playlist) {
-        const index = playlist.contributors.indexOf(userId);
+        const index = playlist.contributors.indexOf(contributorId);
         if (index > -1) {
           playlist.contributors.splice(index, 1);
           await this.updatePlaylist(playlistId, playlist);

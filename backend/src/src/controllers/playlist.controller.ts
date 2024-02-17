@@ -60,11 +60,11 @@ class PlaylistController {
     );
 
     this.router.put(
-      `${this.prefix}/addContributor/:playlistId/:userId`,
+      `${this.prefix}/addContributor/:playlistId/:contributorId`,
       (req: Request, res: Response) => this.addContributor(req, res)
     );
     this.router.put(
-      `${this.prefix}/removeContributor/:playlistId/:userId`,
+      `${this.prefix}/removeContributor/:playlistId/:contributorId`,
       (req: Request, res: Response) => this.removeContributor(req, res)
     );
   }
@@ -351,11 +351,11 @@ class PlaylistController {
 
   private async addContributor(req: Request, res: Response) {
     const playlistId: string = req.params.playlistId;
-    const userId: string = req.params.userId;
-    const ownerId: string = req.body.ownerId;
+    const contributorId: string = req.params.contributorId;
+    const userId: string = req.body.userId;
 
     try {
-      await this.playlistService.addContributor(playlistId, userId, ownerId);
+      await this.playlistService.addContributor(playlistId, contributorId, userId);
       return new SuccessResult({
         msg: "Contributor added successfully",
       }).handle(res);
@@ -366,11 +366,11 @@ class PlaylistController {
 
   private async removeContributor(req: Request, res: Response) {
     const playlistId: string = req.params.playlistId;
-    const userId: string = req.params.userId;
-    const ownerId: string = req.body.ownerId;
+    const contributorId: string = req.params.contributorId;
+    const userId: string = req.body.userId;
 
     try {
-      await this.playlistService.removeContributor(playlistId, userId, ownerId);
+      await this.playlistService.removeContributor(playlistId, contributorId, userId);
       return new SuccessResult({
         msg: "Contributor removed successfully",
       }).handle(res);

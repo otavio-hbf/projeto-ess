@@ -153,6 +153,7 @@ export default class Database {
           createdBy: "Pedro",
           private: true,
           followers: [],
+          contributors: [],
         }),
       ],
     };

@@ -145,8 +145,8 @@ class PlaylistService {
 
   async addContributor(
     playlistId: string,
-    userId: string,
-    ownerId: string
+    contributorId: string,
+    userId: string
   ): Promise<void> {
     // Checa se a playlist existe
     const playlist = await this.getPlaylist(playlistId);
@@ -155,36 +155,36 @@ class PlaylistService {
     }
 
     //Checa se a requisição está sendo feita pelo dono da playlist
-    if (ownerId !== playlist.createdBy) {
+    if (userId !== playlist.createdBy) {
       throw new Error(
         "Only the playlist's owner has permission to add contributors"
       );
     }
 
     // Checa se o usuário adicionado como contribuidor não é o próprio dono
-    if (userId === ownerId) {
+    if (contributorId === userId) {
       throw new Error("User cannot add itself as a contributor");
     }
 
     // Checa se o usuário já é um contribuidor
-    if (playlist.contributors.includes(userId)) {
+    if (playlist.contributors.includes(contributorId)) {
       throw new Error("User is already a contributor to this playlist");
     }
 
     //Checa se o usuário existe
-    const user = await this.userRepository.getUser(userId);
+    const user = await this.userRepository.getUser(contributorId);
     if (!user) {
       throw new Error("User not found");
     }
 
-    playlist.contributors.push(userId);
-    await this.updatePlaylist(playlistId, playlist);
+    playlist.contributors.push(contributorId);
+    await this.updatePlaylist(playlistId, playlist, userId);
   }
 
   async removeContributor(
     playlistId: string,
-    userId: string,
-    ownerId: string
+    contributorId: string,
+    userId: string
   ): Promise<void> {
     const playlist = await this.getPlaylist(playlistId);
     if (!playlist) {
@@ -192,14 +192,14 @@ class PlaylistService {
     }
 
     // Checa se o usuário é o dono
-    if (userId === ownerId) {
+    if (contributorId === userId) {
       throw new Error("Owner cannot be removed as a contributor");
     }
 
-    const index = playlist.contributors.indexOf(userId);
+    const index = playlist.contributors.indexOf(contributorId);
     if (index !== -1) {
       playlist.contributors.splice(index, 1);
-      await this.updatePlaylist(playlistId, playlist);
+      await this.updatePlaylist(playlistId, playlist, userId);
     }
   }
 
