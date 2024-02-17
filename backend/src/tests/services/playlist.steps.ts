@@ -3,12 +3,16 @@ import PlaylistRepository from '../../src/repositories/playlist.repository';
 import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
 import PlaylistModel from '../../src/models/playlist.model';
+import SongRepository from "../../src/repositories/song.repository";
 
 const feature = loadFeature("../../features/playlist_maintenance.feature");
 
 defineFeature(feature, (test) => {
     let mockPlaylistRepository: PlaylistRepository;
+    let mockSongRepository: SongRepository;
+
     let playlistService: PlaylistService;
+
     let mockPlaylistEntity: PlaylistEntity;
 
     beforeEach(() => {
@@ -20,7 +24,7 @@ defineFeature(feature, (test) => {
             deletePlaylist: jest.fn(),
         } as any;
 
-        playlistService = new PlaylistService(mockPlaylistRepository);
+        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository);
     });
 
     afterEach(() => {

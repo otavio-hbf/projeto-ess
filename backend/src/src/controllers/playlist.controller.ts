@@ -41,6 +41,10 @@ class PlaylistController {
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.deletePlaylist(req, res)
     );
+    this.router.put(
+      `${this.prefix}/:id/:songId`,
+      (req: Request, res: Response) => this.addSongToPlaylist(req, res)
+    );
   }
 
   private async getPlaylists(req: Request, res: Response) {
@@ -65,7 +69,7 @@ class PlaylistController {
     try {
       const { name, createdBy } = req.body;
 
-      // Validar se o nome e o createdBy estão presentes
+      // Validar se o nome esta presentes
       if (!name) {
         return res
           .status(400)
@@ -147,6 +151,61 @@ class PlaylistController {
       msg: Result.transformRequestOnMsg(req),
       data: playlists,
     }).handle(res);
+  }
+
+  private async addSongToPlaylist(req: Request, res: Response) {
+    try {
+      const playlistId = req.params.id;
+      const songId = req.params.songId;
+      const createdBy = req.body.userID; // informação do ID do usuário na requisição
+
+      if (!createdBy) {
+        return res.status(400).json({
+          error: "A valid userID is required to add songs in playlist",
+        });
+      }
+
+      const updatedPlaylist = await this.playlistService.addSongToPlaylist(
+        playlistId,
+        songId,
+        createdBy
+      );
+
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: updatedPlaylist,
+      }).handle(res);
+    } catch (error) {
+      if (error instanceof HttpUnauthorizedError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "playlist_add_song_unauthorized",
+          code: 403,
+        }).handle(res);
+      }
+
+      if (error instanceof HttpNotFoundError) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "entity_not_found",
+          code: 403,
+        }).handle(res);
+      }
+
+      if (error instanceof Error) {
+        return new FailureResult({
+          msg: Result.transformRequestOnMsg(req),
+          msgCode: "song_alread_in_playlist",
+          code: 403,
+        }).handle(res);
+      }
+
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        msgCode: "add_song_failure",
+        code: 500,
+      }).handle(res);
+    }
   }
 }
 
