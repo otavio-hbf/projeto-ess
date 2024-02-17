@@ -4,8 +4,8 @@ import app from '../../src/app';
 import PlaylistRepository from '../../src/repositories/playlist.repository';
 import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
-import UserEntity from "../../src/entities/user.entity";
 import SongRepository from "../../src/repositories/song.repository";
+import UserModel from "../../src/models/user.model";
 
 const feature = loadFeature('tests/features/playlist-service.feature');
 const request = supertest(app);
@@ -18,7 +18,7 @@ defineFeature(feature, (test) => {
     let playlistService: PlaylistService;
 
     let mockPlaylistEntity: PlaylistEntity;
-    let mockUserEntity: UserEntity;
+    let mockUserModel: UserModel;
 
     let response: supertest.Response;
 
@@ -41,8 +41,13 @@ defineFeature(feature, (test) => {
     test('Create a New Playlist', ({ given, when, then, and }) => {
         given(
             /^a user with id "(.*)" is logged-in$/,
-            (username) => {
-                
+            (userId) => {
+                mockUserModel = new UserModel({ 
+                    id: userId,
+                    name: "Alfonso",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                    listening_to: "", });
             }
         );
 
@@ -50,19 +55,22 @@ defineFeature(feature, (test) => {
             response = await request.post(req_url).send({
                 name: name,
                 createdBy: userId,
-              });           
+              });       
             }
         );
 
         then(
             /^the response status should be "(.*)"$/,
-            (status_code) => {
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
             }
         );
 
         and(
             /^the response JSON should contain the created playlist with name "(.*)"$/,
-            (playlistName) => {
+            async (playlistName) => {
+                const responseBody = response.body.data;
+                expect(responseBody.name).toBe(playlistName);
             }
         );
     });

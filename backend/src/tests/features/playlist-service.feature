@@ -3,7 +3,7 @@ Feature: Playlist Service
     Scenario: Create a New Playlist
         Given a user with id "123" is logged-in
         When a "POST" request is sent to "/api/playlists" with the playlist name "Afternoon Sessions" and user id "123"
-        Then the response status should be "201"
+        Then the response status should be "200"
         And the response JSON should contain the created playlist with name "Afternoon Sessions"
 
     Scenario: Add a Song to an Existing Playlist
