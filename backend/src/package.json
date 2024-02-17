@@ -7,7 +7,7 @@
     "build": "tsc -p .",
     "prod": "node dist/src/index.js",
     "test": "env-cmd -f .env.test jest --verbose --coverage  --config ./jest.config.js --detectOpenHandles",
-    "prettier": "prettier --write src/**/*.{ts,js}",
+    "prettier": "prettier --write --end-of-line lf src/**/*.{ts,js}",
     "lint": "eslint **/*.ts --report-unused-disable-directives --max-warnings 0 --fix",
     "postinstall": "yarn husky",
     "prepack": "yarn pinst --disable",
@@ -46,7 +46,7 @@
     "nodemon": "^2.0.20",
     "pinst": "^3.0.0",
     "prettier": "^2.8.4",
-    "supertest": "^6.3.3",
+    "supertest": "^6.3.4",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2"
   },
