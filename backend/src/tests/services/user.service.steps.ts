@@ -27,7 +27,7 @@ defineFeature(feature, (test) => {
 
     test('Registration successful', ({ given, when, then }) => {
         given('the system does not have an account with the email “ze@gmail.com” registered', () => {
-
+            
         });
 
         when(/^a "(.*)" request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {

@@ -14,6 +14,14 @@ class UserRepository extends BaseRepository<UserEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
+  public async getUserToLogin(email: string, password: string): Promise<UserEntity | null> {
+    return await this.findOne((item) => item.email === email && item.password === password);
+  }
+
+  public async getUserByEmail(email: string): Promise<UserEntity | null> {
+    return await this.findOne((item) => item.email === email);
+  }
+
   public async createUser(data: UserEntity): Promise<UserEntity> {
     return await this.add(data);
   }

@@ -17,7 +17,7 @@ export default class UserEntity extends BaseEntity {
     this.name = data.name;
     this.email = data.email;
     this.password = data.password;
-    this.history_tracking = data.history_tracking;
-    this.listening_to = data.listening_to;
+    this.history_tracking = data.history_tracking || false;
+    this.listening_to = data.listening_to || "";
   }
 }
