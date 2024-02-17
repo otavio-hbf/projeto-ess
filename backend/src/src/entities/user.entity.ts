@@ -10,7 +10,7 @@ export default class UserEntity extends BaseEntity {
   password: string;
   @IsBoolean()
   history_tracking: boolean;
-  listening_to: string;
+  listening_to?: string;
 
   constructor(data: UserEntity) {
     super(data.id || "");

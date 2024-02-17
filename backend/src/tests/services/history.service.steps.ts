@@ -82,6 +82,7 @@ defineFeature(feature, (test) => {
           email: "testEmail",
           password: password,
           history_tracking: true,
+          listening_to: undefined
         });
 
         jest
