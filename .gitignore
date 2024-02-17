@@ -132,7 +132,6 @@ dist
 
 .editorconfig
 
-yarn.lock
 **/.editorconfig
 
 **/.yarn/*
@@ -148,5 +147,4 @@ yarn.lock
 
 #!.yarn/cache
 .pnp.*
-yarn.lock
 .editorconfig
