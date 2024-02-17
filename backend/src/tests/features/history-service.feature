@@ -19,9 +19,10 @@ Feature: History Service
         And the user history must have 2 entries
 
     Scenario: Clear user history
-        Given the user with id "1" has a history with "3" items
+        Given the user with id "1" has 3 history entries
         When the function deleteUserHistory is called with the user_id "1"
-        Then the history returned must have "0" items
+        And the function getUserHistory is called with the user_id "1"
+        Then the history returned must have 0 items
 
     Scenario: Get user statistics
         Given the user with id "1" has a history with the following items:
