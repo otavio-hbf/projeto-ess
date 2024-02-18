@@ -36,3 +36,9 @@ Feature: Playlist Routers
         When a PUT request is sent to "/api/playlists/4" with user id "2" and the updated playlist name "New Favorites"
         Then the response status should be "200"
         And the response JSON should contain the updated playlist with the name "New Favorites"
+
+    Scenario: Fail to Create Playlist with Empty Name    
+        Given a user with id "1" is logged-in
+        When a POST request is sent to "/api/playlists" with an empty playlist name and user id "1"
+        Then the response status should be "400"
+        And the response JSON should contain "A name is required for playlist creation" error message

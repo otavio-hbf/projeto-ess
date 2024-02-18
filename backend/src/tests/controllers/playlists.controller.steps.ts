@@ -421,5 +421,52 @@ defineFeature(feature, (test) => {
                 expect(updatedPlaylist.body.data.name).toBe(updatedPlaylistName);
             }
         );
+    }); 
+
+    test('Fail to Create Playlist with Empty Name', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                    listening_to: "", });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+
+        when(
+            /^a POST request is sent to "(.*)" with an empty playlist name and user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.post(req_url).send({
+                    name: "",
+                    createdBy: userId,
+                });
+            }
+        );
+    
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    
+        and(
+            /^the response JSON should contain "(.*)" error message$/,
+            async (errorMessage) => {
+                expect(response.body.error).toBe(errorMessage);
+            }
+        );
     });    
 });
