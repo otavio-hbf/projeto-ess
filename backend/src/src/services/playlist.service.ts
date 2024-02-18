@@ -89,8 +89,7 @@ class PlaylistService {
     data: PlaylistEntity,
     userId: string
   ): Promise<PlaylistModel> {
-    const index = data.contributors.indexOf(userId);
-    if (data.createdBy !== userId && index === -1) {
+    if (data.createdBy !== userId) {
       // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
         msg: "Unauthorized: You don't have permission to update the playlist",
@@ -125,8 +124,7 @@ class PlaylistService {
       });
     }
 
-    const index = playlist.contributors.indexOf(userId);
-    if (playlist.createdBy !== userId && index === -1) {
+    if (playlist.createdBy !== userId) {
       // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
         msg: "Unauthorized: You don't have permission to update the playlist",
