@@ -27,6 +27,7 @@ export const addSongsToHistory = async (
       artist: row.artist,
       duration: row.duration,
       genre: row.genre,
+      times_ever_played: row.times_ever_played
     });
 
     let song = await songService.createSong(mockSongEntity);
