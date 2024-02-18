@@ -160,6 +160,20 @@ class HistoryService {
     return historyModel;
   }
 
+  public async getHistoryById(id: string): Promise<HistoryModel> {
+    const historyEntity = await this.historyRepository.getHistoryById(id);
+
+    if (!historyEntity) {
+      throw new HttpNotFoundError({
+        msg: "History not found",
+        msgCode: HistoryServiceMessageCode.history_not_found,
+      });
+    }
+
+    const historyModel = new HistoryModel(historyEntity);
+
+    return historyModel;
+  }
   public async getUserRecommendations(id: string): Promise<SongModel[]> {
     const userStatistics = await this.getUserStatistics(id);
     const userHistory = await this.getUserHistory(id);
