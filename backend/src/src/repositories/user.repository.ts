@@ -28,19 +28,6 @@ class UserRepository extends BaseRepository<UserEntity> {
   public async deleteUser(id: string): Promise<void> {
     await this.delete((item) => item.id !== id);
   }
-
-  public async listenTo(user_id: string, song_id: string): Promise<UserEntity> {
-    const user = await this.getUser(user_id);
-
-    if (user) {
-      user.listening_to = song_id;
-
-      await this.updateUser(user_id, user);
-      return user;
-    } else {
-      throw new Error("Song not found");
-    }
-  }
 }
 
 export default UserRepository;
