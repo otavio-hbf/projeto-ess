@@ -13,3 +13,10 @@ Feature: Playlist Routers
         When a PUT request is sent to "/api/playlists/12345/3" with user id "999"
         Then the response status should be "200"
         And the response JSON should contain the updated playlist with the added song id "3" in the list of songs
+
+    Scenario: Delete a Playlist
+        Given a user with id "1" is logged-in
+        And there is an existing playlist with id "1" named "My Favorites" created by user "1"
+        When a DELETE request is sent to "/api/playlists/1" with user id "1"
+        Then the response status should be "200"
+        And the playlist with id "1" should no longer exist in the database

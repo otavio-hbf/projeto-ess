@@ -193,4 +193,74 @@ defineFeature(feature, (test) => {
             }
         );
     });
+
+    test('Delete a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                    listening_to: "", });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [], });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        when(
+            /^a DELETE request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.delete(req_url).send({
+                    userId: userId,
+                });
+            }
+        );
+
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    
+        and(
+            /^the playlist with id "(.*)" should no longer exist in the database$/,
+            async (playlistId) => {
+                const deletedPlaylistResponse = await request.get('/api/playlists/' + playlistId).send();
+                const result = deletedPlaylistResponse.body.msgCode;
+                
+                expect(deletedPlaylistResponse.status).toBe(404);
+                expect(result).toEqual('playlist_not_found');
+            }
+        );
+    });
+    
 });
