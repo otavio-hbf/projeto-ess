@@ -1,28 +1,43 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
 import supertest from 'supertest';
 import app from '../../src/app';
-import { di } from '../../src/di'
-import TestRepository from '../../src/repositories/test.repository';
-
-import UserRepository from "../../src/repositories/user.repository";
+import PlaylistRepository from '../../src/repositories/playlist.repository';
+import PlaylistEntity from '../../src/entities/playlist.entity';
+import PlaylistService from '../../src/services/playlist.service';
 import UserEntity from "../../src/entities/user.entity";
-import UserService from '../../src/services/user.service';
+import SongRepository from "../../src/repositories/song.repository";
+import UserRepository from '../../src/repositories/user.repository';
 
 const feature = loadFeature('tests/features/user-service.feature');
 const request = supertest(app);
 
 defineFeature(feature, (test) => {
-    let mockTestRepository: TestRepository;
-    
+    // Mock do repositório
+    let mockPlaylistRepository: PlaylistRepository;
+    let mockSongRepository: SongRepository;
     let mockUserRepository: UserRepository;
+
+    let playlistService: PlaylistService;
+
+    let mockPlaylistEntity: PlaylistEntity;
     let mockUserEntity: UserEntity;
-    let service: UserService;
 
     let response: supertest.Response;
-    let status;
 
     beforeEach(() => {
-        mockTestRepository = di.getRepository<TestRepository>(TestRepository);
+        mockPlaylistRepository = {
+            getPlaylists: jest.fn(),
+            getPlaylist: jest.fn(),
+            createPlaylist: jest.fn(),
+            updatePlaylist: jest.fn(),
+            deletePlaylist: jest.fn(),
+        } as any;
+
+        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     test('Registration successful', ({ given, when, then }) => {
@@ -31,9 +46,6 @@ defineFeature(feature, (test) => {
         });
 
         when(/^a "(.*)" request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {
-            /*response = await request.arg0(arg1).send({
-                name: testName,
-              });*/
         });
 
         then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {

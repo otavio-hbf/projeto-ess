@@ -211,18 +211,6 @@ class UserController {
       }).handle(res);
     }
   }
-
-  private async listenTo(req: Request, res: Response) {
-    const user = await this.userService.listenTo(
-      req.params.user_id,
-      req.params.song_id
-    );
-
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: user,
-    }).handle(res);
-  }
 }
 
 export default UserController;
