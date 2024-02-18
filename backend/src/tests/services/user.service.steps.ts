@@ -114,7 +114,7 @@ defineFeature(feature, (test) => {
 
         });
 
-        then(/^the response status should be (\d+)$/, (arg0) => {
+        then(/^the response status should be "(.*)"$/, (arg0) => {
 
         });
 

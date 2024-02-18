@@ -20,7 +20,7 @@ Scenario: Delete user
 Scenario: Update user
     Given the system has the account with email “ze@gmail.com” and password “ze123” registered
     When a PUT request is sent to "/api/users:id" with the request body being a JSON with email "ze@gmail.com" and password "ze321"
-    Then the response status should be "204"
+    Then the response status should be "200"
 
 Scenario: Unsuccessful registration
     Given the system has an account with the email “ze@gmail.com” registered
@@ -30,5 +30,5 @@ Scenario: Unsuccessful registration
 Scenario: Unsuccessful login
     Given the system has the account with email “ze@gmail.com” and password “ze123” registered
     When a GET request was sent to "/api/users/login" with the request body being a JSON with email "ze@gmail.com" and password "ze123"
-    Then the response status should be 200
+    Then the response status should be "200"
     And the user with email "ze@gmail" is logged in
