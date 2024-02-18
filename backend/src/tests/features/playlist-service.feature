@@ -2,25 +2,17 @@ Feature: Playlist Service
    
     Scenario: Create a New Playlist
         Given a user with id "123" is logged-in
-        When a "POST" request is sent to "/api/playlists" with the playlist name "Afternoon Sessions" and user id "123"
+        When a POST request is sent to "/api/playlists" with the playlist name "Afternoon Sessions" and user id "123"
         Then the response status should be "200"
         And the response JSON should contain the created playlist with name "Afternoon Sessions"
 
     Scenario: Add a Song to an Existing Playlist
-        Given the PlaylistService returns a logged-in user with name "Tavio" and password "Password678"
-        And there is a playlist with the name "Breakfast"
-        And there is a song with the title "Construção"
-        When a "POST" request is sent to "/playlists/Breakfast/add-song" with the data:
-        """
-        {
-            "song": {
-                "title": "Construção",
-                "artist": "Chico Buarque"
-            }
-        }
-        """
+        Given a user with id "123" is logged-in
+        And there is an existing playlist with id "12345" named "Breakfast" created by user "123"
+        And there is an existing song with id "1" named "Construção" by "Chico Buarque"
+        When a "PUT" request is sent to "/api/playlists/12345/1" with user id "123"
         Then the response status should be "200"
-        And the playlist "Breakfast" should contain the song "Construção"
+        And the response JSON should contain the updated playlist with the added song id "1" in the list of songs
 
     Scenario: Delete an Existing Playlist
         Given the PlaylistService returns a logged-in user with name "BigT" and password "Password456"

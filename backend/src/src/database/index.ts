@@ -143,7 +143,7 @@ export default class Database {
           followers: [],
         }),
         new PlaylistEntity({
-          id: "123",
+          id: "ce6f5c66-1967-4b21-9929-51ca7d652151",
           name: "Afternoon Sessions",
           songs: [],
           createdBy: "Pedro",

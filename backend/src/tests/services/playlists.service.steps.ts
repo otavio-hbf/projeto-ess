@@ -5,7 +5,16 @@ import PlaylistRepository from '../../src/repositories/playlist.repository';
 import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
 import SongRepository from "../../src/repositories/song.repository";
+import SongEntity from '../../src/entities/song.entity';
+import SongService from '../../src/services/song.service';
+import UserRepository from '../../src/repositories/user.repository';
+import UserEntity from '../../src/entities/user.entity';
 import UserModel from "../../src/models/user.model";
+import UserService from '../../src/services/user.service';
+import Injector from "../../src/di/injector";
+import { di } from "../../src/di/index";
+import { mock } from "node:test";
+
 
 const feature = loadFeature('tests/features/playlist-service.feature');
 const request = supertest(app);
@@ -14,24 +23,41 @@ defineFeature(feature, (test) => {
     // Mock do repositório
     let mockPlaylistRepository: PlaylistRepository;
     let mockSongRepository: SongRepository;
+    let mockUserRepository: UserRepository;
 
     let playlistService: PlaylistService;
+    let songService: SongService;
+    let userService: UserService;
 
-    let mockPlaylistEntity: PlaylistEntity;
     let mockUserModel: UserModel;
+    
+    let mockPlaylistEntity: PlaylistEntity;
+    let mockSongEntity: SongEntity;
+    let mockUserEntity: UserEntity;
 
-    let response: supertest.Response;
+    let injector: Injector = di;
 
     beforeEach(() => {
-        mockPlaylistRepository = {
-            getPlaylists: jest.fn(),
-            getPlaylist: jest.fn(),
-            createPlaylist: jest.fn(),
-            updatePlaylist: jest.fn(),
-            deletePlaylist: jest.fn(),
-        } as any;
+        injector.registerRepository(PlaylistRepository, new PlaylistRepository());
+        mockPlaylistRepository = injector.getRepository(PlaylistRepository);
 
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository);
+        injector.registerRepository(SongRepository, new SongRepository());
+        mockSongRepository = injector.getRepository(SongRepository);
+    
+        injector.registerRepository(UserRepository, new UserRepository());
+        mockUserRepository = injector.getRepository(UserRepository);
+
+        injector.registerService(
+            PlaylistService,
+            new PlaylistService(mockPlaylistRepository, mockSongRepository)
+          );
+          playlistService = injector.getService(PlaylistService);
+      
+        injector.registerService(SongService, new SongService(mockSongRepository));
+        songService = injector.getService(SongService);
+    
+        injector.registerService(UserService, new UserService(mockUserRepository));
+        userService = injector.getService(UserService);
     });
 
     afterEach(() => {
@@ -39,23 +65,31 @@ defineFeature(feature, (test) => {
     });
 
     test('Create a New Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
         given(
             /^a user with id "(.*)" is logged-in$/,
-            (userId) => {
-                mockUserModel = new UserModel({ 
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
                     id: userId,
                     name: "Alfonso",
+                    password: "12334",
                     email: "alfonso@gmail.com",
                     history_tracking: true,
                     listening_to: "", });
+
+                jest.spyOn(mockUserRepository, "createUser");
+
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
             }
         );
 
-        when(/^a "(.*)" request is sent to "(.*)" with the playlist name "(.*)" and user id "(.*)"$/, async (req_type, req_url, name, userId) => {
+        when(/^a POST request is sent to "(.*)" with the playlist name "(.*)" and user id "(.*)"$/, async (req_url, name, userId) => {
             response = await request.post(req_url).send({
                 name: name,
                 createdBy: userId,
-              });       
+              });
             }
         );
 
@@ -75,30 +109,49 @@ defineFeature(feature, (test) => {
         );
     });
 
-    test('Add a Song to an Existing Playlist', ({ given, and, when, then }) => {
-        given(/^the PlaylistService returns a logged-in user with name "(.*)" and password "(.*)"$/, (arg0, arg1) => {
+    test('Add a Song to an Existing Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            (userId) => {
+                // Configure o usuário fictício, se necessário
+            }
+        );
 
-        });
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            (playlistId, playlistName, createdBy) => {
 
-        and(/^there is a playlist with the name "(.*)"$/, (arg0) => {
+            }
+        );
 
-        });
+        and(
+            /^there is an existing song with id "(.*)" named "(.*)" by "(.*)"$/,
+            (songId, songTitle, artist) => {
 
-        and(/^there is a song with the title "(.*)"$/, (arg0) => {
+            }
+        );
 
-        });
+        when(
+            /^a "(.*)" request is sent to "(.*)" with user id "(.*)"$/,
+            async (reqType, reqUrl, userId) => {
 
-        when(/^a "(.*)" request is sent to "(.*)" with the data:$/, (arg0, arg1, docString) => {
+            }
+        );
 
-        });
+        then(
+            /^the response status should be "(.*)"$/,
+            (statusCode) => {
 
-        then(/^the response status should be "(.*)"$/, (arg0) => {
+            }
+        );
 
-        });
+        and(
+            /^the response JSON should contain the updated playlist with the added song id "(.*)" in the list of songs$/,
+            (addedSongId) => {
 
-        and(/^the playlist "(.*)" should contain the song "(.*)"$/, (arg0, arg1) => {
-
-        });
+            }
+        );
     });
 
     test('Delete an Existing Playlist', ({ given, and, when, then }) => {
