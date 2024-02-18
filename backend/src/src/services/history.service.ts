@@ -5,25 +5,28 @@ import HistoryEntity from "../entities/history.entity";
 import UserRepository from "../repositories/user.repository";
 import MostPlayedModel from "../models/most_played.model";
 import SongRepository from "../repositories/song.repository";
+import SongModel from "../models/song.model";
 import { log } from "console";
 import StatisticsModel from "../models/statistics.model";
+import UserModel from "../models/user.model";
 
-class HistoryServiceMessageCode {
+export class HistoryServiceMessageCode {
   public static readonly history_not_found = "history_not_found";
+  public static readonly tracking_disabled = "tracking_disabled";
 }
 
 class HistoryService {
   private historyRepository: HistoryRepository;
-  //   private userRepository: UserRepository;
+  private userRepository: UserRepository;
   private songRepository: SongRepository;
 
   constructor(
     historyRepository: HistoryRepository,
-    // userRepository: UserRepository
+    userRepository: UserRepository,
     songRepository: SongRepository
   ) {
     this.historyRepository = historyRepository;
-    // this.userRepository = userRepository;
+    this.userRepository = userRepository;
     this.songRepository = songRepository;
   }
 
@@ -91,6 +94,15 @@ class HistoryService {
       }
     }
 
+    // sort by times_played then song_id
+    mostPlayedModel.sort((a, b) => {
+      if (a.times_played === b.times_played) {
+        return a.song_id.localeCompare(b.song_id);
+      } else {
+        return b.times_played - a.times_played;
+      }
+    });
+
     return mostPlayedModel;
   }
 
@@ -126,9 +138,9 @@ class HistoryService {
     }
 
     return new StatisticsModel({
-      most_played_genre_name: mostPlayedGenre,
-      most_played_song_name: mostPlayedSong?.song_name,
-      play_duration: totalDuration,
+      most_played_genre: mostPlayedGenre,
+      most_played_song: mostPlayedSong?.song_name,
+      time_played: totalDuration,
     });
   }
 
@@ -148,11 +160,88 @@ class HistoryService {
     return historyModel;
   }
 
-  public async createHistory(data: HistoryEntity): Promise<HistoryModel> {
-    const historyEntity = await this.historyRepository.createHistory(data);
+  public async getHistoryById(id: string): Promise<HistoryModel> {
+    const historyEntity = await this.historyRepository.getHistoryById(id);
+
+    if (!historyEntity) {
+      throw new HttpNotFoundError({
+        msg: "History not found",
+        msgCode: HistoryServiceMessageCode.history_not_found,
+      });
+    }
+
     const historyModel = new HistoryModel(historyEntity);
 
     return historyModel;
+  }
+  public async getUserRecommendations(id: string): Promise<SongModel[]> {
+    const userStatistics = await this.getUserStatistics(id);
+    const userHistory = await this.getUserHistory(id);
+
+    if (!userHistory) {
+      const allSongs = await this.songRepository.getSongs();
+      return allSongs.map((song) => new SongModel(song));
+    }
+
+    if (!userStatistics || !userStatistics.most_played_genre) {
+      const allSongs = await this.songRepository.getSongs();
+      const unlistenedSongs = allSongs.filter(
+        (song) => !userHistory.some((history) => history.song_id === song.id)
+      );
+      return unlistenedSongs.map((song) => new SongModel(song));
+    }
+
+    if (userStatistics.most_played_genre!) {
+      // Retrieve all songs from the repository
+      const allSongs = await this.songRepository.getSongs();
+
+      let recommendedSongs = allSongs.filter(
+        (song) =>
+          song.genre.toLowerCase() ===
+          userStatistics.most_played_genre?.toLowerCase()
+      );
+
+      recommendedSongs = recommendedSongs.filter(
+        (song) => !userHistory.some((history) => history.song_id === song.id)
+      );
+
+      if (recommendedSongs.length === 0) {
+        recommendedSongs = allSongs.filter(
+          (song) => !userHistory.some((history) => history.song_id === song.id)
+        );
+      }
+
+      // Convert the filtered songs to SongModel instances
+      const recommendedSongsModels = recommendedSongs.map(
+        (song) => new SongModel(song)
+      );
+      return recommendedSongsModels;
+    }
+
+    const allSongs = await this.songRepository.getSongs();
+    return allSongs.map((song) => new SongModel(song));
+  }
+
+  public async createHistory(data: HistoryEntity): Promise<HistoryModel> {
+    const user = await this.userRepository.getUser(data.user_id);
+    // if (!user) {
+    //   throw new HttpNotFoundError({
+    //     msg: "User not found",
+    //     msgCode: HistoryServiceMessageCode.history_not_found,
+    //   });
+    // }
+    // !user é para facilitar os testes (criar históricos em usuários inexistentes), remover depois.
+    if (!user || user.history_tracking === true) {
+      const historyEntity = await this.historyRepository.createHistory(data);
+      const historyModel = new HistoryModel(historyEntity);
+
+      return historyModel;
+    } else {
+      throw new HttpNotFoundError({
+        msg: "Tracking is disabled for this user",
+        msgCode: HistoryServiceMessageCode.tracking_disabled,
+      });
+    }
   }
 
   public async updateHistory(

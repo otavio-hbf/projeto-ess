@@ -30,10 +30,6 @@ class UserController {
     this.router.post(`${this.prefix}/login`, (req: Request, res: Response) =>
       this.getUserToLogin(req, res)
     );
-    this.router.get(
-      `${this.prefix}/:user_id/listen/:song_id`,
-      (req: Request, res: Response) => this.listenTo(req, res)
-    );
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createUser(req, res)
     );

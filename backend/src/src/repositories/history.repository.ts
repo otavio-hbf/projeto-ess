@@ -14,6 +14,10 @@ class HistoryRepository extends BaseRepository<HistoryEntity> {
     return await this.findOne((item) => item.user_id === id);
   }
 
+  public async getHistoryById(id: string): Promise<HistoryEntity | null> {
+    return await this.findOne((item) => item.id === id);
+  }
+
   public async createHistory(data: HistoryEntity): Promise<HistoryEntity> {
     return await this.add(data);
   }

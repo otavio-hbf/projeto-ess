@@ -5,6 +5,7 @@ export default class SongEntity extends BaseEntity {
   duration: number;
   artist: string;
   genre: string;
+  times_ever_played: number;
 
   constructor(data: SongEntity) {
     super(data.id || "");
@@ -12,5 +13,8 @@ export default class SongEntity extends BaseEntity {
     this.duration = data.duration;
     this.artist = data.artist;
     this.genre = data.genre;
+    this.times_ever_played = data.times_ever_played
+      ? data.times_ever_played
+      : 0;
   }
 }

@@ -1,7 +1,9 @@
 import { loadFeature, defineFeature } from "jest-cucumber";
 import HistoryRepository from "../../src/repositories/history.repository";
 import HistoryEntity from "../../src/entities/history.entity";
-import HistoryService from "../../src/services/history.service";
+import HistoryService, {
+  HistoryServiceMessageCode,
+} from "../../src/services/history.service";
 import OtherRepository from "../../src/repositories/other.repository";
 import HistoryModel from "../../src/models/history.model";
 import SongRepository from "../../src/repositories/song.repository";
@@ -14,6 +16,11 @@ import UserModel from "../../src/models/user.model";
 import StatisticsModel from "../../src/models/statistics.model";
 import Injector from "../../src/di/injector";
 import { di } from "../../src/di/index";
+import { mock } from "node:test";
+import { exitCode } from "process";
+import { HttpNotFoundError } from "../../src/utils/errors/http.error";
+import { addSongsToHistory, simpleAddSongsToHistory } from "../utils/history.utils";
+import MostPlayedModel from "../../src/models/most_played.model";
 
 const feature = loadFeature("tests/features/history-service.feature");
 
@@ -47,7 +54,11 @@ defineFeature(feature, (test) => {
 
     injector.registerService(
       HistoryService,
-      new HistoryService(mockHistoryRepository, mockSongRepository)
+      new HistoryService(
+        mockHistoryRepository,
+        mockUserRepository,
+        mockSongRepository
+      )
     );
     historyService = injector.getService(HistoryService);
 
@@ -67,22 +78,14 @@ defineFeature(feature, (test) => {
     given(
       /^o método getUserHistory chamado com "(.*)" do HistoryService retorna um histórico com "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
       async (user_id, song_count, song_1, song_2, song_3) => {
-        let songs = [song_1, song_2, song_3];
-        for (let song of songs) {
-          const mockHistoryEntity = new HistoryEntity({
-            id: "",
-            user_id: user_id,
-            song_id: song,
-          });
-          await historyService.createHistory(mockHistoryEntity);
-        }        
+        await simpleAddSongsToHistory(song_1, song_2, song_3, user_id, historyService);
       }
     );
 
     when(
       /^o método getUserHistory do HistoryService for chamado com o id "(.*)"$/,
       async (user_id) => {
-      result = await historyService.getUserHistory(user_id);
+        result = await historyService.getUserHistory(user_id);
       }
     );
 
@@ -96,27 +99,255 @@ defineFeature(feature, (test) => {
       }
     );
   });
+
+  test("Add a new song to a user history", ({ given, when, then }) => {
+    let result: HistoryModel[] = [];
+    given(
+      /^the function createHistory was called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
+        });
+
+        jest.spyOn(mockHistoryRepository, "createHistory");
+
+        await historyService.createHistory(mockHistoryEntity);
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    when(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+
+        result = await historyService.getUserHistory(user_id);
+
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(
+      /^the history returned must have "(.*)" item with song_id "(.*)"$/,
+      (num_items, song_id) => {
+        expect(result.length).toBe(parseInt(num_items));
+        expect(result[0].song_id).toBe(song_id);
+      }
+    );
+  });
+
+  test("Delete an entry from a user history", ({ given, when, and, then }) => {
+    let deleted_entry: HistoryModel;
+    given(
+      /^the user with id "(.*)" has (\d+) history entries$/,
+      async (user_id, entries) => {
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
+
+          // the entry to be deleted will be the last one
+          deleted_entry = await historyService.createHistory(mockHistoryEntity);
+        }
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          parseInt(entries)
+        );
+      }
+    );
+
+    when(
+      "the function deleteHistory is called on one of the entry ids",
+      async () => {
+        jest.spyOn(mockHistoryRepository, "deleteHistory");
+        await historyService.deleteHistory(deleted_entry.id);
+        expect(mockHistoryRepository.deleteHistory).toHaveBeenCalledTimes(1);
+      }
+    );
+    let user_history: HistoryModel[];
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        user_history = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(
+      "the history returned must not have the entry that was deleted",
+      () => {
+        expect(user_history).not.toContain(deleted_entry);
+      }
+    );
+
+    and(/^the user history must have (\d+) entries$/, (num_items) => {
+      expect(user_history.length).toBe(parseInt(num_items));
+    });
+  });
+
+  test("Clear user history", ({ given, when, and, then }) => {
+    given(
+      /^the user with id "(.*)" has (\d+) history entries$/,
+      async (user_id, entries) => {
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
+          await historyService.createHistory(mockHistoryEntity);
+        }
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          parseInt(entries)
+        );
+      }
+    );
+
+    when(
+      /^the function deleteUserHistory is called with the user_id "(.*)"$/,
+      (user_id) => {
+        jest.spyOn(mockHistoryRepository, "deleteUserHistory");
+        historyService.deleteUserHistory(user_id);
+        expect(mockHistoryRepository.deleteUserHistory).toHaveBeenCalledTimes(
+          1
+        );
+      }
+    );
+
+    let user_history: HistoryModel[];
+
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        user_history = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(/^the history returned must have (\d+) items$/, (num_items) => {
+      expect(user_history.length).toBe(parseInt(num_items));
+    });
+  });
+
+  test("Get user statistics", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with the following items:$/,
+      async (user_id, table) => {
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
+      }
+    );
+    let userStatistics: StatisticsModel;
+    when(
+      /^the function getUserStatistics is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userStatistics = await historyService.getUserStatistics(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then("it must return the following statistics:", (table) => {
+      let expected = new StatisticsModel({
+        time_played: parseInt(table[0].play_duration),
+        most_played_genre: table[0].most_played_genre,
+        most_played_song: table[0].most_played_song,
+      });
+
+      expect(userStatistics).toEqual(expected);
+    });
+  });
+
+  test("History Tracking disabled", ({ given, and, when, then }) => {
+    let uid: string;
+    given(
+      /^the user with id "(.*)" has history tracking disabled$/,
+      async (user_id) => {
+        mockUserEntity = new UserEntity({
+          id: user_id,
+          name: "Test User",
+          email: "test",
+          history_tracking: false,
+          password: "123",
+        });
+
+        let user = await userService.createUser(mockUserEntity);
+        uid = user_id;
+
+        expect(user.history_tracking).toBe(false);
+      }
+    );
+
+    and("the user has no play history", async () => {
+      let history = await historyService.getUserHistory(uid);
+      expect(history.length).toBe(0);
+    });
+
+    when(
+      /^the function createHistory is called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
+        });
+
+        jest.spyOn(mockHistoryRepository, "createHistory");
+
+        await expect(
+          historyService.createHistory(mockHistoryEntity)
+        ).rejects.toThrow(HttpNotFoundError);
+
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(0);
+      }
+    );
+
+    let userHistory;
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userHistory = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(/^the history returned must have (\d+) items$/, (entries) => {
+      expect(userHistory.length).toBe(parseInt(entries));
+    });
+  });
+
+  test("User requests most played songs", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with the following items:$/,
+      async (user_id, table) => {
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
+      }
+    );
+
+    let most_played_songs: MostPlayedModel[];
+    when(
+      /^the function getUserMostPlayedList is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        most_played_songs = await historyService.getUserMostPlayedList(user_id);
+      }
+    );
+
+    then("it must return the following songs in order:", (table) => {
+      for (let i = 0; i < table.length; i++) {
+        expect(most_played_songs[i].song_id).toBe(table[i].song_id);
+        expect(most_played_songs[i].times_played).toBe(parseInt(table[i].times_played));
+      }
+    });
+  });
 });
-
-// Test code for creating a new account with the given user and password
-// mockUserEntity = new UserEntity({
-//   id: "",
-//   name: user,
-//   email: "testEmail",
-//   password: password,
-//   history_tracking: true,
-//   listening_to: undefined
-// });
-
-// let expected = new UserModel(mockUserEntity as UserModel);
-
-// jest.spyOn(userService, "createUser");
-
-// await userService.createUser(mockUserEntity);
-
-// jest.spyOn(userService, "getUsers");
-
-// let users = await userService.getUsers();
-
-// expect(users).toEqual(expected);
-// await console.log(mockUserRepository.getUsers)
