@@ -49,7 +49,7 @@ class PlaylistController {
       `${this.prefix}/unfollow/:playlistId`,
       (req: Request, res: Response) => this.unfollowPlaylist(req, res)
     );
-    this.router.put(`${this.prefix}/:id/`, (req: Request, res: Response) =>
+    this.router.put(`${this.prefix}/:id/:songId`, (req: Request, res: Response) =>
       this.addSongToPlaylist(req, res)
     );
     this.router.delete(

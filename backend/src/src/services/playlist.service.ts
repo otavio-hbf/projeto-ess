@@ -89,10 +89,12 @@ class PlaylistService {
       });
     }
 
-    if (playlistEntity.createdBy !== userId) {
-      // O usuário autenticado não é o criador da playlist
+    const playlist = await this.getPlaylist(id);
+    const index = playlist.contributors.indexOf(userId);
+    if (playlistEntity.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
-        msg: "Unauthorized: Only the owner can update the playlist",
+        msg: "Unauthorized: You don't have permission to update the playlist",
       });
     }
 
@@ -112,10 +114,11 @@ class PlaylistService {
       });
     }
 
-    if (playlist.createdBy !== userId) {
-      // O usuário autenticado não é o criador da playlist
+    const index = playlist.contributors.indexOf(userId);
+    if (playlist.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
-        msg: "Unauthorized: Only the owner can delete the playlist",
+        msg: "Unauthorized: You don't have permission to update the playlist",
       });
     }
 
@@ -133,12 +136,11 @@ class PlaylistService {
       throw new Error("User not found");
     }
     //Checa se o usuário não é o dono da playlist
-    if(playlist.createdBy === userId) {
+    if (playlist.createdBy === userId) {
       throw new Error("Owner can't follow its own playlist");
     }
     //Checa se a playlist é pública
-    if(playlist.private)
-    {
+    if (playlist.private) {
       throw new Error("Can't follow private playlist");
     }
 
@@ -263,10 +265,12 @@ class PlaylistService {
       });
     }
 
-    if (playlistEntity.createdBy !== userId) {
-      // O usuário autenticado não é o criador da playlist
+    const playlist = await this.getPlaylist(playlistId);
+    const index = playlist.contributors.indexOf(userId);
+    if (playlistEntity.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
-        msg: "Unauthorized: Only the owner can update the playlist",
+        msg: "Unauthorized: You don't have permission to update the playlist",
       });
     }
 
@@ -321,10 +325,12 @@ class PlaylistService {
       });
     }
 
-    if (playlistEntity.createdBy !== userId) {
-      // O usuário autenticado não é o criador da playlist
+    const playlist = await this.getPlaylist(playlistId);
+    const index = playlist.contributors.indexOf(userId);
+    if (playlistEntity.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
       throw new HttpUnauthorizedError({
-        msg: "Unauthorized: Only the owner can update the playlist",
+        msg: "Unauthorized: You don't have permission to update the playlist",
       });
     }
 
