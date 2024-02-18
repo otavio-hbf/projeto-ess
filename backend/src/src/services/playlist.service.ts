@@ -125,6 +125,12 @@ class PlaylistService {
   async followPlaylist(playlistId: string, userId: string): Promise<void> {
     const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
     const playlistRepository: PlaylistRepository = new PlaylistRepository();
+    const user = await this.userRepository.getUser(userId);
+
+    //Checa se o usuário existe
+    if (!user) {
+      throw new Error("User not found");
+    }
 
     if (!(playlistEntity.followers.indexOf(userId) > -1)) {
       playlistEntity.followers.push(userId);
