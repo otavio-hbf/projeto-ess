@@ -263,11 +263,7 @@ class PlaylistService {
       await this.playlistRepository.updatePlaylist(playlistId, playlistEntity);
     }
 
-    // Atualiza a playlist no repositório
-    const updatedPlaylistEntity = await this.playlistRepository.updatePlaylist(
-      playlistId,
-      playlistEntity
-    );
+    const updatedPlaylistEntity = playlistEntity
 
     if (!updatedPlaylistEntity) {
       throw new HttpNotFoundError({
@@ -324,10 +320,7 @@ class PlaylistService {
     }
 
     // Atualiza a playlist no repositório
-    const updatedPlaylistEntity = await this.playlistRepository.updatePlaylist(
-      playlistId,
-      playlistEntity
-    );
+    const updatedPlaylistEntity = playlistEntity
 
     if (!updatedPlaylistEntity) {
       throw new HttpNotFoundError({
