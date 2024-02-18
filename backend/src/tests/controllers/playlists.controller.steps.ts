@@ -49,7 +49,7 @@ defineFeature(feature, (test) => {
 
         injector.registerService(
             PlaylistService,
-            new PlaylistService(mockPlaylistRepository, mockSongRepository)
+            new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository)
           );
           playlistService = injector.getService(PlaylistService);
       
@@ -75,7 +75,7 @@ defineFeature(feature, (test) => {
                     password: "12334",
                     email: "alfonso@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
 
                 jest.spyOn(mockUserRepository, "createUser");
 
@@ -121,7 +121,7 @@ defineFeature(feature, (test) => {
                     password: "12334",
                     email: "alfonso@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
     
                 jest.spyOn(mockUserRepository, "createUser");
     
@@ -140,7 +140,9 @@ defineFeature(feature, (test) => {
                     createdBy: createdBy,
                     songs: [],
                     private: false,
-                    followers: [], });
+                    followers: [],
+                    contributors: [], 
+                });
     
                 jest.spyOn(mockPlaylistRepository, "createPlaylist");
     
@@ -158,7 +160,9 @@ defineFeature(feature, (test) => {
                     title: songName,
                     artist: artist,
                     duration: 180,
-                    genre: "Pop", });
+                    genre: "Pop", 
+                    times_ever_played: 0
+                });
     
                 jest.spyOn(mockSongRepository, "createSong");
     
@@ -206,7 +210,7 @@ defineFeature(feature, (test) => {
                     password: "12334",
                     email: "alfonso@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
     
                 jest.spyOn(mockUserRepository, "createUser");
     
@@ -225,7 +229,9 @@ defineFeature(feature, (test) => {
                     createdBy: createdBy,
                     songs: [],
                     private: false,
-                    followers: [], });
+                    followers: [], 
+                    contributors: [],
+                });
     
                 jest.spyOn(mockPlaylistRepository, "createPlaylist");
     
@@ -275,7 +281,7 @@ defineFeature(feature, (test) => {
                     password: "123456",
                     email: "joao@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
     
                 jest.spyOn(mockUserRepository, "createUser");
     
@@ -294,7 +300,9 @@ defineFeature(feature, (test) => {
                     createdBy: createdBy,
                     songs: [],
                     private: false,
-                    followers: [], });
+                    followers: [], 
+                    contributors: [],
+                });
     
                 jest.spyOn(mockPlaylistRepository, "createPlaylist");
     
@@ -312,7 +320,9 @@ defineFeature(feature, (test) => {
                     title: songTitle,
                     artist: artist,
                     duration: 0,
-                    genre: "", });
+                    genre: "", 
+                    times_ever_played: 90,
+                });
     
                 mockPlaylistEntity.songs.push(songId);
     
@@ -362,7 +372,7 @@ defineFeature(feature, (test) => {
                     password: "123456",
                     email: "joao@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
     
                 jest.spyOn(mockUserRepository, "createUser");
     
@@ -381,7 +391,9 @@ defineFeature(feature, (test) => {
                     createdBy: createdBy,
                     songs: [],
                     private: false,
-                    followers: [], });
+                    followers: [], 
+                    contributors: [],
+                });
     
                 jest.spyOn(mockPlaylistRepository, "createPlaylist");
     
@@ -435,7 +447,7 @@ defineFeature(feature, (test) => {
                     password: "12334",
                     email: "alfonso@gmail.com",
                     history_tracking: true,
-                    listening_to: "", });
+                });
     
                 jest.spyOn(mockUserRepository, "createUser");
     

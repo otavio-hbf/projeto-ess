@@ -31,7 +31,7 @@ export default class BaseRepository<T extends BaseEntity> {
       }
       const newItem = {
         ...data,
-        id: uuidv4(),
+        id: data.id || uuidv4(), // if id is not provided, generate a new one. careful! this will change the id of the object.
       };
       this.db.data[this.prefix].push(newItem);
       return newItem;

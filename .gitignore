@@ -74,7 +74,8 @@ web_modules/
 
 # dotenv environment variable files
 !.env.example
-.env*
+!.env.test
+# .env*
 .env.development.local
 .env.test.local
 .env.production.local
@@ -132,7 +133,6 @@ dist
 
 .editorconfig
 
-yarn.lock
 **/.editorconfig
 
 **/.yarn/*
@@ -148,5 +148,7 @@ yarn.lock
 
 #!.yarn/cache
 .pnp.*
-yarn.lock
 .editorconfig
+
+package-lock.json
+./package.json

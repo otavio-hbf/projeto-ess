@@ -17,6 +17,7 @@ describe('PlaylistController', () => {
     createdBy: mockedUserId,
     private: true,
     followers: [],
+    contributors: [],
   });
 
   it('should return playlists', async () => {

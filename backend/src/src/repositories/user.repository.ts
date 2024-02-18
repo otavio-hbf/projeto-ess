@@ -14,6 +14,19 @@ class UserRepository extends BaseRepository<UserEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
+  public async getUserToLogin(
+    email: string,
+    password: string
+  ): Promise<UserEntity | null> {
+    return await this.findOne(
+      (item) => item.email === email && item.password === password
+    );
+  }
+
+  public async getUserByEmail(email: string): Promise<UserEntity | null> {
+    return await this.findOne((item) => item.email === email);
+  }
+
   public async createUser(data: UserEntity): Promise<UserEntity> {
     return await this.add(data);
   }
@@ -29,17 +42,13 @@ class UserRepository extends BaseRepository<UserEntity> {
     await this.delete((item) => item.id !== id);
   }
 
-  public async listenTo(user_id: string, song_id: string): Promise<UserEntity> {
-    const user = await this.getUser(user_id);
-
-    if (user) {
-      user.listening_to = song_id;
-
-      await this.updateUser(user_id, user);
-      return user;
-    } else {
-      throw new Error("Song not found");
-    }
+  public async deleteUserWithEmailPassword(
+    email: string,
+    password: string
+  ): Promise<void> {
+    await this.delete(
+      (item) => item.email !== email || item.password !== password
+    );
   }
 }
 

@@ -1,7 +1,9 @@
 import { loadFeature, defineFeature } from "jest-cucumber";
 import HistoryRepository from "../../src/repositories/history.repository";
 import HistoryEntity from "../../src/entities/history.entity";
-import HistoryService from "../../src/services/history.service";
+import HistoryService, {
+  HistoryServiceMessageCode,
+} from "../../src/services/history.service";
 import OtherRepository from "../../src/repositories/other.repository";
 import HistoryModel from "../../src/models/history.model";
 import SongRepository from "../../src/repositories/song.repository";
@@ -12,8 +14,15 @@ import UserEntity from "../../src/entities/user.entity";
 import SongEntity from "../../src/entities/song.entity";
 import UserModel from "../../src/models/user.model";
 import StatisticsModel from "../../src/models/statistics.model";
+import Injector from "../../src/di/injector";
+import { di } from "../../src/di/index";
+import { mock } from "node:test";
+import { exitCode } from "process";
+import { HttpNotFoundError } from "../../src/utils/errors/http.error";
+import { addSongsToHistory, simpleAddSongsToHistory } from "../utils/history.utils";
+import MostPlayedModel from "../../src/models/most_played.model";
 
-const feature = loadFeature("../../features/most_played_songs.feature");
+const feature = loadFeature("tests/features/history-service.feature");
 
 defineFeature(feature, (test) => {
   let mockHistoryRepository: HistoryRepository;
@@ -31,361 +40,314 @@ defineFeature(feature, (test) => {
   let mockSongEntity: SongEntity;
 
   let mockUserModel: UserModel;
+  let injector: Injector = di;
 
   beforeEach(() => {
-    mockHistoryRepository = {
-      getHistories: jest.fn(),
-      getHistory: jest.fn(),
-      getUserStatistics: jest.fn(),
-      createHistory: jest.fn(),
-      updateHistory: jest.fn(),
-      deleteHistory: jest.fn(),
-      deleteUserHistory: jest.fn(),
-    } as any;
+    injector.registerRepository(HistoryRepository, new HistoryRepository());
+    mockHistoryRepository = injector.getRepository(HistoryRepository);
 
-    mockSongRepository = {
-      getSongs: jest.fn(),
-      getSong: jest.fn(),
-      createSong: jest.fn(),
-      updateSong: jest.fn(),
-      deleteSong: jest.fn(),
-    } as any;
+    injector.registerRepository(SongRepository, new SongRepository());
+    mockSongRepository = injector.getRepository(SongRepository);
 
-    mockUserRepository = {
-      getUsers: jest.fn(),
-      getUser: jest.fn(),
-      createUser: jest.fn(),
-      updateUser: jest.fn(),
-      deleteUser: jest.fn(),
-    } as any;
+    injector.registerRepository(UserRepository, new UserRepository());
+    mockUserRepository = injector.getRepository(UserRepository);
 
-    historyService = new HistoryService(
-      mockHistoryRepository,
-      mockSongRepository
+    injector.registerService(
+      HistoryService,
+      new HistoryService(
+        mockHistoryRepository,
+        mockUserRepository,
+        mockSongRepository
+      )
     );
-    songService = new SongService(mockSongRepository);
-    userService = new UserService(mockUserRepository);
+    historyService = injector.getService(HistoryService);
+
+    injector.registerService(SongService, new SongService(mockSongRepository));
+    songService = injector.getService(SongService);
+
+    injector.registerService(UserService, new UserService(mockUserRepository));
+    userService = injector.getService(UserService);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  test("User asks for detailed stats", ({ given, and, when, then }) => {
+  test("Obter histórico de um usuário por id", ({ given, when, then }) => {
+    let result: HistoryModel[] = [];
     given(
-      /^I've created a new account with user "(.*)", password "(.*)"$/,
-      async (user, password) => {
-        // Test code for creating a new account with the given user and password
-        mockUserEntity = new UserEntity({
-          id: "testId",
-          name: user,
-          email: "testEmail",
-          password: password,
-          history_tracking: true,
-          listening_to: undefined
-        });
-
-        jest
-          .spyOn(mockUserRepository, "createUser")
-          .mockResolvedValue(mockUserEntity);
-
-        await userService.createUser(mockUserEntity);
-
-        expect(mockUserRepository.createUser).toBeCalledWith(mockUserEntity);
-
-        jest
-          .spyOn(mockUserRepository, "getUsers")
-          .mockResolvedValue([mockUserEntity]);
+      /^o método getUserHistory chamado com "(.*)" do HistoryService retorna um histórico com "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
+      async (user_id, song_count, song_1, song_2, song_3) => {
+        await simpleAddSongsToHistory(song_1, song_2, song_3, user_id, historyService);
       }
     );
 
-    and(/^I logged in with user "(.*)", password "(.*)"$/, (user, password) => {
-      // Test code for logging in with the given user and password
-    });
+    when(
+      /^o método getUserHistory do HistoryService for chamado com o id "(.*)"$/,
+      async (user_id) => {
+        result = await historyService.getUserHistory(user_id);
+      }
+    );
 
-    and(
-      /^I played the song "(.*)", which is "(.*)" minutes long, "(.*)" times, and is from the genre "(.*)" and artist "(.*)"$/,
-      async (song, duration, times, genre, artist) => {
-        // Test code for playing the song with the given details
-        mockSongEntity = new SongEntity({
-          id: "testSongId",
-          title: song,
-          duration: duration,
-          artist: artist,
-          genre: genre,
+    then(
+      /^o histórico retornado deve ter "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
+      (song_count, song_1, song_2, song_3) => {
+        expect(result.length).toBe(parseInt(song_count));
+        for (let song of result) {
+          expect([song_1, song_2, song_3]).toContain(song.song_id);
+        }
+      }
+    );
+  });
+
+  test("Add a new song to a user history", ({ given, when, then }) => {
+    let result: HistoryModel[] = [];
+    given(
+      /^the function createHistory was called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
         });
 
-        // create song
-        jest
-          .spyOn(mockSongRepository, "createSong")
-          .mockResolvedValue(mockSongEntity);
+        jest.spyOn(mockHistoryRepository, "createHistory");
 
-        await songService.createSong(mockSongEntity);
+        await historyService.createHistory(mockHistoryEntity);
 
-        // add song to history "times" times
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(1);
+      }
+    );
 
-        for (let i = 0; i < parseInt(times); i++) {
+    when(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+
+        result = await historyService.getUserHistory(user_id);
+
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(
+      /^the history returned must have "(.*)" item with song_id "(.*)"$/,
+      (num_items, song_id) => {
+        expect(result.length).toBe(parseInt(num_items));
+        expect(result[0].song_id).toBe(song_id);
+      }
+    );
+  });
+
+  test("Delete an entry from a user history", ({ given, when, and, then }) => {
+    let deleted_entry: HistoryModel;
+    given(
+      /^the user with id "(.*)" has (\d+) history entries$/,
+      async (user_id, entries) => {
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
           mockHistoryEntity = new HistoryEntity({
-            id: `t${i}`,
-            user_id: "testId",
-            song_id: "testSongId",
+            id: "",
+            song_id: "test",
+            user_id: user_id,
           });
 
-          jest
-            .spyOn(mockHistoryRepository, "createHistory")
-            .mockResolvedValue(mockHistoryEntity);
+          // the entry to be deleted will be the last one
+          deleted_entry = await historyService.createHistory(mockHistoryEntity);
+        }
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          parseInt(entries)
+        );
+      }
+    );
 
+    when(
+      "the function deleteHistory is called on one of the entry ids",
+      async () => {
+        jest.spyOn(mockHistoryRepository, "deleteHistory");
+        await historyService.deleteHistory(deleted_entry.id);
+        expect(mockHistoryRepository.deleteHistory).toHaveBeenCalledTimes(1);
+      }
+    );
+    let user_history: HistoryModel[];
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        user_history = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(
+      "the history returned must not have the entry that was deleted",
+      () => {
+        expect(user_history).not.toContain(deleted_entry);
+      }
+    );
+
+    and(/^the user history must have (\d+) entries$/, (num_items) => {
+      expect(user_history.length).toBe(parseInt(num_items));
+    });
+  });
+
+  test("Clear user history", ({ given, when, and, then }) => {
+    given(
+      /^the user with id "(.*)" has (\d+) history entries$/,
+      async (user_id, entries) => {
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
           await historyService.createHistory(mockHistoryEntity);
         }
 
-        jest
-          .spyOn(mockSongRepository, "getSongs")
-          .mockResolvedValue([mockSongEntity]);
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+          parseInt(entries)
+        );
       }
     );
 
-    when(/^I select "(.*)"$/, (option) => {
-      // Test code for selecting the option
+    when(
+      /^the function deleteUserHistory is called with the user_id "(.*)"$/,
+      (user_id) => {
+        jest.spyOn(mockHistoryRepository, "deleteUserHistory");
+        historyService.deleteUserHistory(user_id);
+        expect(mockHistoryRepository.deleteUserHistory).toHaveBeenCalledTimes(
+          1
+        );
+      }
+    );
+
+    let user_history: HistoryModel[];
+
+    and(
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        user_history = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then(/^the history returned must have (\d+) items$/, (num_items) => {
+      expect(user_history.length).toBe(parseInt(num_items));
+    });
+  });
+
+  test("Get user statistics", ({ given, when, then }) => {
+    given(
+      /^the user with id "(.*)" has a history with the following items:$/,
+      async (user_id, table) => {
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
+      }
+    );
+    let userStatistics: StatisticsModel;
+    when(
+      /^the function getUserStatistics is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userStatistics = await historyService.getUserStatistics(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    then("it must return the following statistics:", (table) => {
+      let expected = new StatisticsModel({
+        time_played: parseInt(table[0].play_duration),
+        most_played_genre: table[0].most_played_genre,
+        most_played_song: table[0].most_played_song,
+      });
+
+      expect(userStatistics).toEqual(expected);
+    });
+  });
+
+  test("History Tracking disabled", ({ given, and, when, then }) => {
+    let uid: string;
+    given(
+      /^the user with id "(.*)" has history tracking disabled$/,
+      async (user_id) => {
+        mockUserEntity = new UserEntity({
+          id: user_id,
+          name: "Test User",
+          email: "test",
+          history_tracking: false,
+          password: "123",
+        });
+
+        let user = await userService.createUser(mockUserEntity);
+        uid = user_id;
+
+        expect(user.history_tracking).toBe(false);
+      }
+    );
+
+    and("the user has no play history", async () => {
+      let history = await historyService.getUserHistory(uid);
+      expect(history.length).toBe(0);
     });
 
-    then(
-      /^the system will correctly calculate the total play time of my songs as "(.*)" minutes$/,
-      async (totalPlayTime) => {
-        // Test code for verifying the total play time calculation
-
-        mockStatistics = new StatisticsModel({
-          play_duration: parseInt(totalPlayTime),
+    when(
+      /^the function createHistory is called with the user_id "(.*)" and the song_id "(.*)"$/,
+      async (user_id, song_id) => {
+        mockHistoryEntity = new HistoryEntity({
+          id: "",
+          user_id: user_id,
+          song_id: song_id,
         });
 
-        jest
-          .spyOn(historyService, "getUserStatistics")
-          .mockResolvedValue(mockStatistics);
+        jest.spyOn(mockHistoryRepository, "createHistory");
 
-        const statistics = await historyService.getUserStatistics(
-          mockUserEntity.id
-        );
+        await expect(
+          historyService.createHistory(mockHistoryEntity)
+        ).rejects.toThrow(HttpNotFoundError);
 
-        expect(statistics.play_duration).toEqual(mockStatistics.play_duration);
+        expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(0);
       }
     );
 
+    let userHistory;
     and(
-      /^will correctly calculate my most played genre as "(.*)", and my most played song as "(.*)"$/,
-      async (mostPlayedGenre, mostPlayedSong) => {
-        // Test code for verifying the most played genre calculation
-        mockStatistics = new StatisticsModel({
-          most_played_genre_name: mostPlayedGenre,
-          most_played_song_name: mostPlayedSong,
-        });
-
-        jest
-          .spyOn(historyService, "getUserStatistics")
-          .mockResolvedValue(mockStatistics);
-
-        const statistics = await historyService.getUserStatistics(
-          mockUserEntity.id
-        );
-
-        expect(statistics.most_played_genre_name).toEqual(
-          mockStatistics.most_played_genre_name
-        );
-        expect(statistics.most_played_song_name).toEqual(
-          mockStatistics.most_played_song_name
-        );
+      /^the function getUserHistory is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        jest.spyOn(mockHistoryRepository, "getHistories");
+        userHistory = await historyService.getUserHistory(user_id);
+        expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
       }
     );
+
+    then(/^the history returned must have (\d+) items$/, (entries) => {
+      expect(userHistory.length).toBe(parseInt(entries));
+    });
   });
 
-  test("User requests a new playlist of the most played songs of the month", ({
-    given,
-    and,
-    when,
-    then,
-  }) => {
+  test("User requests most played songs", ({ given, when, then }) => {
     given(
-      /^I'm logged in with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
+      /^the user with id "(.*)" has a history with the following items:$/,
+      async (user_id, table) => {
+        await addSongsToHistory(table, user_id, mockHistoryRepository, mockSongRepository, songService, historyService);
+      }
     );
 
-    and(
-      /^I have the songs "(.*)", "(.*)", and "(.*)" in my most played songs$/,
-      (arg0, arg1, arg2) => {}
+    let most_played_songs: MostPlayedModel[];
+    when(
+      /^the function getUserMostPlayedList is called with the user_id "(.*)"$/,
+      async (user_id) => {
+        most_played_songs = await historyService.getUserMostPlayedList(user_id);
+      }
     );
 
-    when("I request a new playlist of my most played songs", () => {});
-
-    then(/^the system generates a playlist titled "(.*)"$/, (arg0) => {});
-
-    and(
-      /^includes "(.*)", "(.*)", and "(.*)" in the playlist$/,
-      (arg0, arg1, arg2) => {}
-    );
-
-    and("allows me to save it for future listening", () => {});
-  });
-
-  test("User requests a new playlist based on most played genre", ({
-    given,
-    and,
-    when,
-    then,
-  }) => {
-    given("I'm logged in as an user", () => {});
-
-    and(
-      /^I have songs from the genres "(.*)", "(.*)", and "(.*)" in my most played list$/,
-      (arg0, arg1, arg2) => {}
-    );
-
-    and(
-      /^I have played songs from the "(.*)" genre "(.*)" times$/,
-      (arg0, arg1) => {}
-    );
-
-    and(
-      /^I have played songs from the "(.*)" genre "(.*)" times$/,
-      (arg0, arg1) => {}
-    );
-
-    and(
-      /^I have played songs from the "(.*)" genre "(.*)" times$/,
-      (arg0, arg1) => {}
-    );
-
-    when("I request a new playlist based on the most played genre", () => {});
-
-    then(
-      /^the system identifies "(.*)" as the predominant genre among my most played songs$/,
-      (arg0) => {}
-    );
-
-    and(/^generates a playlist titled "(.*)"$/, (arg0) => {});
-
-    and("allows me to save it for future listening", () => {});
-  });
-
-  test("New user who has never played a song before", ({
-    given,
-    and,
-    when,
-    then,
-  }) => {
-    given(
-      /^I've created a new account with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
-    );
-
-    and(/^I logged in with user "(.*)", password "(.*)"$/, (arg0, arg1) => {});
-
-    and("I have no songs in my history", () => {});
-
-    when("I open my most played songs", () => {});
-
-    then(/^I see a message "(.*)"$/, (arg0) => {});
-  });
-
-  test("User attempts to access most played songs without logging in", ({
-    given,
-    when,
-    then,
-    and,
-  }) => {
-    given("I am not logged into the system", () => {});
-
-    when("I attempt to view my most played songs", () => {});
-
-    then(
-      "the system displays an error message prompting me to log in",
-      () => {}
-    );
-
-    and("does not show any song statistics or information", () => {});
-  });
-
-  test("User turns off tracking of play history", ({
-    given,
-    when,
-    and,
-    then,
-  }) => {
-    given(
-      /^I am logged in with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
-    );
-
-    when("I go to settings", () => {});
-
-    and("I choose to turn off the tracking of my play history", () => {});
-
-    then(
-      "the system confirms that play history tracking is turned off",
-      () => {}
-    );
-
-    and("my future plays are not recorded in my play history", () => {});
-  });
-
-  test("User clears play history", ({ given, and, when, then }) => {
-    given(
-      /^I am logged in with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
-    );
-
-    and(
-      /^I have the songs "(.*)" and "(.*)" in my play history$/,
-      (arg0, arg1) => {}
-    );
-
-    when("I go to settings", () => {});
-
-    and("I select the option to clear my play history", () => {});
-
-    then("the system deletes all my previously stored play history", () => {});
-
-    and("now I do not have any songs in my play history", () => {});
-  });
-
-  test("User has disabled tracking of play history", ({
-    given,
-    and,
-    when,
-    then,
-  }) => {
-    given(
-      /^I am logged in with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
-    );
-
-    and(
-      "I have disabled the tracking of my play history in settings",
-      () => {}
-    );
-
-    when("I attempt to view my most played songs", () => {});
-
-    then("the system displays an empty list", () => {});
-
-    and(
-      "the system indicates that play history tracking is disabled",
-      () => {}
-    );
-
-    and("does not provide any most played song information", () => {});
-  });
-
-  test("User asks for most played songs", ({ given, and, when, then }) => {
-    given(
-      /^I am logged in with user "(.*)", password "(.*)"$/,
-      (arg0, arg1) => {}
-    );
-
-    and("I have played songs before", () => {});
-
-    when("I open my most played songs", () => {});
-
-    then(
-      "the system will display me a list of my most played songs of the month",
-      () => {}
-    );
+    then("it must return the following songs in order:", (table) => {
+      for (let i = 0; i < table.length; i++) {
+        expect(most_played_songs[i].song_id).toBe(table[i].song_id);
+        expect(most_played_songs[i].times_played).toBe(parseInt(table[i].times_played));
+      }
+    });
   });
 });

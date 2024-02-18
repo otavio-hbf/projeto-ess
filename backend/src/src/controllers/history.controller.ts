@@ -7,6 +7,7 @@ class HistoryController {
   private prefix: string = "/user";
   private hot: string = "/hot";
   private statistics: string = "/statistics";
+  private recommendations: string = "/recommendations";
   private suffix: string = "/history";
   public router: Router;
   private historyService: HistoryService;
@@ -19,31 +20,60 @@ class HistoryController {
 
   // id is USER id
   private initRoutes() {
+    // GET all histories
+    // /histories
     this.router.get(`/histories`, (req: Request, res: Response) =>
       this.getHistories(req, res)
     );
 
+    // GET history by id
+    // /history/:id
+    this.router.get(`${this.suffix}/:id`, (req: Request, res: Response) =>
+      this.getHistoryById(req, res)
+    );
+
+    // GET user history
+    // /user/:id/history
     this.router.get(
       `${this.prefix}/:id${this.suffix}`,
       (req: Request, res: Response) => this.getUserHistory(req, res)
     );
 
+    // GET most played
+    // /user/:id/hot
     this.router.get(
       `${this.prefix}/:id${this.hot}`,
       (req: Request, res: Response) => this.getUserMostPlayed(req, res)
     );
 
+    // GET statistics
+    // /user/:id/statistics
     this.router.get(
       `${this.prefix}/:id${this.statistics}`,
       (req: Request, res: Response) => this.getUserStatistics(req, res)
     );
 
+    this.router.get(
+      `${this.prefix}/:id${this.recommendations}`,
+      (req: Request, res: Response) => this.getUserRecommendations(req, res)
+    );
+
+    // CREATE user history
+    // /history
     this.router.post(this.suffix, (req: Request, res: Response) =>
       this.createHistory(req, res)
     );
 
+    // DELETE history entry
+    // /history/:id
+    this.router.delete(`${this.suffix}/:id`, (req: Request, res: Response) =>
+      this.deleteHistory(req, res)
+    );
+
+    // DELETE and CLEAR user history
+    // /user/:id/history/clear
     this.router.delete(
-      `${this.prefix}/:id${this.suffix}`,
+      `${this.prefix}/:id${this.suffix}/clear`,
       (req: Request, res: Response) => this.deleteUserHistory(req, res)
     );
   }
@@ -88,8 +118,29 @@ class HistoryController {
     }).handle(res);
   }
 
+  private async getUserRecommendations(req: Request, res: Response) {
+    const userId: string = req.params.id as string;
+    const statistics = await this.historyService.getUserRecommendations(
+      req.params.id
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: statistics,
+    }).handle(res);
+  }
+
   private async getHistory(req: Request, res: Response) {
     const history = await this.historyService.getHistory(req.params.id);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: history,
+    }).handle(res);
+  }
+
+  private async getHistoryById(req: Request, res: Response) {
+    const history = await this.historyService.getHistoryById(req.params.id);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
