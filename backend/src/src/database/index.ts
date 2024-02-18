@@ -153,7 +153,6 @@ export default class Database {
           email: "alfonso@gmail.com",
           password: "123456",
           history_tracking: true,
-          listening_to: "",
         }),
         new UserEntity({
           id: "2",
@@ -161,7 +160,6 @@ export default class Database {
           email: "joao@gmail.com",
           password: "789456",
           history_tracking: true,
-          listening_to: "",
         }),
       ],
       history: [
