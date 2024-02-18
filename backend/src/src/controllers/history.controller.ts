@@ -7,6 +7,7 @@ class HistoryController {
   private prefix: string = "/user";
   private hot: string = "/hot";
   private statistics: string = "/statistics";
+  private recommendations : string = "/recommendations"
   private suffix: string = "/history";
   public router: Router;
   private historyService: HistoryService;
@@ -36,6 +37,11 @@ class HistoryController {
     this.router.get(
       `${this.prefix}/:id${this.statistics}`,
       (req: Request, res: Response) => this.getUserStatistics(req, res)
+    );
+
+    this.router.get(
+      `${this.prefix}/:id${this.recommendations}`,
+      (req: Request, res: Response) => this.getUserRecommendations(req, res)
     );
 
     this.router.post(this.suffix, (req: Request, res: Response) =>
@@ -79,6 +85,18 @@ class HistoryController {
 
   private async getUserStatistics(req: Request, res: Response) {
     const statistics = await this.historyService.getUserStatistics(
+      req.params.id
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: statistics,
+    }).handle(res);
+  }
+
+  private async getUserRecommendations(req: Request, res: Response) {
+    const userId : string = req.params.id as string
+    const statistics = await this.historyService.getUserRecommendations(
       req.params.id
     );
 
@@ -135,6 +153,8 @@ class HistoryController {
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
   }
+
+
 }
 
 export default HistoryController;
