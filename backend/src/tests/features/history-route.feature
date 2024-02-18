@@ -16,7 +16,12 @@ Feature: History Routes
 
     # Service
     Scenario: Get user history from user id
-        Given the HistoryService
+        Given the HistoryService returns a history for user_id "1" with 3 items with song_id "1", "2" and "3"
+        When I send a "GET" request to "/user/1/history"
+        Then the response status should be "200"
+        And the response JSON should contain a history with 3 items with song_id "1", "2" and "3"
+
+        
 
 
 # Given o método getUserHistory chamado com "1" do HistoryService retorna um histórico com "3" itens com song_id "1", "2" e "3"
@@ -32,7 +37,7 @@ Feature: History Routes
 #     Given the user with id "1" has 3 history entries
 #     When the function deleteHistory is called on one of the entry ids
 #     And the function getUserHistory is called with the user_id "1"
-#     Then the history returned must not have the entry that was deleted
+#     Then the history returned must n"ot have the entry that was deleted
 #     And the user history must have 2 entries
 
 # Scenario: Clear user history
