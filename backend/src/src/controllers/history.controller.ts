@@ -25,6 +25,12 @@ class HistoryController {
       this.getHistories(req, res)
     );
 
+    // GET history by id
+    // /history/:id
+    this.router.get(`${this.suffix}/:id`, (req: Request, res: Response) =>
+      this.getHistoryById(req, res)
+    );
+
     // GET user history
     // /user/:id/history
     this.router.get(
@@ -54,9 +60,8 @@ class HistoryController {
 
     // DELETE history entry
     // /history/:id
-    this.router.delete(
-      `${this.suffix}/:id`,
-      (req: Request, res: Response) => this.deleteHistory(req, res)
+    this.router.delete(`${this.suffix}/:id`, (req: Request, res: Response) =>
+      this.deleteHistory(req, res)
     );
 
     // DELETE and CLEAR user history
@@ -109,6 +114,15 @@ class HistoryController {
 
   private async getHistory(req: Request, res: Response) {
     const history = await this.historyService.getHistory(req.params.id);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: history,
+    }).handle(res);
+  }
+
+  private async getHistoryById(req: Request, res: Response) {
+    const history = await this.historyService.getHistoryById(req.params.id);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

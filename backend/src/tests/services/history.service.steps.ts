@@ -19,7 +19,7 @@ import { di } from "../../src/di/index";
 import { mock } from "node:test";
 import { exitCode } from "process";
 import { HttpNotFoundError } from "../../src/utils/errors/http.error";
-import { addSongsToHistory } from "../utils/history.utils";
+import { addSongsToHistory, simpleAddSongsToHistory } from "../utils/history.utils";
 import MostPlayedModel from "../../src/models/most_played.model";
 
 const feature = loadFeature("tests/features/history-service.feature");
@@ -78,15 +78,7 @@ defineFeature(feature, (test) => {
     given(
       /^o método getUserHistory chamado com "(.*)" do HistoryService retorna um histórico com "(.*)" itens com song_id "(.*)", "(.*)" e "(.*)"$/,
       async (user_id, song_count, song_1, song_2, song_3) => {
-        let songs = [song_1, song_2, song_3];
-        for (let song of songs) {
-          const mockHistoryEntity = new HistoryEntity({
-            id: "",
-            user_id: user_id,
-            song_id: song,
-          });
-          await historyService.createHistory(mockHistoryEntity);
-        }
+        await simpleAddSongsToHistory(song_1, song_2, song_3, user_id, historyService);
       }
     );
 

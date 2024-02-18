@@ -27,7 +27,7 @@ export const addSongsToHistory = async (
       artist: row.artist,
       duration: row.duration,
       genre: row.genre,
-      times_ever_played: row.times_ever_played
+      times_ever_played: row.times_ever_played,
     });
 
     let song = await songService.createSong(mockSongEntity);
@@ -54,4 +54,27 @@ export const addSongsToHistory = async (
   expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
     total_songs_added
   );
+};
+
+export const simpleAddSongsToHistory = async (
+  song_1: string,
+  song_2: string,
+  song_3: string,
+  user_id: string,
+  historyService: HistoryService
+) => {
+  // clear user history first
+  await historyService.deleteUserHistory(user_id);
+  
+  let songs = [song_1, song_2, song_3];
+  jest.spyOn(historyService, "createHistory")
+  for (let song of songs) {
+    const mockHistoryEntity = new HistoryEntity({
+      id: "",
+      user_id: user_id,
+      song_id: song,
+    });
+    await historyService.createHistory(mockHistoryEntity);
+  }
+  expect(historyService.createHistory).toHaveBeenCalledTimes(3);
 };
