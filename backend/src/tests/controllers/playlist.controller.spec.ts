@@ -81,8 +81,7 @@ it('should create a playlist', async () => {
       const addSongtoPlaylistData = {userId: mockedUserId};
       const response = await request.put('/api/playlists/' + mockedPlaylistId + '/' + mockedSongId).send(addSongtoPlaylistData);
       const result = response.body.data;
-      
-      console.log(response);
+
       expect(response.status).toBe(200);
       expect(result.songs).toContain(mockedSongId);
     });
