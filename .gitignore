@@ -148,3 +148,6 @@ dist
 #!.yarn/cache
 .pnp.*
 .editorconfig
+
+package-lock.json
+./package.json
