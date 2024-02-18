@@ -150,3 +150,6 @@ yarn.lock
 .pnp.*
 yarn.lock
 .editorconfig
+
+package-lock.json
+./package.json

@@ -3,37 +3,38 @@ As an user
 I want to be able to access the top songs, artists, podcasts and playlists
 So that I can see the current most listened songs, artists, podcasts or playlists.
 
-Scenario: Access the top songs
-Given I am logged as an user with login "ABestetica" and password "chuva123" in the "hot" page
-And I see 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
-When I click the option of "see more" of the top "songs"
-Then a list of the 50 current most played "songs" is shown.
+Scenario: Show the top songs
+Given já existem “12” músicas cadastradas
+When uma requisição “GET” for enviada para a rota “/hot”
+Then o status da resposta é “200”
+And o JSON da resposta deve conter os ids e nomes das 5 músicas mais tocadas.
+Scenario: Show the top songs by genre
+Given existem “6” músicas cadastradas com gênero “MPB”
+When uma requisição “GET” for enviada para a rota “/hot?genre=MPB”
+Then o status da resposta é “200”
+And o JSON da resposta deve conter os ids e nomes das 5 músicas mais tocadas
 
-Scenario: View less songs
-Given I am logged as an user with login "ABestetica" and password "chuva123" in the "hot" page
-And I see 4 containers, each of then for the elements "artists, songs, playlists, podcasts"
-And the container of "songs" shows the top 50 current songs, indicating the button "see more" was pressed
-When I click the option of "see less" of the top songs
-Then the list of the 50 current most played songs is not shown anymore
-And the screen displays the container of songs with only the top 5 preview.
+Scenario: Deletar uma música que estava no top songs
+Given o top songs está preenchido com 10 músicas
+		And entre elas está a música chamada “X” na “1º” posição
+		And a 11° música mais escutada se chama “Y”
+		When “X” é deletada do banco de dados através de uma requisição “DELETE”
+		Then o status da resposta do “DELETE” é “204”
+		And a lista do top 10 sofre uma alteração onde todas as músicas que estavam
+	abaixo da primeira opção sobem de ranking
+And a música Y entra para a 10° posição 
 
-Scenario: Back to main menu
-Given I am logged as an user with login "ABestetica" and password "chuva123" in the "hot" page
-And I see the "back to menu" button at the end of the page
-When I click it
-Then I am redirected to the main menu
+Scenario: Obter top 5 músicas quando há menos cadastradas
+Given há “4” músicas cadastradas no sistema
+When uma requisição “GET” é feita para a rota “/hot”
+Then o status da resposta é “200”
+And o JSON da resposta inclui todas as “4” músicas ordenadas por vezes que já foram tocadas
+And o 5° lugar não é preenchido
 
-Scenario: Play the songs
-Given I am logged as an user with login "ABestetica" and password "chuva123" in the "hot" page
-When I click the button "see more" of the top songs
-And the top 50 songs is displayed
-And I click in the song with title "minha cura"
-Then the song "minha cura" starts to played
+Scenario: Obter top 5 músicas de determinado gênero quando há menos cadastradas
+Given há “10” músicas cadastradas
+And “4” delas são do gênero “MPB”
+When uma  requisição “GET” é feita para a rota “/hot?genre=MPB”
+Then o status da resposta é “200”
+And o JSON inclui apenas as “4” músicas do estilo MPB
 
-Scenario: Access the artist page
-Given I am logged as an user with login "ABestetica" and password "chuva123" in the "hot" page
-When I click the button "see more" of the top artists
-And the top 50 artists is displayed
-And I click in the artist named "Henrique e Juliano"
-Then I am redirected to the artist page
-And I can access all the "Henrique e Juliano" songs
