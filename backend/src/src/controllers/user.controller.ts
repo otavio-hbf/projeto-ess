@@ -54,36 +54,30 @@ class UserController {
     }).handle(res);
   }
   private async getUserToLogin(req: Request, res: Response) {
-    
     try {
       const { email, password } = req.body;
-      
+
       // Validar o email estão presentes
       if (!email) {
-        return res
-          .status(400)
-          .json({ error: "A email is required for login" });
+        return res.status(400).json({ error: "A email is required for login" });
       }
-      
+
       // Validar o email estão presentes
       if (!password) {
-        return res
-        .status(400)
-        .json({ error: "A senha is required for login" });
+        return res.status(400).json({ error: "A senha is required for login" });
       }
+      
+      const user = await this.userService.getUserToLogin(req.body.email, req.body.password);
 
-      const user = await this.userService.getUser(req.params.id);
-
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: user,
-    }).handle(res);
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: user,
+      }).handle(res);
 
     } catch (error) {
-
       return new FailureResult({
         msg: Result.transformRequestOnMsg(req),
-        msgCode: "user_register_fail",
+        msgCode: "user_login_fail",
         code: 500,
       }).handle(res);
     }
@@ -99,25 +93,24 @@ class UserController {
   }
 
   private async createUser(req: Request, res: Response) {
-
     try {
       const { name, email, password } = req.body;
 
-      // Validar se o nome esta presentes
+      // Validar se o nome esta presente
       if (!name) {
         return res
           .status(400)
           .json({ error: "A name is required for register" });
       }
 
-      // Validar o email estão presentes
+      // Validar o email esta presente
       if (!email) {
         return res
           .status(400)
           .json({ error: "A email is required for register" });
       }
 
-      // Validar o password estão presentes
+      // Validar o password esta presente
       if (!password) {
         return res
           .status(400)

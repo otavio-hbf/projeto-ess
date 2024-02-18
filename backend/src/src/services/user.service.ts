@@ -1,6 +1,9 @@
 import UserRepository from "../repositories/user.repository";
 import UserModel from "../models/user.model";
-import { HttpNotFoundError, HttpForbiddenError } from "../utils/errors/http.error";
+import {
+  HttpNotFoundError,
+  HttpForbiddenError,
+} from "../utils/errors/http.error";
 import UserEntity from "../entities/user.entity";
 import { validate } from "class-validator";
 
@@ -39,8 +42,14 @@ class UserService {
     return userModel;
   }
 
-  public async getUserToLogin(email: string, password: string): Promise<UserModel> {
-    const userEntity = await this.userRepository.getUserToLogin(email, password);
+  public async getUserToLogin(
+    email: string,
+    password: string
+  ): Promise<UserEntity | null> {
+    const userEntity = await this.userRepository.getUserToLogin(
+      email,
+      password
+    );
 
     if (!userEntity) {
       throw new HttpNotFoundError({
@@ -49,9 +58,7 @@ class UserService {
       });
     }
 
-    const userModel = new UserModel(userEntity);
-
-    return userModel;
+    return userEntity;
   }
 
   public async createUser(data: UserEntity): Promise<UserModel> {

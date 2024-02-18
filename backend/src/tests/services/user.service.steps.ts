@@ -31,7 +31,9 @@ defineFeature(feature, (test) => {
         });
 
         when(/^a "(.*)" request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {
-
+            /*response = await request.arg0(arg1).send({
+                name: testName,
+              });*/
         });
 
         then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
