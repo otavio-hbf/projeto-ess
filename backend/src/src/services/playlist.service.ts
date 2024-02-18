@@ -40,6 +40,17 @@ class PlaylistService {
     return playlistsModel;
   }
 
+  public async getUserPlaylists(userId: string): Promise<PlaylistModel[]> {
+    const playlistsEntity = await this.playlistRepository.getUserPlaylists(userId);
+
+    const playlistsModel = playlistsEntity.map(
+      (playlist) => new PlaylistModel(playlist)
+    );
+
+    return playlistsModel;
+  }
+
+
   public async getPlaylist(id: string): Promise<PlaylistModel> {
     const playlistEntity = await this.playlistRepository.getPlaylist(id);
 
@@ -263,7 +274,7 @@ class PlaylistService {
       await this.playlistRepository.updatePlaylist(playlistId, playlistEntity);
     }
 
-    const updatedPlaylistEntity = playlistEntity
+    const updatedPlaylistEntity = playlistEntity;
 
     if (!updatedPlaylistEntity) {
       throw new HttpNotFoundError({
@@ -320,7 +331,7 @@ class PlaylistService {
     }
 
     // Atualiza a playlist no repositório
-    const updatedPlaylistEntity = playlistEntity
+    const updatedPlaylistEntity = playlistEntity;
 
     if (!updatedPlaylistEntity) {
       throw new HttpNotFoundError({
