@@ -145,41 +145,6 @@ export default class Database {
           genre: "Classical",
           times_ever_played: 50,
         }),
-        new SongEntity({
-          id: "4",
-          title: "Banana",
-          duration: 60,
-          artist: "Patrick",
-          genre: "Pop",
-        }),
-        new SongEntity({
-          id: "5",
-          title: "Orange",
-          duration: 50,
-          artist: "Squidward",
-          genre: "Electronic",
-        }),
-        new SongEntity({
-          id: "6",
-          title: "Grape",
-          duration: 55,
-          artist: "Plankton",
-          genre: "Jazz",
-        }),
-        new SongEntity({
-          id: "7",
-          title: "Strawberry",
-          duration: 40,
-          artist: "Sandy",
-          genre: "Rock",
-        }),
-        new SongEntity({
-          id: "8",
-          title: "Pineapple",
-          duration: 35,
-          artist: "Mr. Krabs",
-          genre: "Hip Hop",
-        }),
       ],
       users: [
         new UserEntity({
