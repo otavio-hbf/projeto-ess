@@ -14,7 +14,10 @@ import HistoryEntity from "../../src/entities/history.entity";
 import SongEntity from "../../src/entities/song.entity";
 import UserModel from "../../src/models/user.model";
 import Injector from "../../src/di/injector";
-import { simpleAddSongsToHistory } from "../utils/history.utils";
+import {
+  addSongsToHistory,
+  simpleAddSongsToHistory,
+} from "../utils/history.utils";
 
 const feature = loadFeature("./tests/features/history-route.feature");
 const request = supertest(app);
@@ -42,22 +45,33 @@ defineFeature(feature, (test) => {
   const prefix: string = "/api";
 
   beforeEach(() => {
-    mockHistoryRepository = di.getRepository(HistoryRepository);
+    mockHistoryRepository =
+      di.getRepository<HistoryRepository>(HistoryRepository);
 
-    mockSongRepository = di.getRepository(SongRepository);
+    mockSongRepository = di.getRepository<SongRepository>(SongRepository);
 
-    mockUserRepository = di.getRepository(UserRepository);
+    mockUserRepository = di.getRepository<UserRepository>(UserRepository);
 
-    historyService = di.getService(HistoryService);
+    injector.registerService(
+      HistoryService,
+      new HistoryService(
+        mockHistoryRepository,
+        mockUserRepository,
+        mockSongRepository
+      )
+    );
+    historyService = injector.getService(HistoryService);
 
-    songService = di.getService(SongService);
+    injector.registerService(SongService, new SongService(mockSongRepository));
+    songService = injector.getService(SongService);
 
-    userService = di.getService(UserService);
+    injector.registerService(UserService, new UserService(mockUserRepository));
+    userService = injector.getService(UserService);
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
+  //   afterEach(() => {
+  //     jest.resetAllMocks();
+  //   });
 
   test("Get user history from user id", ({ given, when, then, and }) => {
     given(
@@ -73,7 +87,7 @@ defineFeature(feature, (test) => {
       }
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, async (req_type, route) => {
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
       response = await request.get(`${prefix}${route}`).send();
     });
 
@@ -105,121 +119,204 @@ defineFeature(feature, (test) => {
   test("Get most played songs from user id", ({ given, when, then, and }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      (arg0, table) => {}
+      async (user_id, table) => {
+        await addSongsToHistory(
+          table,
+          user_id,
+          mockHistoryRepository,
+          mockSongRepository,
+          songService,
+          historyService
+        );
+      }
     );
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
-
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       "the response JSON should contain a list with the following songs in order:",
-      (table) => {}
+      (table) => {
+        for (let i = 0; i < table.length; i++) {
+          expect(response.body.data[i].song_id).toBe(table[i].song_id);
+          expect(response.body.data[i].times_played).toBe(
+            parseInt(table[i].times_played)
+          );
+        }
+      }
     );
   });
 
   test("Get user statistics from user id", ({ given, when, then, and }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      (arg0, table) => {}
+      async (user_id, table) => {
+        await addSongsToHistory(
+          table,
+          user_id,
+          mockHistoryRepository,
+          mockSongRepository,
+          songService,
+          historyService
+        );
+      }
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       "the response JSON should contain the following statistics:",
-      (table) => {}
+      (table) => {
+        let expected = new StatisticsModel({
+          time_played: parseInt(table[0].play_duration),
+          most_played_genre: table[0].most_played_genre,
+          most_played_song: table[0].most_played_song,
+        });
+
+        expect(response.body.data).toEqual(expected);
+      }
     );
   });
 
   test("Add a new song to a user history", ({ given, when, then, and }) => {
-    given(/^the user with id "(.*)" has no history$/, (arg0) => {});
+    given(/^the user with id "(.*)" has no history$/, async (user_id) => {
+      // clear user history first
+      await historyService.deleteUserHistory(user_id);
+    });
 
     when(
-      /^I send a "(.*)" request to "(.*)" with the following JSON:$/,
-      (arg0, arg1, docString) => {}
+      /^I send a POST request to "(.*)" with the following JSON:$/,
+      async (route, docString) => {
+        const body = JSON.parse(docString);
+        response = await request.post(`${prefix}${route}`).send(body);
+        //console.debug(response.body);
+      }
     );
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history with (\d+) item with song_id "(.*)"$/,
-      (arg0, arg1) => {}
+      (num_items, song_id) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining({
+            song_id: song_id,
+          })
+        );
+      }
     );
   });
 
   test("Clear user history", ({ given, when, and, then }) => {
     given(
       /^the user with id "(.*)" has (\d+) history entries$/,
-      (arg0, arg1) => {}
+      async (user_id, entries) => {
+        // clear user history first
+        await historyService.deleteUserHistory(user_id);
+
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
+          await historyService.createHistory(mockHistoryEntity);
+        }
+      }
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, async (route) => {
+      response = await request.delete(`${prefix}${route}`).send();
+    });
 
-    and(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history with (\d+) entries$/,
-      (arg0) => {}
+      (entries) => {
+        expect(response.body.data).toHaveLength(parseInt(entries));
+      }
     );
   });
 
   test("Delete history entry", ({ given, when, and, then }) => {
     given(
       /^the user with id "(.*)" has (\d+) history entries with ids "(.*)", "(.*)" and "(.*)"$/,
-      (arg0, arg1, arg2, arg3, arg4) => {}
+      async (user_id, entries, id_1, id_2, id_3) => {
+        // clear user history first
+        await historyService.deleteUserHistory(user_id);
+        // create history entries with id 1, 2, 3
+        let ids = [id_1, id_2, id_3];
+        for (let id of ids) {
+          mockHistoryEntity = new HistoryEntity({
+            id: id,
+            song_id: "test" + id,
+            user_id: user_id,
+          });
+          await historyService.createHistory(mockHistoryEntity);
+        }
+      }
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, async (route) => {
+      response = await request.delete(`${prefix}${route}`).send();
+    });
 
-    and(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, async (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history without the entry that was deleted with id "(.*)"$/,
-      (arg0) => {}
+      (id) => {
+        expect(response.body.data).not.toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: id,
+            }),
+          ])
+        );
+      }
     );
 
     and(
       /^the response JSON should contain a history with ids "(.*)" and "(.*)"$/,
-      (arg0, arg1) => {}
+      (arg0, arg1) => {
+        expect(response.body.data).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: arg0,
+            }),
+            expect.objectContaining({
+              id: arg1,
+            }),
+          ])
+        );
+      }
     );
   });
-
-  //   test('Create a history', ({ given, when, then, and }) => {
-  //     given(/^o HistoryRepository não tem um history com nome "(.*)"$/, async (historyId, historyName) => {
-  //       // Check if the history does not exist in the repository and delete it if it exists
-  //       const existingHistory = await mockHistoryRepository.getHistory(historyId);
-  //       if (existingHistory) {
-  //         await mockHistoryRepository.deleteHistory(historyId);
-  //       }
-  //     });
-
-  //     when(
-  //       /^uma requisição POST for enviada para "(.*)" com o corpo da requisição sendo um JSON com o nome "(.*)"$/,
-  //       async (url, historyName) => {
-  //         response = await request.post(url).send({
-  //           name: historyName,
-  //         });
-  //       }
-  //     );
-
-  //     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
-  //       expect(response.status).toBe(parseInt(statusCode, 10));
-  //     });
-
-  //     and(/^o JSON da resposta deve conter o nome "(.*)"$/, (historyName) => {
-  //         expect(response.body.data).toEqual(
-  //           expect.objectContaining({
-  //             name: historyName,
-  //           })
-  //         );
-  //       }
-  //     );
-  //   });
 });
