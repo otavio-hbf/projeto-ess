@@ -7,7 +7,7 @@ class HistoryController {
   private prefix: string = "/user";
   private hot: string = "/hot";
   private statistics: string = "/statistics";
-  private recommendations : string = "/recommendations"
+  private recommendations: string = "/recommendations";
   private suffix: string = "/history";
   public router: Router;
   private historyService: HistoryService;
@@ -95,7 +95,7 @@ class HistoryController {
   }
 
   private async getUserRecommendations(req: Request, res: Response) {
-    const userId : string = req.params.id as string
+    const userId: string = req.params.id as string;
     const statistics = await this.historyService.getUserRecommendations(
       req.params.id
     );
@@ -153,8 +153,6 @@ class HistoryController {
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
   }
-
-
 }
 
 export default HistoryController;

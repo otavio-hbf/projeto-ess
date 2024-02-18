@@ -151,52 +151,53 @@ class HistoryService {
     return historyModel;
   }
 
-
   public async getUserRecommendations(id: string): Promise<SongModel[]> {
-
     const userStatistics = await this.getUserStatistics(id);
     const userHistory = await this.getUserHistory(id);
-    
-    if(!userHistory){
+
+    if (!userHistory) {
       const allSongs = await this.songRepository.getSongs();
-      return allSongs.map(song => new SongModel(song));
+      return allSongs.map((song) => new SongModel(song));
     }
 
-    if (!userStatistics || !userStatistics.most_played_genre ) {
-        const allSongs = await this.songRepository.getSongs();
-        const unlistenedSongs = allSongs.filter(song =>
-            !userHistory.some(history => history.song_id === song.id)
-        );
-        return unlistenedSongs.map(song => new SongModel(song));
+    if (!userStatistics || !userStatistics.most_played_genre) {
+      const allSongs = await this.songRepository.getSongs();
+      const unlistenedSongs = allSongs.filter(
+        (song) => !userHistory.some((history) => history.song_id === song.id)
+      );
+      return unlistenedSongs.map((song) => new SongModel(song));
     }
 
-    if(userStatistics.most_played_genre!){
+    if (userStatistics.most_played_genre!) {
       // Retrieve all songs from the repository
       const allSongs = await this.songRepository.getSongs();
 
-      let recommendedSongs = allSongs.filter(song =>
-        song.genre.toLowerCase() === userStatistics.most_played_genre?.toLowerCase()
+      let recommendedSongs = allSongs.filter(
+        (song) =>
+          song.genre.toLowerCase() ===
+          userStatistics.most_played_genre?.toLowerCase()
       );
-      
-      recommendedSongs = recommendedSongs.filter(song =>
-        !userHistory.some(history => history.song_id === song.id));
+
+      recommendedSongs = recommendedSongs.filter(
+        (song) => !userHistory.some((history) => history.song_id === song.id)
+      );
 
       if (recommendedSongs.length === 0) {
-          recommendedSongs = allSongs.filter(song =>
-              !userHistory.some(history => history.song_id === song.id)
-          );
+        recommendedSongs = allSongs.filter(
+          (song) => !userHistory.some((history) => history.song_id === song.id)
+        );
       }
 
       // Convert the filtered songs to SongModel instances
-      const recommendedSongsModels = recommendedSongs.map(song => new SongModel(song));
+      const recommendedSongsModels = recommendedSongs.map(
+        (song) => new SongModel(song)
+      );
       return recommendedSongsModels;
     }
 
     const allSongs = await this.songRepository.getSongs();
-    return allSongs.map(song => new SongModel(song));
-}
-
-
+    return allSongs.map((song) => new SongModel(song));
+  }
 
   public async createHistory(data: HistoryEntity): Promise<HistoryModel> {
     const user = await this.userRepository.getUser(data.user_id);

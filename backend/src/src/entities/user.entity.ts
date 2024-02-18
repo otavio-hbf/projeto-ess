@@ -11,7 +11,6 @@ export default class UserEntity extends BaseEntity {
   @IsBoolean()
   history_tracking: boolean;
 
-
   constructor(data: UserEntity) {
     super(data.id || "");
     this.name = data.name;
