@@ -4,12 +4,14 @@ import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
 import PlaylistModel from '../../src/models/playlist.model';
 import SongRepository from "../../src/repositories/song.repository";
+import UserRepository from '../../src/repositories/user.repository';
 
 const feature = loadFeature("../../features/playlist_maintenance.feature");
 
 defineFeature(feature, (test) => {
     let mockPlaylistRepository: PlaylistRepository;
     let mockSongRepository: SongRepository;
+    let mockUserRepository: UserRepository;
 
     let playlistService: PlaylistService;
 
@@ -24,7 +26,7 @@ defineFeature(feature, (test) => {
             deletePlaylist: jest.fn(),
         } as any;
 
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository);
+        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
     });
 
     afterEach(() => {
@@ -53,6 +55,7 @@ defineFeature(feature, (test) => {
                 createdBy: "Pedro",
                 private: true,
                 followers: [],
+                contributors: [],
             });
 
             jest.spyOn(mockPlaylistRepository, 'createPlaylist')

@@ -6,6 +6,7 @@ export default class PlaylistEntity extends BaseEntity {
   createdBy: string; // ID do usuário que criou a playlist
   private: boolean;
   followers: string[]; // IDs dos usuários que seguem a playlist
+  contributors: string[]; // IDs dos usuários que são contribuidores da playlist
 
   constructor(data: PlaylistEntity) {
     super(data.id || "");
@@ -14,5 +15,6 @@ export default class PlaylistEntity extends BaseEntity {
     this.createdBy = data.createdBy;
     this.private = data.private || false;
     this.followers = data.followers || [];
+    this.contributors = data.contributors || [];
   }
 }

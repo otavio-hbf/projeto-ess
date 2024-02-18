@@ -40,3 +40,18 @@ Feature: History Service
         When the function createHistory is called with the user_id "1" and the song_id "4"
         And the function getUserHistory is called with the user_id "1"
         Then the history returned must have 0 items
+
+    Scenario: User requests most played songs
+        Given the user with id "1" has a history with the following items:
+            | times_played | song_id | title                   | artist      | genre | duration |
+            | 3            | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 300      |
+            | 3            | 2       | Yellow                  | Coldplay    | Pop   | 150      |
+            | 1            | 3       | Yellow Submarine        | The Beatles | Rock  | 100      |
+            | 2            | 4       | Ticket to Ride          | The Beatles | Rock  | 250      |
+        When the function getUserMostPlayedList is called with the user_id "1"
+        Then it must return the following songs in order:
+            | song_id | title                   | artist      | genre | times_played |
+            | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 3            |
+            | 2       | Yellow                  | Coldplay    | Pop   | 3            |
+            | 4       | Ticket to Ride          | The Beatles | Rock  | 2            |
+            | 3       | Yellow Submarine        | The Beatles | Rock  | 1            |

@@ -94,6 +94,15 @@ class HistoryService {
       }
     }
 
+    // sort by times_played then song_id
+    mostPlayedModel.sort((a, b) => {
+      if (a.times_played === b.times_played) {
+        return a.song_id.localeCompare(b.song_id);
+      } else {
+        return b.times_played - a.times_played;
+      }
+    });
+
     return mostPlayedModel;
   }
 
