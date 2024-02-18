@@ -89,7 +89,6 @@ class PlaylistService {
     data: PlaylistEntity,
     userId: string
   ): Promise<PlaylistModel> {
-
     const index = data.contributors.indexOf(userId);
     if (data.createdBy !== userId && index === -1) {
       // O usuário autenticado não é contribuidor nem o criador da playlist
@@ -103,15 +102,12 @@ class PlaylistService {
       data
     );
 
-
     if (!playlistEntity) {
       throw new HttpNotFoundError({
         msg: "Playlist not found to Update",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
-
-    
 
     const playlistModel = new PlaylistModel(playlistEntity);
 
@@ -261,8 +257,9 @@ class PlaylistService {
     songId: string,
     userId: string
   ): Promise<PlaylistModel> {
-    
-    const playlistEntity = await this.playlistRepository.getPlaylist(playlistId);
+    const playlistEntity = await this.playlistRepository.getPlaylist(
+      playlistId
+    );
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
@@ -287,8 +284,6 @@ class PlaylistService {
         msgCode: PlaylistServiceMessageCode.song_not_found,
       });
     }
-
-    
 
     // Verifique se a música já está na playlist
     if (playlistEntity.songs.includes(songId)) {
@@ -318,8 +313,9 @@ class PlaylistService {
     songIdToRemove: string,
     userId: string
   ): Promise<PlaylistModel> {
-
-    const playlistEntity = await this.playlistRepository.getPlaylist(playlistId);
+    const playlistEntity = await this.playlistRepository.getPlaylist(
+      playlistId
+    );
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
@@ -338,15 +334,12 @@ class PlaylistService {
 
     const songEntity = await this.songRepository.getSong(songIdToRemove);
 
-
     if (!songEntity) {
       throw new HttpNotFoundError({
         msg: "Song not found",
         msgCode: PlaylistServiceMessageCode.song_not_found,
       });
     }
-
-    
 
     // Verifique se a música está na playlist
     if (!playlistEntity.songs.includes(songIdToRemove)) {
