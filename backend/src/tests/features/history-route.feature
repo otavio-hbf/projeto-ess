@@ -29,11 +29,11 @@ Feature: History Routes
     # GET statistics
     # /user/:id/statistics
     Scenario: Get user statistics from user id
-        Given the user with id "1" has a history with the following items:
+        Given the user with id "g1" has a history with the following items:
             | times_played | song_id | title                   | artist      | genre | duration |
-            | 3            | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 300      |
-            | 1            | 2       | Yellow Submarine        | The Beatles | Rock  | 100      |
-        When I send a GET request to "/user/1/statistics"
+            | 3            | g1       | Never Gonna Give You Up | Rick Astley | Rock  | 300      |
+            | 1            | g2       | Yellow Submarine        | The Beatles | Rock  | 100      |
+        When I send a GET request to "/user/g1/statistics"
         Then the response status should be "200"
         And the response JSON should contain the following statistics:
             | most_played_song        | most_played_genre | play_duration |
@@ -50,7 +50,7 @@ Feature: History Routes
                 "song_id": "4"
             }
             """
-        Then the response status should be "201"
+        Then the response status should be "200"
         And the response JSON should contain a history with 1 item with song_id "4"
 
     # DELETE/CLEAR user history

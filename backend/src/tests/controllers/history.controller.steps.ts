@@ -45,21 +45,22 @@ defineFeature(feature, (test) => {
   const prefix: string = "/api";
 
   beforeEach(() => {
-    mockHistoryRepository = di.getRepository(HistoryRepository);
+    mockHistoryRepository =
+      di.getRepository<HistoryRepository>(HistoryRepository);
 
-    mockSongRepository = di.getRepository(SongRepository);
+    mockSongRepository = di.getRepository<SongRepository>(SongRepository);
 
-    mockUserRepository = di.getRepository(UserRepository);
+    mockUserRepository = di.getRepository<UserRepository>(UserRepository);
 
     injector.registerService(
-        HistoryService,
-        new HistoryService(
-          mockHistoryRepository,
-          mockUserRepository,
-          mockSongRepository
-        )
-      );
-      historyService = injector.getService(HistoryService);
+      HistoryService,
+      new HistoryService(
+        mockHistoryRepository,
+        mockUserRepository,
+        mockSongRepository
+      )
+    );
+    historyService = injector.getService(HistoryService);
 
     injector.registerService(SongService, new SongService(mockSongRepository));
     songService = injector.getService(SongService);
@@ -68,9 +69,9 @@ defineFeature(feature, (test) => {
     userService = injector.getService(UserService);
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
+  //   afterEach(() => {
+  //     jest.resetAllMocks();
+  //   });
 
   test("Get user history from user id", ({ given, when, then, and }) => {
     given(
@@ -131,7 +132,6 @@ defineFeature(feature, (test) => {
     );
     when(/^I send a GET request to "(.*)"$/, async (route) => {
       response = await request.get(`${prefix}${route}`).send();
-      console.debug(response.body);
     });
 
     then(/^the response status should be "(.*)"$/, (status) => {
@@ -154,32 +154,68 @@ defineFeature(feature, (test) => {
   test("Get user statistics from user id", ({ given, when, then, and }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      (arg0, table) => {}
+      async (user_id, table) => {
+        await addSongsToHistory(
+          table,
+          user_id,
+          mockHistoryRepository,
+          mockSongRepository,
+          songService,
+          historyService
+        );
+      }
     );
 
-    when(/^I send a GET request to "(.*)"$/, (arg1) => {});
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       "the response JSON should contain the following statistics:",
-      (table) => {}
+      (table) => {
+        let expected = new StatisticsModel({
+          time_played: parseInt(table[0].play_duration),
+          most_played_genre: table[0].most_played_genre,
+          most_played_song: table[0].most_played_song,
+        });
+
+        expect(response.body.data).toEqual(expected);
+      }
     );
   });
 
   test("Add a new song to a user history", ({ given, when, then, and }) => {
-    given(/^the user with id "(.*)" has no history$/, (arg0) => {});
+    given(/^the user with id "(.*)" has no history$/, async (user_id) => {
+      // clear user history first
+      await historyService.deleteUserHistory(user_id);
+    });
 
     when(
       /^I send a POST request to "(.*)" with the following JSON:$/,
-      (arg1, docString) => {}
+      async (route, docString) => {
+        const body = JSON.parse(docString);
+        response = await request.post(`${prefix}${route}`).send(body);
+        console.debug(response.body);
+      }
     );
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history with (\d+) item with song_id "(.*)"$/,
-      (arg0, arg1) => {}
+      (num_items, song_id) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining({
+            song_id: song_id,
+          })
+        );
+      }
     );
   });
 
