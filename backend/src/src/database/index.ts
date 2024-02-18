@@ -1,6 +1,5 @@
 import HistoryEntity from "../entities/history.entity";
 import SongEntity from "../entities/song.entity";
-import TestEntity from "../entities/test.entity";
 import UserEntity from "../entities/user.entity";
 import PlaylistEntity from "../entities/playlist.entity";
 
@@ -25,12 +24,6 @@ export default class Database {
 
   static seed() {
     Database.getInstance().data = {
-      tests: [
-        new TestEntity({
-          id: "89ecc32a-aec7-4b71-adfd-03287e4ca74f",
-          name: "Test Seed",
-        }),
-      ],
       songs: [
         new SongEntity({
           id: "1",
@@ -160,7 +153,6 @@ export default class Database {
           email: "alfonso@gmail.com",
           password: "123456",
           history_tracking: true,
-          listening_to: "",
         }),
         new UserEntity({
           id: "2",
@@ -168,7 +160,6 @@ export default class Database {
           email: "joao@gmail.com",
           password: "789456",
           history_tracking: true,
-          listening_to: "",
         }),
       ],
       history: [
@@ -216,6 +207,7 @@ export default class Database {
           createdBy: "1", // User ID 1 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "2",
@@ -224,6 +216,7 @@ export default class Database {
           createdBy: "2", // User ID 2 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "3",
@@ -232,6 +225,7 @@ export default class Database {
           createdBy: "1", // User ID 1 created this playlist
           private: false,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
           id: "4",
@@ -240,14 +234,25 @@ export default class Database {
           createdBy: "2", // User ID 2 created this playlist
           private: true,
           followers: [],
+          contributors: [],
         }),
         new PlaylistEntity({
-          id: "123",
+          id: "ce6f5c66-1967-4b21-9929-51ca7d652151",
           name: "Afternoon Sessions",
           songs: [],
           createdBy: "Pedro",
           private: true,
           followers: [],
+          contributors: [],
+        }),
+        new PlaylistEntity({
+          id: "12345",
+          name: "Breakfast and Furious",
+          songs: [],
+          createdBy: "999",
+          private: true,
+          followers: [],
+          contributors: [],
         }),
       ],
     };

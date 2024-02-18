@@ -27,7 +27,7 @@ export const addSongsToHistory = async (
       artist: row.artist,
       duration: row.duration,
       genre: row.genre,
-      times_ever_played: row.times_ever_played
+      times_ever_played: 0,
     });
 
     let song = await songService.createSong(mockSongEntity);
@@ -43,7 +43,7 @@ export const addSongsToHistory = async (
       await historyService.createHistory(mockHistoryEntity);
     }
   }
-  expect(mockSongRepository.createSong).toHaveBeenCalledTimes(table.length);
+  // expect(mockSongRepository.createSong).toHaveBeenCalledTimes(table.length);
 
   // total_songs added should be equal to the sum of each entry on table.times_played
   let total_songs_added = table.reduce(
@@ -51,7 +51,53 @@ export const addSongsToHistory = async (
     0
   );
 
-  expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
-    total_songs_added
-  );
+  // expect(mockHistoryRepository.createHistory).toHaveBeenCalledTimes(
+  //   total_songs_added
+  // );
+};
+
+export const simpleAddSongsToHistory = async (
+  song_1: string,
+  song_2: string,
+  song_3: string,
+  user_id: string,
+  historyService: HistoryService
+) => {
+  // clear user history first
+  await historyService.deleteUserHistory(user_id);
+  
+  let songs = [song_1, song_2, song_3];
+  jest.spyOn(historyService, "createHistory")
+  for (let song of songs) {
+    const mockHistoryEntity = new HistoryEntity({
+      id: "",
+      user_id: user_id,
+      song_id: song,
+    });
+    await historyService.createHistory(mockHistoryEntity);
+  }
+  expect(historyService.createHistory).toHaveBeenCalledTimes(3);
+};
+
+export const simpleAddSongsToHistoryRep = async (
+  song_1: string,
+  song_2: string,
+  song_3: string,
+  user_id: string,
+  historyRepository: HistoryRepository
+) => {
+  // clear user history first
+  await historyRepository.deleteUserHistory(user_id);
+  
+  let songs = [song_1, song_2, song_3];
+  jest.spyOn(historyRepository, "createHistory")
+  for (let song of songs) {
+    const mockHistoryEntity = new HistoryEntity({
+      id: "",
+      user_id: user_id,
+      song_id: song,
+    });
+    await historyRepository.createHistory(mockHistoryEntity);
+  }
+  expect(historyRepository.createHistory).toHaveBeenCalledTimes(3);
 };

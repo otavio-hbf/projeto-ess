@@ -25,6 +25,11 @@ class PlaylistController {
       (req: Request, res: Response) => this.searchPlaylists(req, res)
     );
 
+    this.router.get(
+      `${this.prefix}/MyPlaylists`,
+      (req: Request, res: Response) => this.getUserPlaylists(req, res)
+    );
+
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getPlaylists(req, res)
     );
@@ -42,6 +47,14 @@ class PlaylistController {
       this.deletePlaylist(req, res)
     );
     this.router.put(
+      `${this.prefix}/follow/:playlistId`,
+      (req: Request, res: Response) => this.followPlaylist(req, res)
+    );
+    this.router.put(
+      `${this.prefix}/unfollow/:playlistId`,
+      (req: Request, res: Response) => this.unfollowPlaylist(req, res)
+    );
+    this.router.put(
       `${this.prefix}/:id/:songId`,
       (req: Request, res: Response) => this.addSongToPlaylist(req, res)
     );
@@ -49,20 +62,28 @@ class PlaylistController {
       `${this.prefix}/:id/:songId`,
       (req: Request, res: Response) => this.removeSongToPlaylist(req, res)
     );
-
-    this.router.post(
-      `${this.prefix}/follow/:userId/:playlistId`,
-      (req: Request, res: Response) => this.followPlaylist(req, res)
+    this.router.put(
+      `${this.prefix}/addContributor/:playlistId/:contributorId`,
+      (req: Request, res: Response) => this.addContributor(req, res)
     );
-
-    this.router.post(
-      `${this.prefix}/unfollow/:userId/:playlistId`,
-      (req: Request, res: Response) => this.unfollowPlaylist(req, res)
+    this.router.put(
+      `${this.prefix}/removeContributor/:playlistId/:contributorId`,
+      (req: Request, res: Response) => this.removeContributor(req, res)
     );
   }
 
   private async getPlaylists(req: Request, res: Response) {
     const playlists = await this.playlistService.getPlaylists();
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: playlists,
+    }).handle(res);
+  }
+
+  private async getUserPlaylists(req: Request, res: Response) {
+    const userId = req.body.userId;
+    const playlists = await this.playlistService.getUserPlaylists(userId);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -321,7 +342,7 @@ class PlaylistController {
 
   private async followPlaylist(req: Request, res: Response) {
     const playlistId: string = req.params.playlistId;
-    const userId: string = req.params.userId;
+    const userId: string = req.body.userId;
 
     await this.playlistService.followPlaylist(playlistId, userId);
 
@@ -332,13 +353,51 @@ class PlaylistController {
 
   private async unfollowPlaylist(req: Request, res: Response) {
     const playlistId: string = req.params.playlistId;
-    const userId: string = req.params.userId;
+    const userId: string = req.body.userId;
 
     await this.playlistService.unfollowPlaylist(playlistId, userId);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
+  }
+
+  private async addContributor(req: Request, res: Response) {
+    const playlistId: string = req.params.playlistId;
+    const contributorId: string = req.params.contributorId;
+    const userId: string = req.body.userId;
+
+    try {
+      await this.playlistService.addContributor(
+        playlistId,
+        contributorId,
+        userId
+      );
+      return new SuccessResult({
+        msg: "Contributor added successfully",
+      }).handle(res);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async removeContributor(req: Request, res: Response) {
+    const playlistId: string = req.params.playlistId;
+    const contributorId: string = req.params.contributorId;
+    const userId: string = req.body.userId;
+
+    try {
+      await this.playlistService.removeContributor(
+        playlistId,
+        contributorId,
+        userId
+      );
+      return new SuccessResult({
+        msg: "Contributor removed successfully",
+      }).handle(res);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

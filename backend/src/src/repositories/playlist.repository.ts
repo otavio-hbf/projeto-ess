@@ -10,6 +10,10 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
     return await this.findAll();
   }
 
+  public async getUserPlaylists(userId: string): Promise<PlaylistEntity[]> {
+    return await this.findAll((item) => item.createdBy === userId);
+  }
+
   public async getPlaylist(id: string): Promise<PlaylistEntity | null> {
     return await this.findOne((item) => item.id === id);
   }
@@ -65,6 +69,45 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
           (followerId) => followerId !== userId
         );
         await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async addContributor(
+    playlistId: string,
+    contributorId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        // Checa se o usuário já é um contribuidor
+        if (playlist.contributors.indexOf(contributorId) > -1) {
+          throw new Error("User is already a contributor to this playlist");
+        }
+        playlist.contributors.push(contributorId);
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async removeContributor(
+    playlistId: string,
+    contributorId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        const index = playlist.contributors.indexOf(contributorId);
+        if (index > -1) {
+          playlist.contributors.splice(index, 1);
+          await this.updatePlaylist(playlistId, playlist);
+        } else {
+          throw new Error("User is not a contributor");
+        }
       }
     } catch (error) {
       throw error;
