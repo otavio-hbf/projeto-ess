@@ -222,18 +222,40 @@ defineFeature(feature, (test) => {
   test("Clear user history", ({ given, when, and, then }) => {
     given(
       /^the user with id "(.*)" has (\d+) history entries$/,
-      (arg0, arg1) => {}
+      async (user_id, entries) => {
+        // clear user history first
+        await historyService.deleteUserHistory(user_id);
+
+        // create entries
+        jest.spyOn(mockHistoryRepository, "createHistory");
+        for (let i = 0; i < parseInt(entries); i++) {
+          mockHistoryEntity = new HistoryEntity({
+            id: "",
+            song_id: "test",
+            user_id: user_id,
+          });
+          await historyService.createHistory(mockHistoryEntity);
+        }
+      }
     );
 
-    when(/^I send a DELETE request to "(.*)"$/, (arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, async (route) => {
+        response = await request.delete(`${prefix}${route}`).send();
+    });
 
-    and(/^I send a GET request to "(.*)"$/, (arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, async (route) => {
+        response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+        expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history with (\d+) entries$/,
-      (arg0) => {}
+      (entries) => {
+        expect(response.body.data).toHaveLength(parseInt(entries));
+      }
     );
   });
 
