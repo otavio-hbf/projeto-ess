@@ -57,7 +57,7 @@ class UserService {
         msgCode: UserServiceMessageCode.user_not_found,
       });
     }
-    
+
     const userModel = new UserModel(userEntity);
 
     return userModel;
@@ -110,10 +110,7 @@ class UserService {
     email: string,
     password: string
   ): Promise<void> {
-    await this.userRepository.deleteUserWithEmailPassword(
-      email,
-      password
-    );
+    await this.userRepository.deleteUserWithEmailPassword(email, password);
   }
 
   public async listenTo(user_id: string, song_id: string): Promise<UserModel> {

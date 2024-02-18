@@ -147,26 +147,22 @@ class UserController {
 
   private async updateUser(req: Request, res: Response) {
     const { name, email, password } = req.body;
-      // Validar se o nome esta presente
-      if (!name) {
-        return res
-          .status(400)
-          .json({ error: "A name is required for update" });
-      }
+    // Validar se o nome esta presente
+    if (!name) {
+      return res.status(400).json({ error: "A name is required for update" });
+    }
 
-      // Validar o email esta presente
-      if (!email) {
-        return res
-          .status(400)
-          .json({ error: "A email is required for update" });
-      }
+    // Validar o email esta presente
+    if (!email) {
+      return res.status(400).json({ error: "A email is required for update" });
+    }
 
-      // Validar o password esta presente
-      if (!password) {
-        return res
-          .status(400)
-          .json({ error: "A password is required for update" });
-      }
+    // Validar o password esta presente
+    if (!password) {
+      return res
+        .status(400)
+        .json({ error: "A password is required for update" });
+    }
 
     const user = await this.userService.updateUser(
       req.params.id,
@@ -192,11 +188,15 @@ class UserController {
       const { email, password } = req.body;
 
       if (!email) {
-        return res.status(400).json({ error: "A email is required for delete" });
+        return res
+          .status(400)
+          .json({ error: "A email is required for delete" });
       }
 
       if (!password) {
-        return res.status(400).json({ error: "A senha is required for delete" });
+        return res
+          .status(400)
+          .json({ error: "A senha is required for delete" });
       }
 
       await this.userService.deleteUserWithEmailPassword(
@@ -215,7 +215,6 @@ class UserController {
       }).handle(res);
     }
   }
-
 
   private async listenTo(req: Request, res: Response) {
     const user = await this.userService.listenTo(
