@@ -89,10 +89,20 @@ class PlaylistService {
     data: PlaylistEntity,
     userId: string
   ): Promise<PlaylistModel> {
+
+    const index = data.contributors.indexOf(userId);
+    if (data.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: You don't have permission to update the playlist",
+      });
+    }
+
     const playlistEntity = await this.playlistRepository.updatePlaylist(
       id,
       data
     );
+
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
@@ -101,14 +111,7 @@ class PlaylistService {
       });
     }
 
-    const playlist = await this.getPlaylist(id);
-    const index = playlist.contributors.indexOf(userId);
-    if (playlistEntity.createdBy !== userId && index === -1) {
-      // O usuário autenticado não é contribuidor nem o criador da playlist
-      throw new HttpUnauthorizedError({
-        msg: "Unauthorized: You don't have permission to update the playlist",
-      });
-    }
+    
 
     const playlistModel = new PlaylistModel(playlistEntity);
 
@@ -258,17 +261,25 @@ class PlaylistService {
     songId: string,
     userId: string
   ): Promise<PlaylistModel> {
-    const playlistEntity = await this.playlistRepository.getPlaylist(
-      playlistId
-    );
-    const songEntity = await this.songRepository.getSong(songId);
+    
+    const playlistEntity = await this.playlistRepository.getPlaylist(playlistId);
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
-        msg: "Playlist not found",
+        msg: "Playlist not found to add song",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
+
+    const index = playlistEntity.contributors.indexOf(userId);
+    if (playlistEntity.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: You don't have permission to update the playlist",
+      });
+    }
+
+    const songEntity = await this.songRepository.getSong(songId);
 
     if (!songEntity) {
       throw new HttpNotFoundError({
@@ -277,14 +288,7 @@ class PlaylistService {
       });
     }
 
-    const playlist = await this.getPlaylist(playlistId);
-    const index = playlist.contributors.indexOf(userId);
-    if (playlistEntity.createdBy !== userId && index === -1) {
-      // O usuário autenticado não é contribuidor nem o criador da playlist
-      throw new HttpUnauthorizedError({
-        msg: "Unauthorized: You don't have permission to update the playlist",
-      });
-    }
+    
 
     // Verifique se a música já está na playlist
     if (playlistEntity.songs.includes(songId)) {
@@ -314,17 +318,26 @@ class PlaylistService {
     songIdToRemove: string,
     userId: string
   ): Promise<PlaylistModel> {
-    const playlistEntity = await this.playlistRepository.getPlaylist(
-      playlistId
-    );
-    const songEntity = await this.songRepository.getSong(songIdToRemove);
+
+    const playlistEntity = await this.playlistRepository.getPlaylist(playlistId);
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
-        msg: "Playlist not found",
+        msg: "Playlist not found to remove song",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
+
+    const index = playlistEntity.contributors.indexOf(userId);
+    if (playlistEntity.createdBy !== userId && index === -1) {
+      // O usuário autenticado não é contribuidor nem o criador da playlist
+      throw new HttpUnauthorizedError({
+        msg: "Unauthorized: You don't have permission to update the playlist",
+      });
+    }
+
+    const songEntity = await this.songRepository.getSong(songIdToRemove);
+
 
     if (!songEntity) {
       throw new HttpNotFoundError({
@@ -333,14 +346,7 @@ class PlaylistService {
       });
     }
 
-    const playlist = await this.getPlaylist(playlistId);
-    const index = playlist.contributors.indexOf(userId);
-    if (playlistEntity.createdBy !== userId && index === -1) {
-      // O usuário autenticado não é contribuidor nem o criador da playlist
-      throw new HttpUnauthorizedError({
-        msg: "Unauthorized: You don't have permission to update the playlist",
-      });
-    }
+    
 
     // Verifique se a música está na playlist
     if (!playlistEntity.songs.includes(songIdToRemove)) {
