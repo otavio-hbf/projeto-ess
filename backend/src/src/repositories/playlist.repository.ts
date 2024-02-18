@@ -70,6 +70,45 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
       throw error;
     }
   }
+
+  public async addContributor(
+    playlistId: string,
+    contributorId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        // Checa se o usuário já é um contribuidor
+        if (playlist.followers.indexOf(contributorId) > -1) {
+          throw new Error("User is already a contributor to this playlist");
+        }
+        playlist.contributors.push(contributorId);
+        await this.updatePlaylist(playlistId, playlist);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async removeContributor(
+    playlistId: string,
+    contributorId: string
+  ): Promise<void> {
+    try {
+      const playlist = await this.getPlaylist(playlistId);
+      if (playlist) {
+        const index = playlist.contributors.indexOf(contributorId);
+        if (index > -1) {
+          playlist.contributors.splice(index, 1);
+          await this.updatePlaylist(playlistId, playlist);
+        } else {
+          throw new Error("User is not a contributor");
+        }
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PlaylistRepository;
