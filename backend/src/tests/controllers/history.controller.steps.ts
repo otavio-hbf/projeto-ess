@@ -14,7 +14,10 @@ import HistoryEntity from "../../src/entities/history.entity";
 import SongEntity from "../../src/entities/song.entity";
 import UserModel from "../../src/models/user.model";
 import Injector from "../../src/di/injector";
-import { simpleAddSongsToHistory } from "../utils/history.utils";
+import {
+  addSongsToHistory,
+  simpleAddSongsToHistory,
+} from "../utils/history.utils";
 
 const feature = loadFeature("./tests/features/history-route.feature");
 const request = supertest(app);
@@ -48,11 +51,21 @@ defineFeature(feature, (test) => {
 
     mockUserRepository = di.getRepository(UserRepository);
 
-    historyService = di.getService(HistoryService);
+    injector.registerService(
+        HistoryService,
+        new HistoryService(
+          mockHistoryRepository,
+          mockUserRepository,
+          mockSongRepository
+        )
+      );
+      historyService = injector.getService(HistoryService);
 
-    songService = di.getService(SongService);
+    injector.registerService(SongService, new SongService(mockSongRepository));
+    songService = injector.getService(SongService);
 
-    userService = di.getService(UserService);
+    injector.registerService(UserService, new UserService(mockUserRepository));
+    userService = injector.getService(UserService);
   });
 
   afterEach(() => {
@@ -73,7 +86,7 @@ defineFeature(feature, (test) => {
       }
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, async (req_type, route) => {
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
       response = await request.get(`${prefix}${route}`).send();
     });
 
@@ -105,16 +118,36 @@ defineFeature(feature, (test) => {
   test("Get most played songs from user id", ({ given, when, then, and }) => {
     given(
       /^the user with id "(.*)" has a history with the following items:$/,
-      (arg0, table) => {}
+      async (user_id, table) => {
+        await addSongsToHistory(
+          table,
+          user_id,
+          mockHistoryRepository,
+          mockSongRepository,
+          songService,
+          historyService
+        );
+      }
     );
+    when(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+      console.debug(response.body);
+    });
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
-
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       "the response JSON should contain a list with the following songs in order:",
-      (table) => {}
+      (table) => {
+        for (let i = 0; i < table.length; i++) {
+          expect(response.body.data[i].song_id).toBe(table[i].song_id);
+          expect(response.body.data[i].times_played).toBe(
+            parseInt(table[i].times_played)
+          );
+        }
+      }
     );
   });
 
@@ -124,7 +157,7 @@ defineFeature(feature, (test) => {
       (arg0, table) => {}
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a GET request to "(.*)"$/, (arg1) => {});
 
     then(/^the response status should be "(.*)"$/, (arg0) => {});
 
@@ -138,8 +171,8 @@ defineFeature(feature, (test) => {
     given(/^the user with id "(.*)" has no history$/, (arg0) => {});
 
     when(
-      /^I send a "(.*)" request to "(.*)" with the following JSON:$/,
-      (arg0, arg1, docString) => {}
+      /^I send a POST request to "(.*)" with the following JSON:$/,
+      (arg1, docString) => {}
     );
 
     then(/^the response status should be "(.*)"$/, (arg0) => {});
@@ -156,9 +189,9 @@ defineFeature(feature, (test) => {
       (arg0, arg1) => {}
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, (arg1) => {});
 
-    and(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, (arg1) => {});
 
     then(/^the response status should be "(.*)"$/, (arg0) => {});
 
@@ -174,9 +207,9 @@ defineFeature(feature, (test) => {
       (arg0, arg1, arg2, arg3, arg4) => {}
     );
 
-    when(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, (arg1) => {});
 
-    and(/^I send a "(.*)" request to "(.*)"$/, (arg0, arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, (arg1) => {});
 
     then(/^the response status should be "(.*)"$/, (arg0) => {});
 
