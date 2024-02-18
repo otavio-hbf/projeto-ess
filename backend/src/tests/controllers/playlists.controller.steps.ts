@@ -348,5 +348,78 @@ defineFeature(feature, (test) => {
                 expect(updatedPlaylist.body.data.songs).not.toContain(songId);
             }
         );
+    });
+    
+    test('Update Playlist Name', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "João",
+                    password: "123456",
+                    email: "joao@gmail.com",
+                    history_tracking: true,
+                    listening_to: "", });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [], });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)" and the updated playlist name "(.*)"$/,
+            async (req_url, userId, updatedPlaylistName) => {
+                response = await request.put(req_url).send({
+                    id: mockPlaylistEntity.id,
+                    name: updatedPlaylistName,
+                    createdBy: mockPlaylistEntity.createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [],
+                    userId: userId,
+                });
+            }
+        );
+    
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    
+        and(
+            /^the response JSON should contain the updated playlist with the name "(.*)"$/,
+            async (updatedPlaylistName) => {
+                const updatedPlaylist = await request.get('/api/playlists/' + mockPlaylistEntity.id).send();
+                //console.log(updatedPlaylist.body.data);
+                expect(updatedPlaylist.body.data.name).toBe(updatedPlaylistName);
+            }
+        );
     });    
 });

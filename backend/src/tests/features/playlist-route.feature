@@ -28,3 +28,11 @@ Feature: Playlist Routers
         When a DELETE request is sent to "/api/playlists/2/2" with user id "2"
         Then the response status should be "200"
         And the response JSON should contain the updated playlist with the song id "2" removed from the list of songs
+
+
+    Scenario: Update Playlist Name
+        Given a user with id "2" is logged-in
+        And there is an existing playlist with id "4" named "Workout Beats" created by user "2"
+        When a PUT request is sent to "/api/playlists/4" with user id "2" and the updated playlist name "New Favorites"
+        Then the response status should be "200"
+        And the response JSON should contain the updated playlist with the name "New Favorites"
