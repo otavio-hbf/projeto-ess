@@ -174,7 +174,7 @@ describe('PlaylistService', () => {
         jest.spyOn(mockSongRepository, 'getSong').mockResolvedValue(mockSongEntity);
   
         const updatedPlaylist = await playlistService.removeSongToPlaylist(playlistId, songIdToRemove, userId);
-        console.log(updatedPlaylist);
+        //console.log(updatedPlaylist);
   
         expect(updatedPlaylist).toEqual(new PlaylistModel(mockPlaylistEntity));
         expect(mockPlaylistRepository.getPlaylist).toHaveBeenCalledWith(playlistId);

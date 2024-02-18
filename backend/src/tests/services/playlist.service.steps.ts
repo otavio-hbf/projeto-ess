@@ -2,240 +2,395 @@ import { loadFeature, defineFeature } from 'jest-cucumber';
 import PlaylistRepository from '../../src/repositories/playlist.repository';
 import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistService from '../../src/services/playlist.service';
-import PlaylistModel from '../../src/models/playlist.model';
 import SongRepository from "../../src/repositories/song.repository";
+import SongEntity from '../../src/entities/song.entity';
+import SongService from '../../src/services/song.service';
 import UserRepository from '../../src/repositories/user.repository';
+import UserEntity from '../../src/entities/user.entity';
+import UserModel from "../../src/models/user.model";
+import UserService from '../../src/services/user.service';
+import Injector from "../../src/di/injector";
+import { di } from "../../src/di/index";
+import { mock } from "node:test";
 
-const feature = loadFeature("../../features/playlist_maintenance.feature");
+const feature = loadFeature("tests/features/playlist-service.feature");
 
 defineFeature(feature, (test) => {
+    // Mock do repositório
     let mockPlaylistRepository: PlaylistRepository;
     let mockSongRepository: SongRepository;
     let mockUserRepository: UserRepository;
 
     let playlistService: PlaylistService;
+    let songService: SongService;
+    let userService: UserService;
 
+    let mockUserModel: UserModel;
+    
     let mockPlaylistEntity: PlaylistEntity;
+    let mockSongEntity: SongEntity;
+    let mockUserEntity: UserEntity;
+
+    let injector: Injector = di;
 
     beforeEach(() => {
-        mockPlaylistRepository = {
-            getPlaylists: jest.fn(),
-            getPlaylist: jest.fn(),
-            createPlaylist: jest.fn(),
-            updatePlaylist: jest.fn(),
-            deletePlaylist: jest.fn(),
-        } as any;
+        injector.registerRepository(PlaylistRepository, new PlaylistRepository());
+        mockPlaylistRepository = injector.getRepository(PlaylistRepository);
 
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
+        injector.registerRepository(SongRepository, new SongRepository());
+        mockSongRepository = injector.getRepository(SongRepository);
+    
+        injector.registerRepository(UserRepository, new UserRepository());
+        mockUserRepository = injector.getRepository(UserRepository);
+
+        injector.registerService(
+            PlaylistService,
+            new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository)
+          );
+          playlistService = injector.getService(PlaylistService);
+      
+        injector.registerService(SongService, new SongService(mockSongRepository));
+        songService = injector.getService(SongService);
+    
+        injector.registerService(UserService, new UserService(mockUserRepository));
+        userService = injector.getService(UserService);
     });
 
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    test('Playlist Creation', ({ given, and, when, then }) => {
-        given(/^I'm logged in with user "([^"]*)" and password "([^"]*)" in the "([^"]*)" page$/, 
-            async (username, password, page) => {
-                // Implementação do cenário de login
-            });
+    test('Get playlists by user id', ({ given, when, then }) => {
+        let playlists: PlaylistEntity[];
+        let response: PlaylistEntity[];
 
-        and(/^I select the "([^"]*)" field$/, async (button) => {
-            // Implementação da seleção do campo "New Playlist+"
-        });
-
-        and(/^enter the name "([^"]*)"$/, async (playlistName) => {
-            // Implementação da inserção do nome "Afternoon Sessions"
-        });
-
-        when(/^confirm the creation$/, async () => {
-            mockPlaylistEntity = new PlaylistEntity({
-                id: "123",
-                name: "Afternoon Sessions",
+        given(/^the method getPlaylists was called with the user_id "(.*)" from PlaylistService returns playlists with ids "(.*)", "(.*)", and "(.*)"$/, async (userId, Id_1, Id_2, Id_3) => {
+            const idsArray = [Id_1, Id_2, Id_3];
+            playlists = idsArray.map(id => new PlaylistEntity({ 
+                id, 
+                createdBy: userId, 
+                name: `Playlist ${id}`,
                 songs: [],
-                createdBy: "Pedro",
-                private: true,
+                private: false,
+                followers: [],
+                contributors: [], 
+            }));
+            jest.spyOn(mockPlaylistRepository, "getPlaylists").mockResolvedValue(playlists);
+        });
+
+        when(/^the method getPlaylists from PlaylistService is called with the id "(.*)"$/, async (userId) => {
+            response = await playlistService.getPlaylists();
+            //console.log(response);
+        });
+
+        then(/^the playlists returned must have ids "(.*)", "(.*)", and "(.*)"$/, async (expectedId_1, expectedId_2, expectedId_3) => {
+            const expectedIdsArray = [expectedId_1, expectedId_2, expectedId_3];
+            const returnedIdsArray = response.map(response => response.id);
+
+            expect(returnedIdsArray).toEqual(expectedIdsArray);
+        });
+    });
+
+    test('Create a new playlist', ({ given, when, then }) => {
+        let response: PlaylistEntity[];
+
+        given(/^the function createPlaylist was called with the user_id "(.*)" and the playlist name "(.*)"$/, async (userId, playlistName) => {
+            // Mock implementation of the PlaylistRepository method
+            mockPlaylistEntity = new PlaylistEntity({ 
+                id: "1233445", 
+                createdBy: userId, 
+                name: playlistName,
+                songs: [],
+                private: false,
                 followers: [],
                 contributors: [],
             });
-
-            jest.spyOn(mockPlaylistRepository, 'createPlaylist')
-                .mockResolvedValue(mockPlaylistEntity);
+            jest.spyOn(mockPlaylistRepository, "createPlaylist");
 
             await playlistService.createPlaylist(mockPlaylistEntity);
+    
+            expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
         });
 
-        then(/^the newly created playlist is displayed to me$/, async () => {
-            // Implementação da verificação se a playlist foi criada com sucesso
-            expect(mockPlaylistRepository.createPlaylist).toBeCalledWith(
-                expect.objectContaining({ name: "Afternoon Sessions" })
-            );
+        when(/^the function getUserPlaylists is called with the user_id "(.*)"$/, async (userId) => {
+            response = await playlistService.getUserPlaylists(userId);
+            //console.log(response);
         });
 
-        and(/^I receive the option to add songs to the newly created playlist$/, async () => {
-            // Implementação da verificação se o usuário recebe a opção de adicionar músicas
-            // à playlist recém-criada
-        });
-    });
+        then(/^the playlists returned must include "(.*)"$/, async (expectedPlaylistName) => {
+            const playlistNames = response.map(response => response.name);
 
-    test('Playlist Deletion', ({ given, and, when, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" page$/, (arg0, arg1, arg2) => {
-
-        });
-
-        and(/^in the list of playlists, I select the option to delete the playlist "(.*)"$/, (arg0) => {
-
-        });
-
-        when(/^I accept the confirmation to delete the playlist "(.*)"$/, (arg0) => {
-
-        });
-
-        then(/^the playlist "(.*)" is removed from my "(.*)" page$/, (arg0, arg1) => {
-
+            expect(playlistNames).toContain(expectedPlaylistName);
         });
     });
 
-    test('Adding a Song to a Playlist', ({ given, and, when, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" accessing the music search page.$/, (arg0, arg1) => {
 
+    test('Update playlist name', ({ given, when, then, and }) => {
+        let updatePlaylist: PlaylistEntity;
+        let response: PlaylistEntity;
+
+        given(/^a user with id "(.*)" has a playlist named "(.*)"$/, async (userId, playlistName) => {
+            mockUserEntity = new UserEntity({ 
+                id: userId,
+                name: "Alfonso",
+                password: "12334",
+                email: "alfonso@gmail.com",
+                history_tracking: true,
+            });
+            jest.spyOn(mockUserRepository, "createUser");
+
+            await userService.createUser(mockUserEntity);
+            
+            expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+
+            mockPlaylistEntity = new PlaylistEntity({ 
+                id: "1",
+                name: playlistName,
+                createdBy: userId,
+                songs: [],
+                private: false,
+                followers: [],
+                contributors: [], 
+            });
+
+            jest.spyOn(mockPlaylistRepository, "createPlaylist");
+
+            await playlistService.createPlaylist(mockPlaylistEntity);
+
+            expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
         });
 
-        and(/^I find the song "(.*)"$/, (arg0) => {
-
+        when(/^the function updatePlaylist is called with the playlist id "(.*)", user_id "(.*)", and the updated playlist name "(.*)"$/, async (playlistId, userId, updatedPlaylistName) => {
+            updatePlaylist = new PlaylistEntity({ 
+                id: mockPlaylistEntity.id,
+                name: updatedPlaylistName,
+                createdBy: mockPlaylistEntity.createdBy,
+                songs: mockPlaylistEntity.songs,
+                private: mockPlaylistEntity.private,
+                followers: mockPlaylistEntity.followers,
+                contributors: mockPlaylistEntity.contributors, 
+            });
+            jest.spyOn(mockPlaylistRepository, "updatePlaylist");
+            
+            await playlistService.updatePlaylist(playlistId, updatePlaylist, userId);
+            
+            expect(mockPlaylistRepository.updatePlaylist).toHaveBeenCalledTimes(1);
+        });
+        
+        and(/^the function getPlaylist is called with the playlist id "(.*)"$/, async (playlistId) => {
+            response = await playlistService.getPlaylist(playlistId);
+            //console.log(response);
         });
 
-        when('I select the option to add it to the playlist', () => {
-
-        });
-
-        and(/^choose the playlist "(.*)" from the existing playlist options$/, (arg0) => {
-
-        });
-
-        then(/^the song "(.*)" is added to the playlist "(.*)"$/, (arg0, arg1) => {
-
-        });
-
-        and('visually confirmed to me', () => {
-
-        });
-    });
-
-    test('Excluding Songs from a Playlist', ({ given, and, when, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" page$/, (arg0, arg1, arg2) => {
-
-        });
-
-        and(/^I select the playlist "(.*)" from the list of playlists$/, (arg0) => {
-
-        });
-
-        when('I choose the option to manage songs in the playlist', () => {
-
-        });
-
-        and(/^select the song "(.*)" to be removed$/, (arg0) => {
-
-        });
-
-        and('confirm the exclusion', () => {
-
-        });
-
-        then(/^the song "(.*)" is no longer part of the playlist "(.*)"$/, (arg0, arg1) => {
-
-        });
-
-        and('a confirmation of the song exclusion is displayed to me', () => {
-
-        });
-    });
-
-    test('Failure in Updating Song in the Playlist', ({ given, when, and, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" playlist page$/, (arg0, arg1, arg2) => {
-
-        });
-
-        when(/^I try to rearrange the order of the song "(.*)"$/, (arg0) => {
-
-        });
-
-        and('there is an interruption in the connection with the server', () => {
-
-        });
-
-        then('an error message is displayed, informing me about the failure to update the song order', () => {
-
-        });
-
-        and('the previous state of the song order in the playlist is maintained.', () => {
-
+        then(/^the playlist returned must have the name "(.*)"$/, async (expectedPlaylistName) => {
+            expect(response.name).toBe(expectedPlaylistName);
         });
     });
 
-    test('Failure in Playlist Deletion', ({ given, when, and, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" page$/, (arg0, arg1, arg2) => {
+    test('Delete a playlist', ({ given, when, then, and }) => {
+        let playlists: PlaylistEntity[];
+        let response: PlaylistEntity[];
 
+        given(/^a user with id "(.*)" has playlists with ids "(.*)", "(.*)", and "(.*)"$/, async (userId, Id_1, Id_2, Id_3) => {
+            mockUserEntity = new UserEntity({ 
+                id: userId,
+                name: "Alfonso",
+                password: "12334",
+                email: "alfonso@gmail.com",
+                history_tracking: true,
+            });
+            jest.spyOn(mockUserRepository, "createUser");
+
+            await userService.createUser(mockUserEntity);
+            
+            expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+
+            const idsArray = [Id_1, Id_2, Id_3];
+            playlists = idsArray.map(id => new PlaylistEntity({ 
+                id, 
+                createdBy: userId, 
+                name: `Playlist ${id}`,
+                songs: [],
+                private: false,
+                followers: [],
+                contributors: [], 
+            }));
+            jest.spyOn(mockPlaylistRepository, "createPlaylist");
+
+            for (const playlist of playlists) {
+                await playlistService.createPlaylist(playlist);
+            }
+            
+            // Verificando se o método foi chamado três vezes
+            expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(3);
+        });
+        
+        when(/^the function deletePlaylist is called with the playlist id "(.*)" and user_id "(.*)"$/, async (playlistId, userId) => {
+            jest.spyOn(mockPlaylistRepository, "deletePlaylist");
+            
+            await playlistService.deletePlaylist(playlistId, userId);
+            
+            expect(mockPlaylistRepository.deletePlaylist).toHaveBeenCalledTimes(1);
         });
 
-        when(/^I select the option to delete the playlist "(.*)"$/, (arg0) => {
-
+        and(/^the function getPlaylists is called with the user_id "(.*)"$/, async (userId) => {
+            // Call the service method
+            response = await playlistService.getUserPlaylists(userId);
+            //console.log(response);
         });
 
-        and('an interruption in the connection with the server occurs', () => {
-
+        then(/^the playlists returned must not include the playlist with id "(.*)"$/, async (deletedPlaylistId) => {
+            // Verify if the deleted playlist is not included in the returned playlists
+            expect(response.some((playlist) => playlist.id === deletedPlaylistId)).toBe(false);
         });
 
-        then('an error message is displayed, indicating that the deletion could not be completed due to a server failure', () => {
-
-        });
-
-        and(/^the playlist "(.*)" remains in the list of playlists$/, (arg0) => {
-
+        and(/^the user playlists must have (\d+) items$/, async (expectedPlaylistCount) => {
+            // Verify if the user playlists have the expected number of items
+            expect(response.length).toBe(parseInt(expectedPlaylistCount, 10));
         });
     });
 
-    test('Reorganization of Song Order in a Playlist', ({ given, when, and, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" page$/, (arg0, arg1, arg2) => {
+    test('Add a song to a playlist', ({ given, when, then, and}) => {
+        let response: PlaylistEntity;
+        
+        given(/^a user with id "(.*)" has a playlist with id "(.*)"$/, async (userId, playlistId) => {
+            mockUserEntity = new UserEntity({ 
+                id: userId,
+                name: "Alfonso",
+                password: "12334",
+                email: "alfonso@gmail.com",
+                history_tracking: true,
+            });
+            jest.spyOn(mockUserRepository, "createUser");
 
+            await userService.createUser(mockUserEntity);
+            
+            expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+
+            mockPlaylistEntity = new PlaylistEntity({ 
+                id: playlistId,
+                name: "playlistName",
+                createdBy: userId,
+                songs: [],
+                private: false,
+                followers: [],
+                contributors: [], 
+            });
+
+            jest.spyOn(mockPlaylistRepository, "createPlaylist");
+
+            await playlistService.createPlaylist(mockPlaylistEntity);
+
+            expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
         });
 
-        when(/^I select the playlist "(.*)" to rearrange$/, (arg0) => {
+        and(/^there is a song with id "(.*)"$/, async (songId) => {
+            mockSongEntity = new SongEntity({ 
+                id: songId,
+                title: "songTitle",
+                artist: "artist",
+                duration: 0,
+                genre: "", 
+                times_ever_played: 90,
+            });
 
+            jest.spyOn(mockSongRepository, "createSong");
+
+            await songService.createSong(mockSongEntity);
+
+            expect(mockSongRepository.createSong).toHaveBeenCalledTimes(1);
         });
 
-        and(/^drag and drop the song "(.*)" to the first in the list$/, (arg0) => {
-
+        when(/^the function addSongToPlaylist is called with the playlist id "(.*)", song id "(.*)", and user_id "(.*)"$/, async (playlistId, songId, userId) => {
+            jest.spyOn(mockPlaylistRepository, "updatePlaylist");
+            
+            await playlistService.addSongToPlaylist(playlistId, songId, userId);
+            
+            expect(mockPlaylistRepository.updatePlaylist).toHaveBeenCalledTimes(1);
         });
 
-        then('the updated order of songs is automatically saved in the playlist', () => {
+        and(/^the function getPlaylist is called with the playlist id "(.*)"$/, async (playlistId) => {
+            response = await playlistService.getPlaylist(playlistId);
+        });
 
+        then(/^the playlist returned must have the song with id "(.*)"$/, async (songId) => {
+            expect(response.songs).toContain(songId);
         });
     });
 
-    test('Playlist Name Update', ({ given, when, and, then }) => {
-        given(/^I'm logged in with user "(.*)" and password "(.*)" in the "(.*)" page$/, (arg0, arg1, arg2) => {
+    test('Remove a song from a playlist', ({ given, when, then, and }) => {
+        let response: PlaylistEntity;
+        let songs: SongEntity[];
+    
+        given(/^a user with id "(.*)" has a playlist with id "(.*)" containing songs with ids "(.*)", "(.*)", and "(.*)"$/, async (userId, playlistId, songId1, songId2, songId3) => {
+            mockUserEntity = new UserEntity({
+                id: userId,
+                name: "Alfonso",
+                password: "12334",
+                email: "alfonso@gmail.com",
+                history_tracking: true,
+            });
+    
+            jest.spyOn(mockUserRepository, "createUser");
+    
+            await userService.createUser(mockUserEntity);
+    
+            expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+    
+            mockPlaylistEntity = new PlaylistEntity({
+                id: playlistId,
+                name: "playlistName",
+                createdBy: userId,
+                songs: [songId1, songId2, songId3],
+                private: false,
+                followers: [],
+                contributors: [],
+            });
+    
+            jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+            await playlistService.createPlaylist(mockPlaylistEntity);
+    
+            expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
 
+            const idsArray = [songId1, songId2, songId3];
+            songs = idsArray.map(id => new SongEntity({ 
+                id, 
+                title: `Song ${id}`,
+                artist: `Artist ${id}`,
+                duration: 0,
+                genre: "", 
+                times_ever_played: 90,
+            }));
+            jest.spyOn(mockSongRepository, "createSong");
+
+            for (const song of songs) {
+                await songService.createSong(song);
+            }
+            
+            // Verificando se o método foi chamado três vezes
+            expect(mockSongRepository.createSong).toHaveBeenCalledTimes(3);
         });
-
-        when(/^I locate the playlist "(.*)"$/, (arg0) => {
-
+    
+        when(/^the function removeSongToPlaylist is called with the playlist id "(.*)", song id "(.*)", and user_id "(.*)"$/, async (playlistId, songIdToRemove, userId) => {
+            jest.spyOn(mockPlaylistRepository, "updatePlaylist");
+    
+            await playlistService.removeSongToPlaylist(playlistId, songIdToRemove, userId);
+    
+            expect(mockPlaylistRepository.updatePlaylist).toHaveBeenCalledTimes(1);
         });
-
-        and('select the option to edit the playlist name', () => {
-
+    
+        and(/^the function getPlaylist is called with the playlist id "(.*)"$/, async (playlistId) => {
+            response = await playlistService.getPlaylist(playlistId);
         });
-
-        and(/^enter the new desired name "(.*)"$/, (arg0) => {
-
+    
+        then(/^the playlist returned must not have the song with id "(.*)"$/, async (songId) => {
+            expect(response.songs).not.toContain(songId);
         });
-
-        and('confirm the update', () => {
-
-        });
-
-        then(/^the playlist is displayed with the new name "(.*)" in my playlist list$/, (arg0) => {
-
+    
+        and(/^the playlist must have songs with ids "(.*)" and "(.*)"$/, async (songId1, songId2) => {
+            expect(response.songs).toContain(songId1);
+            expect(response.songs).toContain(songId2);
         });
     });
 });

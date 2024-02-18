@@ -41,7 +41,9 @@ class PlaylistService {
   }
 
   public async getUserPlaylists(userId: string): Promise<PlaylistModel[]> {
-    const playlistsEntity = await this.playlistRepository.getUserPlaylists(userId);
+    const playlistsEntity = await this.playlistRepository.getUserPlaylists(
+      userId
+    );
 
     const playlistsModel = playlistsEntity.map(
       (playlist) => new PlaylistModel(playlist)
@@ -49,7 +51,6 @@ class PlaylistService {
 
     return playlistsModel;
   }
-
 
   public async getPlaylist(id: string): Promise<PlaylistModel> {
     const playlistEntity = await this.playlistRepository.getPlaylist(id);
@@ -95,7 +96,7 @@ class PlaylistService {
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
-        msg: "Playlist not found",
+        msg: "Playlist not found to Update",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
@@ -118,7 +119,7 @@ class PlaylistService {
     if (!playlist) {
       // Trate o caso em que a playlist não existe
       throw new HttpNotFoundError({
-        msg: "Playlist not found",
+        msg: "Playlist not found to Delete",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }

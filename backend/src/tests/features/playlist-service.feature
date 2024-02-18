@@ -1,14 +1,14 @@
 Feature: Playlist Service
 
     # Service
-    Scenario: Get playlists by id
+    Scenario: Get playlists by user id
         Given the method getPlaylists was called with the user_id "1" from PlaylistService returns playlists with ids "1", "2", and "3"
         When the method getPlaylists from PlaylistService is called with the id "1"
         Then the playlists returned must have ids "1", "2", and "3"
 
     Scenario: Create a new playlist
         Given the function createPlaylist was called with the user_id "1" and the playlist name "My New Playlist"
-        When the function getPlaylists is called with the user_id "1"
+        When the function getUserPlaylists is called with the user_id "1"
         Then the playlists returned must include "My New Playlist"
 
     Scenario: Update playlist name

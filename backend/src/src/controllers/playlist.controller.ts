@@ -25,8 +25,9 @@ class PlaylistController {
       (req: Request, res: Response) => this.searchPlaylists(req, res)
     );
 
-    this.router.get(`${this.prefix}/MyPlaylists`, (req: Request, res: Response) =>
-      this.getUserPlaylists(req, res)
+    this.router.get(
+      `${this.prefix}/MyPlaylists`,
+      (req: Request, res: Response) => this.getUserPlaylists(req, res)
     );
 
     this.router.get(this.prefix, (req: Request, res: Response) =>
