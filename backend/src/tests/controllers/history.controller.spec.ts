@@ -36,55 +36,37 @@ describe('HistoryController', () => {
     expect(response.body.data).toEqual(createdHistoryEntity);
   });
 
-//   it('should throw an error when history is not found', async () => {
-//     const response = await request.get(`/api/historys/02`);
+  it('should throw an error when history is not found', async () => {
+    const response = await request.get(`/api/history/02`);
 
-//     expect(response.status).toBe(404);
-//     expect(response.body.msgCode).toEqual('history_not_found');
-//   });
+    expect(response.status).toBe(404);
+    expect(response.body.msgCode).toEqual('history_not_found');
+  });
 
-//   it('should create a history', async () => {
-//     const response = await request.post('/api/historys').send(mockHistoryEntity);
+  it('should create a history', async () => {
+    const response = await request.post('/api/history').send(mockHistoryEntity);
 
-//     expect(response.status).toBe(200);
+    expect(response.status).toBe(200);
 
-//     expect(response.body.data).toEqual(
-//       expect.objectContaining({
-//         name: mockHistoryEntity.name,
-//       })
-//     );
-//   });
+    expect(response.body.data).toEqual(
+      expect.objectContaining({
+        song_id: mockHistoryEntity.song_id,
+        user_id: mockHistoryEntity.user_id,
+      })
+    );
+  });
 
-//   it('should update a history', async () => {
-//     const createdHistoryEntity = await mockHistoryRepository.createHistory(
-//       mockHistoryEntity
-//     );
+  it('should delete a history', async () => {
+    const createdHistoryEntity = await mockHistoryRepository.createHistory(
+      mockHistoryEntity
+    );
 
-//     const response = await request
-//       .put(`/api/historys/${createdHistoryEntity.id}`)
-//       .send({
-//         name: 'history2',
-//       });
+    const response = await request.delete(`/api/history/${createdHistoryEntity.id}`);
 
-//     expect(response.status).toBe(200);
-//     expect(response.body.data).toEqual(
-//       expect.objectContaining({
-//         name: 'history2',
-//       })
-//     );
-//   });
-
-//   it('should delete a history', async () => {
-//     const createdHistoryEntity = await mockHistoryRepository.createHistory(
-//       mockHistoryEntity
-//     );
-
-//     const response = await request.delete(`/api/historys/${createdHistoryEntity.id}`);
-
-//     const deletedHistoryEntity = await mockHistoryRepository.getHistory(
-//       createdHistoryEntity.id
-//     );
-//     expect(response.status).toBe(200);
-//     expect(deletedHistoryEntity).toBeNull();
-//   });
+    const deletedHistoryEntity = await mockHistoryRepository.getHistory(
+      createdHistoryEntity.id
+    );
+    expect(response.status).toBe(200);
+    expect(deletedHistoryEntity).toBeNull();
+  });
 });
