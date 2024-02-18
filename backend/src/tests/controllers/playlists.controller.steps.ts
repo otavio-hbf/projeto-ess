@@ -262,5 +262,91 @@ defineFeature(feature, (test) => {
             }
         );
     });
+
+    test('Remove a Song from a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
     
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "João",
+                    password: "123456",
+                    email: "joao@gmail.com",
+                    history_tracking: true,
+                    listening_to: "", });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [], });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing song with id "(.*)" named "(.*)" by "(.*)" in the playlist$/,
+            async (songId, songTitle, artist) => {
+                mockSongEntity = new SongEntity({ 
+                    id: songId,
+                    title: songTitle,
+                    artist: artist,
+                    duration: 0,
+                    genre: "", });
+    
+                mockPlaylistEntity.songs.push(songId);
+    
+                jest.spyOn(mockSongRepository, "createSong");
+    
+                await songService.createSong(mockSongEntity);
+    
+                expect(mockSongRepository.createSong).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        when(
+            /^a DELETE request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.delete(req_url).send({
+                    userId: userId,
+                });
+            }
+        );
+  
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    
+        and(
+            /^the response JSON should contain the updated playlist with the song id "(.*)" removed from the list of songs$/,
+            async (songId) => {
+                const updatedPlaylist = await request.get('/api/playlists/' + mockPlaylistEntity.id).send();
+                //console.log(updatedPlaylist.body.data);
+                expect(updatedPlaylist.body.data.songs).not.toContain(songId);
+            }
+        );
+    });    
 });

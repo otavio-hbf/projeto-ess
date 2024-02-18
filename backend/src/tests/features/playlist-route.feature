@@ -20,3 +20,11 @@ Feature: Playlist Routers
         When a DELETE request is sent to "/api/playlists/1" with user id "1"
         Then the response status should be "200"
         And the playlist with id "1" should no longer exist in the database
+
+    Scenario: Remove a Song from a Playlist
+        Given a user with id "2" is logged-in
+        And there is an existing playlist with id "2" named "Road Trip Playlist" created by user "2"
+        And there is an existing song with id "2" named "Watermelon" by "Spongebob" in the playlist
+        When a DELETE request is sent to "/api/playlists/2/2" with user id "2"
+        Then the response status should be "200"
+        And the response JSON should contain the updated playlist with the song id "2" removed from the list of songs
