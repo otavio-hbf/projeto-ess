@@ -240,15 +240,15 @@ defineFeature(feature, (test) => {
     );
 
     when(/^I send a DELETE request to "(.*)"$/, async (route) => {
-        response = await request.delete(`${prefix}${route}`).send();
+      response = await request.delete(`${prefix}${route}`).send();
     });
 
     and(/^I send a GET request to "(.*)"$/, async (route) => {
-        response = await request.get(`${prefix}${route}`).send();
+      response = await request.get(`${prefix}${route}`).send();
     });
 
     then(/^the response status should be "(.*)"$/, (status) => {
-        expect(response.status).toBe(parseInt(status));
+      expect(response.status).toBe(parseInt(status));
     });
 
     and(
@@ -262,55 +262,61 @@ defineFeature(feature, (test) => {
   test("Delete history entry", ({ given, when, and, then }) => {
     given(
       /^the user with id "(.*)" has (\d+) history entries with ids "(.*)", "(.*)" and "(.*)"$/,
-      (arg0, arg1, arg2, arg3, arg4) => {}
+      async (user_id, entries, id_1, id_2, id_3) => {
+        // clear user history first
+        await historyService.deleteUserHistory(user_id);
+        // create history entries with id 1, 2, 3
+        let ids = [id_1, id_2, id_3];
+        for (let id of ids) {
+          mockHistoryEntity = new HistoryEntity({
+            id: id,
+            song_id: "test" + id,
+            user_id: user_id,
+          });
+          await historyService.createHistory(mockHistoryEntity);
+        }
+      }
     );
 
-    when(/^I send a DELETE request to "(.*)"$/, (arg1) => {});
+    when(/^I send a DELETE request to "(.*)"$/, async (route) => {
+      response = await request.delete(`${prefix}${route}`).send();
+    });
 
-    and(/^I send a GET request to "(.*)"$/, (arg1) => {});
+    and(/^I send a GET request to "(.*)"$/, async (route) => {
+      response = await request.get(`${prefix}${route}`).send();
+    });
 
-    then(/^the response status should be "(.*)"$/, (arg0) => {});
+    then(/^the response status should be "(.*)"$/, async (status) => {
+      expect(response.status).toBe(parseInt(status));
+    });
 
     and(
       /^the response JSON should contain a history without the entry that was deleted with id "(.*)"$/,
-      (arg0) => {}
+      (id) => {
+        expect(response.body.data).not.toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: id,
+            }),
+          ])
+        );
+      }
     );
 
     and(
       /^the response JSON should contain a history with ids "(.*)" and "(.*)"$/,
-      (arg0, arg1) => {}
+      (arg0, arg1) => {
+        expect(response.body.data).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: arg0,
+            }),
+            expect.objectContaining({
+              id: arg1,
+            }),
+          ])
+        );
+      }
     );
   });
-
-  //   test('Create a history', ({ given, when, then, and }) => {
-  //     given(/^o HistoryRepository não tem um history com nome "(.*)"$/, async (historyId, historyName) => {
-  //       // Check if the history does not exist in the repository and delete it if it exists
-  //       const existingHistory = await mockHistoryRepository.getHistory(historyId);
-  //       if (existingHistory) {
-  //         await mockHistoryRepository.deleteHistory(historyId);
-  //       }
-  //     });
-
-  //     when(
-  //       /^uma requisição POST for enviada para "(.*)" com o corpo da requisição sendo um JSON com o nome "(.*)"$/,
-  //       async (url, historyName) => {
-  //         response = await request.post(url).send({
-  //           name: historyName,
-  //         });
-  //       }
-  //     );
-
-  //     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
-  //       expect(response.status).toBe(parseInt(statusCode, 10));
-  //     });
-
-  //     and(/^o JSON da resposta deve conter o nome "(.*)"$/, (historyName) => {
-  //         expect(response.body.data).toEqual(
-  //           expect.objectContaining({
-  //             name: historyName,
-  //           })
-  //         );
-  //       }
-  //     );
-  //   });
 });
