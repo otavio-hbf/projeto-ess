@@ -43,6 +43,9 @@ class UserController {
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.deleteUser(req, res)
     );
+    this.router.delete(`${this.prefix}`, (req: Request, res: Response) =>
+      this.deleteUserWithEmailPassword(req, res)
+    );
   }
 
   private async getUsers(req: Request, res: Response) {
@@ -53,27 +56,30 @@ class UserController {
       data: users,
     }).handle(res);
   }
+
   private async getUserToLogin(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
 
-      // Validar o email estão presentes
+      // Validar se o email esta presentes
       if (!email) {
         return res.status(400).json({ error: "A email is required for login" });
       }
 
-      // Validar o email estão presentes
+      // Validar se a senha esta presentes
       if (!password) {
         return res.status(400).json({ error: "A senha is required for login" });
       }
-      
-      const user = await this.userService.getUserToLogin(req.body.email, req.body.password);
+
+      const user = await this.userService.getUserToLogin(
+        req.body.email,
+        req.body.password
+      );
 
       return new SuccessResult({
         msg: Result.transformRequestOnMsg(req),
         data: user,
       }).handle(res);
-
     } catch (error) {
       return new FailureResult({
         msg: Result.transformRequestOnMsg(req),
@@ -103,14 +109,14 @@ class UserController {
           .json({ error: "A name is required for register" });
       }
 
-      // Validar o email esta presente
+      // Validar se o email esta presente
       if (!email) {
         return res
           .status(400)
           .json({ error: "A email is required for register" });
       }
 
-      // Validar o password esta presente
+      // Validar se a senha esta presente
       if (!password) {
         return res
           .status(400)
@@ -122,7 +128,6 @@ class UserController {
         msg: Result.transformRequestOnMsg(req),
         data: user,
       }).handle(res);
-
     } catch (error) {
       if (error instanceof HttpForbiddenError) {
         return new FailureResult({
@@ -141,6 +146,28 @@ class UserController {
   }
 
   private async updateUser(req: Request, res: Response) {
+    const { name, email, password } = req.body;
+      // Validar se o nome esta presente
+      if (!name) {
+        return res
+          .status(400)
+          .json({ error: "A name is required for update" });
+      }
+
+      // Validar o email esta presente
+      if (!email) {
+        return res
+          .status(400)
+          .json({ error: "A email is required for update" });
+      }
+
+      // Validar o password esta presente
+      if (!password) {
+        return res
+          .status(400)
+          .json({ error: "A password is required for update" });
+      }
+
     const user = await this.userService.updateUser(
       req.params.id,
       new UserEntity(req.body)
@@ -159,6 +186,36 @@ class UserController {
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
   }
+
+  private async deleteUserWithEmailPassword(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ error: "A email is required for delete" });
+      }
+
+      if (!password) {
+        return res.status(400).json({ error: "A senha is required for delete" });
+      }
+
+      await this.userService.deleteUserWithEmailPassword(
+        req.body.email,
+        req.body.password
+      );
+
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+      }).handle(res);
+    } catch (error) {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        msgCode: "user_delete_fail",
+        code: 500,
+      }).handle(res);
+    }
+  }
+
 
   private async listenTo(req: Request, res: Response) {
     const user = await this.userService.listenTo(

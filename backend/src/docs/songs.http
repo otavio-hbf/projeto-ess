@@ -19,7 +19,7 @@ Content-Type: application/json
 
 {
   "name": "value2",
-  "email": "ze@gmail.com",
+  "email": "zegmail.com",
   "password": "ze123"
 }
 
@@ -30,4 +30,28 @@ Content-Type: application/json
 {
   "email": "alfonso@gmail.com",
   "password": "123456"
+}
+
+###
+DELETE http://localhost:5001/api/users/3
+
+###
+DELETE http://localhost:5001/api/users
+Content-Type: application/json
+
+{
+  "email": "alfonso@gmail.com",
+  "password": "123456"
+}
+
+### GET historico do user 1
+GET http://localhost:5001/api/users
+
+###
+PUT http://localhost:5001/api/users/1
+Content-Type: application/json
+
+{
+  "name": "antoim",
+  "email": "asdads"
 }

@@ -45,7 +45,7 @@ class UserService {
   public async getUserToLogin(
     email: string,
     password: string
-  ): Promise<UserEntity | null> {
+  ): Promise<UserModel> {
     const userEntity = await this.userRepository.getUserToLogin(
       email,
       password
@@ -57,8 +57,10 @@ class UserService {
         msgCode: UserServiceMessageCode.user_not_found,
       });
     }
+    
+    const userModel = new UserModel(userEntity);
 
-    return userEntity;
+    return userModel;
   }
 
   public async createUser(data: UserEntity): Promise<UserModel> {
@@ -102,6 +104,16 @@ class UserService {
 
   public async deleteUser(id: string): Promise<void> {
     await this.userRepository.deleteUser(id);
+  }
+
+  public async deleteUserWithEmailPassword(
+    email: string,
+    password: string
+  ): Promise<void> {
+    await this.userRepository.deleteUserWithEmailPassword(
+      email,
+      password
+    );
   }
 
   public async listenTo(user_id: string, song_id: string): Promise<UserModel> {
