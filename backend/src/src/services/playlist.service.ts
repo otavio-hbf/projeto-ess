@@ -126,10 +126,20 @@ class PlaylistService {
     const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
     const playlistRepository: PlaylistRepository = new PlaylistRepository();
     const user = await this.userRepository.getUser(userId);
+    const playlist = await this.getPlaylist(playlistId);
 
     //Checa se o usuário existe
     if (!user) {
       throw new Error("User not found");
+    }
+    //Checa se o usuário não é o dono da playlist
+    if(playlist.createdBy === userId) {
+      throw new Error("Owner can't follow its own playlist");
+    }
+    //Checa se a playlist é pública
+    if(playlist.private)
+    {
+      throw new Error("Can't follow private playlist");
     }
 
     if (!(playlistEntity.followers.indexOf(userId) > -1)) {
