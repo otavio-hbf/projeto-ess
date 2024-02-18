@@ -19,6 +19,8 @@ class HistoryController {
 
   // id is USER id
   private initRoutes() {
+    // GET all histories
+    // /histories
     this.router.get(`/histories`, (req: Request, res: Response) =>
       this.getHistories(req, res)
     );
@@ -45,15 +47,22 @@ class HistoryController {
     );
 
     // CREATE user history
-    // /user/history
+    // /history
     this.router.post(this.suffix, (req: Request, res: Response) =>
       this.createHistory(req, res)
     );
 
-    // DELETE user history
-    // /user/:id/history
+    // DELETE history entry
+    // /history/:id
     this.router.delete(
-      `${this.prefix}/:id${this.suffix}`,
+      `${this.suffix}/:id`,
+      (req: Request, res: Response) => this.deleteHistory(req, res)
+    );
+
+    // DELETE and CLEAR user history
+    // /user/:id/history/clear
+    this.router.delete(
+      `${this.prefix}/:id${this.suffix}/clear`,
       (req: Request, res: Response) => this.deleteUserHistory(req, res)
     );
   }
