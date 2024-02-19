@@ -135,6 +135,7 @@ class PlaylistService {
   }
 
   async followPlaylist(playlistId: string, userId: string): Promise<void> {
+    console.log(await this.getPlaylists());
     const playlistEntity: PlaylistEntity = await this.getPlaylist(playlistId);
     const playlistRepository: PlaylistRepository = new PlaylistRepository();
     const user = await this.userRepository.getUser(userId);
@@ -175,6 +176,7 @@ class PlaylistService {
     contributorId: string,
     userId: string
   ): Promise<void> {
+
     // Checa se a playlist existe
     const playlist = await this.getPlaylist(playlistId);
     if (!playlist) {
@@ -213,6 +215,7 @@ class PlaylistService {
     contributorId: string,
     userId: string
   ): Promise<void> {
+    console.log(await this.getPlaylists());
     const playlist = await this.getPlaylist(playlistId);
     if (!playlist) {
       throw new Error("Playlist not found");

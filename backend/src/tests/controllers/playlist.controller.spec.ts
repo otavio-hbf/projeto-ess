@@ -8,7 +8,10 @@ describe('PlaylistController', () => {
   const mockedUserId: string = "Pedro";
   const mockedPlaylistName = {name: "My songs"};
   const mockedPlaylistId: string = "ce6f5c66-1967-4b21-9929-51ca7d652151";
+  const mockedPlaylistId2: string = "alwnqwdnej18ej129";
   const mockedSongId: string = "1";
+  const mockedFollower = "Thiago";
+  const mockedContributorId: string = "contributor123";
 
   const mockedPlaylistEntity: PlaylistEntity = new PlaylistEntity({
     id: mockedPlaylistId,
@@ -16,6 +19,16 @@ describe('PlaylistController', () => {
     songs: [],
     createdBy: mockedUserId,
     private: true,
+    followers: [],
+    contributors: [],
+  });
+
+  const mockedPlaylistEntity2: PlaylistEntity = new PlaylistEntity({
+    id: mockedPlaylistId2,
+    name: "Songs to listen to with a fever",
+    songs: [],
+    createdBy: mockedUserId,
+    private: false,
     followers: [],
     contributors: [],
   });
@@ -100,6 +113,29 @@ it('should create a playlist', async () => {
       const deletePlaylistData = {userId: mockedUserId};
       const response = await request.delete('/api/playlists/' + mockedPlaylistId).send(deletePlaylistData);
     
+      expect(response.status).toBe(200);
+    });
+
+    it('should follow a playlist', async () => {
+      const response = await request.put('/api/playlists/follow/' + "1").send({ userId: "2" });
+      
+      expect(response.status).toBe(200);
+    });
+  
+    it('should unfollow a playlist', async () => {
+      const response = await request.put('/api/playlists/unfollow/' + "1").send({ userId: "2" });
+      
+      expect(response.status).toBe(200);
+    });
+  
+    it('should add a contributor to a playlist', async () => {
+      const response = await request.put('/api/playlists/addContributor/' + "1/" + "2").send({ userId: "1" });
+      
+      expect(response.status).toBe(200);
+    });
+  
+    it('should remove a contributor from a playlist', async () => {
+      const response = await request.put('/api/playlists/removeContributor/' + "1/" + "2").send({ userId: "1" });
       expect(response.status).toBe(200);
     });
 });
