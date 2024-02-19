@@ -156,6 +156,8 @@ class PlaylistService {
     if (!(playlistEntity.followers.indexOf(userId) > -1)) {
       playlistEntity.followers.push(userId);
       await playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    } else {
+      throw new Error("User is already following this playlist");
     }
   }
 
@@ -167,6 +169,8 @@ class PlaylistService {
     if (index !== -1) {
       playlistEntity.followers.splice(index, 1);
       await playlistRepository.updatePlaylist(playlistId, playlistEntity);
+    } else {
+      throw new Error("User is not following this playlist");
     }
   }
 
@@ -227,6 +231,8 @@ class PlaylistService {
     if (index !== -1) {
       playlist.contributors.splice(index, 1);
       await this.updatePlaylist(playlistId, playlist, userId);
+    } else {
+      throw new Error("User is not a contributor");
     }
   }
 

@@ -480,5 +480,268 @@ defineFeature(feature, (test) => {
                 expect(response.body.error).toBe(errorMessage);
             }
         );
-    });    
+    });
+
+    test('Follow a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)" without followers in$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [],
+                    contributors: [], 
+                });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.put(req_url).send({
+                    userId: userId,
+                });
+                ///console.log(response.body.data);
+            }
+        );
+    
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    });
+
+    test('Unfollow a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "João",
+                    password: "123456",
+                    email: "joao@gmail.com",
+                    history_tracking: true,
+                });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [], 
+                    contributors: [],
+                });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing follower with id "(.*)"$/,
+            async (userId) => {
+                mockPlaylistEntity.followers.push(userId);
+            }
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.put(req_url).send({
+                    userId: userId,
+                });
+            }
+        );
+  
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    });
+
+    test('Add a Contributor to a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)" without contributors$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [],
+                    contributors: [], 
+                });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+
+        and(
+            /^there is an existing user with id "(.*)"$/,
+            async (userId) => {}
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.put(req_url).send({
+                    userId: userId,
+                });
+            }
+        );
+    
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+
+    });
+
+    test('Remove a Contributor from a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                });
+
+                jest.spyOn(mockUserRepository, "createUser");
+
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)"$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [], 
+                    contributors: [],
+                });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing contributor with id "(.*)"$/,
+            async (userId) => {
+                mockPlaylistEntity.contributors.push(userId);
+            }
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.put(req_url).send({
+                    userId: userId,
+                });
+            }
+        );
+  
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+
+    });
+
 });
