@@ -1,142 +1,150 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
 import supertest from 'supertest';
 import app from '../../src/app';
-import PlaylistRepository from '../../src/repositories/playlist.repository';
-import PlaylistEntity from '../../src/entities/playlist.entity';
-import PlaylistService from '../../src/services/playlist.service';
 import UserEntity from "../../src/entities/user.entity";
-import SongRepository from "../../src/repositories/song.repository";
 import UserRepository from '../../src/repositories/user.repository';
+import UserService from '../../src/services/user.service';
+import { get } from 'http';
 
 const feature = loadFeature('tests/features/user-route.feature');
 const request = supertest(app);
 
 defineFeature(feature, (test) => {
     // Mock do repositório
-    let mockPlaylistRepository: PlaylistRepository;
-    let mockSongRepository: SongRepository;
     let mockUserRepository: UserRepository;
-
-    let playlistService: PlaylistService;
-
-    let mockPlaylistEntity: PlaylistEntity;
     let mockUserEntity: UserEntity;
+
+    let userService: UserService;
 
     let response: supertest.Response;
 
     beforeEach(() => {
-        mockPlaylistRepository = {
-            getPlaylists: jest.fn(),
-            getPlaylist: jest.fn(),
-            createPlaylist: jest.fn(),
-            updatePlaylist: jest.fn(),
-            deletePlaylist: jest.fn(),
+        mockUserRepository = {
+            getUsers: jest.fn(),
+            getUserToLogin: jest.fn(),
+            getUserByEmail: jest.fn(),
+            createUser: jest.fn(),
+            updateUser: jest.fn(),
+            deleteUser: jest.fn(),
+            deleteUserWithEmailPassword: jest.fn(),
         } as any;
 
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
+        userService = new UserService(mockUserRepository);
     });
 
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    test('Registration successful', ({ given, when, then }) => {
-        given('the system does not have an account with the email “ze@gmail.com” registered', () => {
+    test('Registration successful', ({ given, when, then, and }) => {
+        given(/^the system does not have an account with the email "(.*)" registered$/, (email) => {
 
         });
 
-        when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => {
-
+        when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, async (url, name, email, password) => {
+            response = await request.post(url).send({
+                name,
+                email,
+                password
+            })
         });
 
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
-
-        });
-    });
-
-    test('Login successful', ({ given, when, then, and }) => {
-        given(/^the system has the account with email “alfonso@gmail.com” and password “(\d+)” registered$/, (arg0) => {
-
-        });
-
-        when(/^a GET request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
-
-        });
-    });
-
-    test('Delete user', ({ given, when, then, and }) => {
-        given(/^the system has the account with email “alfonso@gmail.com” and password "(.*)" registered$/, (arg0) => {
-
-        });
-
-        when(/^a DELETE request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status shold be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the system does not have the email account "(.*)" registered$/, (arg0) => {
-
-        });
-    });
-
-    test('Update user', ({ given, when, then, and }) => {
-        given(/^a user with id "(.*)" is logged-in$/, (arg0) => {
-
-        });
-
-        when(/^a PUT request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the response JSON shold contain the updated user with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
+        then(/^the response status should be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code));
         });
     });
 
     test('Unsuccessful registration', ({ given, when, then }) => {
-        given('the system has an account with the email “alfonso@gmail.com” registered', () => {
+        given(/^the system has an account with the email "(.*)" registered$/, async (email) => {
+            
+        });
+
+        when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, async (url, name, email, password) => {
+            response = await request.post(url).send({
+                name,
+                email,
+                password
+            })
+        });
+
+        then(/^response status shold be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code))
+        });
+    });
+
+    test('Login successful', ({ given, when, then, and }) => {
+        given(/^the system has the account with email "(.*)" and password "(.*)" registered$/, (email, password) => {
 
         });
 
-        when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => {
-
+        when(/^a POST request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, async (url, email, password) => {
+            response = await request.post(url).send({
+                email,
+                password
+            })
         });
 
-        then(/^response status shold be "(.*)"$/, (arg0) => {
-
+        then(/^the response status should be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code))
         });
     });
 
     test('Unsuccessful login', ({ given, when, then }) => {
-        given(/^the system does not have an account with the email “ze@gmail.com” and password "(.*)" registered$/, (arg0) => {
+        given(/^the system does not have an account with the email "(.*)" and password "(.*)" registered$/, (email, password) => {
+            
+        });
+
+        when(/^a POST request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, async (url, email, password) => {
+            response = await request.post(url).send({
+                email,
+                password
+            })
+            console.log(response.body)
+        });
+
+        then(/^the response status should be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code))
+        });
+    });
+
+    test('Delete user', ({ given, when, then, and }) => {
+        given(/^the system has the account with email "(.*)" and password "(.*)" registered$/, (email, password) => {
 
         });
 
-        when(/^a GET request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
+        when(/^a DELETE request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, async (url, email, password) => {
+            response = await request.delete(url).send({
+                email,
+                password
+            })
         });
 
-        then(/^the response status should be "(.*)"$/, (arg0) => {
+        then(/^the response status shold be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code))
+        });
+    });
 
+    test('Update user', ({ given, when, then, and }) => {
+        given(/^a user with id "(.*)" is logged-in$/, async (id) => {
+            
+        });
+
+        when(/^a PUT request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, async (url, name, email, password) => {
+            response = await request.put(url).send({
+                name,
+                email,
+                password
+            })
+        });
+
+        then(/^the response status should be "(.*)"$/, (status_code) => {
+            expect(response.status).toBe(parseInt(status_code));
+        });
+
+        and(/^the response JSON should contain the updated user with name "(.*)" email "(.*)" and password "(.*)"$/, (name, email, password) => {
+            const responseBody = response.body.data;
+            expect(responseBody.name).toBe(name);
+            expect(responseBody.email).toBe(email);
         });
     });
 });

@@ -27,6 +27,9 @@ class UserController {
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getUser(req, res)
     );
+    this.router.get(`${this.prefix}/email/:email`, (req: Request, res: Response) =>
+      this.getUserByEmail(req, res)
+    );
     this.router.post(`${this.prefix}/login`, (req: Request, res: Response) =>
       this.getUserToLogin(req, res)
     );
@@ -87,6 +90,15 @@ class UserController {
 
   private async getUser(req: Request, res: Response) {
     const user = await this.userService.getUser(req.params.id);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: user,
+    }).handle(res);
+  }
+
+  private async getUserByEmail(req: Request, res: Response) {
+    const user = await this.userService.getUserByEmail(req.params.email);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
