@@ -161,6 +161,14 @@ export default class Database {
           password: "789456",
           history_tracking: true,
         }),
+
+        new UserEntity({
+          id: "3",
+          name: "Carlos",
+          email: "carlitos@gmail.com",
+          password: "6666666",
+          history_tracking: true,
+        }),
       ],
       history: [
         new HistoryEntity({
