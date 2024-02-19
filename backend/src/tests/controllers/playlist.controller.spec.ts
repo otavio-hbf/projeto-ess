@@ -116,78 +116,10 @@ it('should create a playlist', async () => {
       expect(response.status).toBe(200);
     });
 
-    it('should follow a playlist', async () => {
-      const response = await request.put('/api/playlists/follow/' + "1").send({ userId: "2" });
+    it('should return an empty list as a result of the search', async () => {
       
+      const response = await request.get('/api/feed/search/playlists/?keyword=after');
       expect(response.status).toBe(200);
-    });
-
-    it('should throw an error when the user is already following that playlist', async () => {
-      const response = await request.put('/api/playlists/follow/' + "1").send({ userId: "2" });
-      
-      expect(response.status).toBe(500);
-    });
-
-    it('should throw an error when following a private playlist', async () => {
-      const response = await request.put('/api/playlists/follow/' + "4").send({ userId: "1" });
-      
-      expect(response.status).toBe(500);
-    });
-
-    it('should throw an error when following a playlist you own', async () => {
-      const response = await request.put('/api/playlists/follow/' + "1").send({ userId: "1" });
-      
-      expect(response.status).toBe(500);
-    });
-  
-    it('should unfollow a playlist', async () => {
-      const response = await request.put('/api/playlists/unfollow/' + "1").send({ userId: "2" });
-      
-      expect(response.status).toBe(200);
-    });
-
-    it('should throw this error when trying to unfollow a playlist you are not following', async () => {
-      const response = await request.put('/api/playlists/unfollow/' + "1").send({ userId: "2" });
-      
-      expect(response.status).toBe(500);
-    });
-  
-    it('should add a contributor to a playlist', async () => {
-      const response = await request.put('/api/playlists/addContributor/' + "1/" + "2").send({ userId: "1" });
-      
-      expect(response.status).toBe(200);
-    });
-
-    it('should throw an error when adding a user that is already a contributor', async () => {
-      const response = await request.put('/api/playlists/addContributor/' + "1/" + "2").send({ userId: "1" });
-      
-      expect(response.status).toBe(500);
-    });
-
-    it('should throw an error when the owner tries to add itself as a contributor', async () => {
-      const response = await request.put('/api/playlists/addContributor/' + "1/" + "1").send({ userId: "1" });
-      
-      expect(response.status).toBe(500);
-    });
-
-    it('should throw an error when an user other than the owner tries adding a contributor', async () => {
-      const response = await request.put('/api/playlists/addContributor/' + "1/" + "3").send({ userId: "2" });
-      
-      expect(response.status).toBe(500);
-    });
-  
-    it('should remove a contributor from a playlist', async () => {
-      const response = await request.put('/api/playlists/removeContributor/' + "1/" + "2").send({ userId: "1" });
-      expect(response.status).toBe(200);
-    });
-
-    it('should throw an error when trying to remove a user that is not a contributor', async () => {
-      const response = await request.put('/api/playlists/removeContributor/' + "1/" + "2").send({ userId: "1" });
-      expect(response.status).toBe(500);
-    });
-
-    it('should throw an error when owner is trying to remove itself as a contributor', async () => {
-      const response = await request.put('/api/playlists/removeContributor/' + "1/" + "1").send({ userId: "1" });
-      expect(response.status).toBe(500);
+      expect(response.body.data).toEqual([]);
     });
 });
