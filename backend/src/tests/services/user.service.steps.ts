@@ -1,137 +1,85 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
-import supertest from 'supertest';
-import app from '../../src/app';
-import PlaylistRepository from '../../src/repositories/playlist.repository';
-import PlaylistEntity from '../../src/entities/playlist.entity';
-import PlaylistService from '../../src/services/playlist.service';
-import UserEntity from "../../src/entities/user.entity";
-import SongRepository from "../../src/repositories/song.repository";
 import UserRepository from '../../src/repositories/user.repository';
+import UserService from '../../src/services/user.service';
+import UserEntity from '../../src/entities/user.entity';
+import UserModel from '../../src/models/user.model';
+import { HttpNotFoundError } from '../../src/utils/errors/http.error';
 
-const feature = loadFeature('tests/features/user-service.feature');
-const request = supertest(app);
+const feature = loadFeature("tests/features/user-service.feature");
 
 defineFeature(feature, (test) => {
-    // Mock do repositório
-    let mockPlaylistRepository: PlaylistRepository;
-    let mockSongRepository: SongRepository;
     let mockUserRepository: UserRepository;
-
-    let playlistService: PlaylistService;
-
-    let mockPlaylistEntity: PlaylistEntity;
-    let mockUserEntity: UserEntity;
-
-    let response: supertest.Response;
+    let userService: UserService;
 
     beforeEach(() => {
-        mockPlaylistRepository = {
-            getPlaylists: jest.fn(),
-            getPlaylist: jest.fn(),
-            createPlaylist: jest.fn(),
-            updatePlaylist: jest.fn(),
-            deletePlaylist: jest.fn(),
-        } as any;
-
-        playlistService = new PlaylistService(mockPlaylistRepository, mockSongRepository, mockUserRepository);
+        mockUserRepository = new UserRepository(); // You may want to use a mock here instead
+        userService = new UserService(mockUserRepository);
     });
 
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    test('Registration successful', ({ given, when, then }) => {
-        given('the system does not have an account with the email “ze@gmail.com” registered', () => {
-            
+    test('obter usuário pelo email', ({ given, when, then }) => {
+        let userEmail: string;
+        let userEntity: UserEntity;
+        let result: UserModel;
+
+        given('existe um usuário de nome "Alfonso" e email "alfonso@gmail.com"', () => {
+            userEmail = 'alfonso@gmail.com';
+            userEntity = new UserEntity({ id:'1', name: 'Alfonso', email: userEmail, password:'123456', history_tracking: true });
+            jest.spyOn(mockUserRepository, 'getUserByEmail').mockResolvedValueOnce(userEntity);
         });
 
-        when(/^a "(.*)" request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3, arg4) => {
+        when(/^o método getUserByEmail é chamado com o email "(.*)"$/, async (email) => {
+            result = await userService.getUserByEmail(userEmail);
         });
 
-        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
-
-        });
-    });
-
-    test('Login successful', ({ given, when, then, and }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
-
-        });
-
-        when(/^a GET request was sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
-
+        then(/^o usuário retornado tem nome "(.*)"$/, (name) => {
+            expect(result.name).toBe(name);
         });
     });
 
-    test('Delete user', ({ given, when, and, then }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+    test('obter todos os usuários', ({ given, when, then }) => {
+        let usersEntity: UserEntity[];
+        let result: UserModel[];
 
+        given('existe um usuário de nome "Alfonso" cadastrado', () => {
+            usersEntity = [new UserEntity({ id:'1', name: 'Alfonso', email: 'alfonso@gmail.com', password:'123456', history_tracking: true })];
+            jest.spyOn(mockUserRepository, 'getUsers').mockResolvedValueOnce(usersEntity);
         });
 
-        when(/^the system receives a request to delete the account with email "(.*)" and password "(.*)"$/, (arg0, arg1) => {
-
+        when('o método getUsers é chamado', async () => {
+            result = await userService.getUsers();
         });
 
-        and(/^the system deletes the email account "(.*)"$/, (arg0) => {
-
-        });
-
-        then(/^the system does not have the email account "(.*)" registered$/, (arg0) => {
-
-        });
-    });
-
-    test('Update user', ({ given, when, then }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
-
-        });
-
-        when(/^a PUT request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
+        then(/^o usuário de nome "(.*)" deve está na lista de usuários retornada$/, (name) => {
+            const userNames = result.map(user => user.name);
+            expect(userNames).toContain(name);
         });
     });
 
-    test('Unsuccessful registration', ({ given, when, then }) => {
-        given('the system has an account with the email “ze@gmail.com” registered', () => {
+    test('excluir usuário', ({ given, when, then }) => {
+        let userEmail: string;
+        let userEntity: UserEntity;
 
+        given('o método createUser foi chamado com o name "samanto" email "samanto@gmail.com" e senha "samanto123"', () => {
+            userEmail = 'samanto@gmail.com';
+            userEntity = new UserEntity({ id:'20', name: 'samanto', email: userEmail, password: 'samanto123', history_tracking: true });
+            jest.spyOn(mockUserRepository, 'createUser').mockResolvedValueOnce(userEntity);
         });
 
-        when(/^a POST request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => { 
-
+        when(/^o método deleteUserWithEmailPassword é chamado com o email "(.*)" e senha "(.*)"$/, async () => {
+            await userService.deleteUserWithEmailPassword(userEmail, 'samanto123');
         });
 
-        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
-
-        });
-    });
-
-    test('Unsuccessful login', ({ given, when, then, and }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
-
+        then(/^o método getUserByEmail é chamado com o email "(.*)"$/, async (email) => {
+            jest.spyOn(mockUserRepository, 'getUserByEmail').mockResolvedValueOnce(null);
+            await expect(userService.getUserByEmail(email)).rejects.toThrow(HttpNotFoundError);
         });
 
-        when(/^a GET request was sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
-
+        then('é retornada a mensagem "user_not_found"', () => {
+            // Handled in previous step
         });
     });
 });

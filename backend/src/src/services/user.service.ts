@@ -63,6 +63,21 @@ class UserService {
     return userModel;
   }
 
+  public async getUserByEmail(email: string): Promise<UserModel> {
+    const userEntity = await this.userRepository.getUserByEmail(email);
+
+    if (!userEntity) {
+      throw new HttpNotFoundError({
+        msg: "User not found",
+        msgCode: UserServiceMessageCode.user_not_found,
+      });
+    }
+
+    const userModel = new UserModel(userEntity);
+
+    return userModel;
+  }
+
   public async createUser(data: UserEntity): Promise<UserModel> {
     const errors = await validate(data);
     const user = await this.userRepository.getUserByEmail(data.email);
