@@ -42,3 +42,10 @@ Feature: Playlist Routers
         When a POST request is sent to "/api/playlists" with an empty playlist name and user id "1"
         Then the response status should be "400"
         And the response JSON should contain "A name is required for playlist creation" error message
+    
+    Scenario: Follow a Playlist
+        Given a user with id "2" is logged-in
+        And there is an existing playlist with id "3" named "Chill Vibes" created by user "1" without followers in
+        When a PUT request is sent to "/api/playlists/follow/3" with user id "2"
+        Then the response status should be "200"
+

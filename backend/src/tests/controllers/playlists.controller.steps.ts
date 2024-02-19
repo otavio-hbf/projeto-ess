@@ -480,5 +480,66 @@ defineFeature(feature, (test) => {
                 expect(response.body.error).toBe(errorMessage);
             }
         );
-    });    
+    });
+
+    test('Follow a Playlist', ({ given, when, then, and }) => {
+        let response: supertest.Response;
+    
+        given(
+            /^a user with id "(.*)" is logged-in$/,
+            async (userId) => {
+                mockUserEntity = new UserEntity({ 
+                    id: userId,
+                    name: "Alfonso",
+                    password: "12334",
+                    email: "alfonso@gmail.com",
+                    history_tracking: true,
+                });
+    
+                jest.spyOn(mockUserRepository, "createUser");
+    
+                await userService.createUser(mockUserEntity);
+            
+                expect(mockUserRepository.createUser).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        and(
+            /^there is an existing playlist with id "(.*)" named "(.*)" created by user "(.*)" without followers in$/,
+            async (playlistId, playlistName, createdBy) => {
+                mockPlaylistEntity = new PlaylistEntity({ 
+                    id: playlistId,
+                    name: playlistName,
+                    createdBy: createdBy,
+                    songs: [],
+                    private: false,
+                    followers: [],
+                    contributors: [], 
+                });
+    
+                jest.spyOn(mockPlaylistRepository, "createPlaylist");
+    
+                await playlistService.createPlaylist(mockPlaylistEntity);
+    
+                expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledTimes(1);
+            }
+        );
+    
+        when(
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
+            async (req_url, userId) => {
+                response = await request.put(req_url).send({
+                    userId: userId,
+                });
+                ///console.log(response.body.data);
+            }
+        );
+    
+        then(
+            /^the response status should be "(.*)"$/,
+            async (status_code) => {
+                expect(response.status).toBe(parseInt(status_code));
+            }
+        );
+    });
 });

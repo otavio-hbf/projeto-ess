@@ -157,7 +157,6 @@ class PlaylistService {
     if (!(playlistEntity.followers.indexOf(userId) > -1)) {
       playlistEntity.followers.push(userId);
       await playlistRepository.updatePlaylist(playlistId, playlistEntity);
-
     } else {
       throw new Error("User is already following this playlist");
     }
@@ -181,7 +180,6 @@ class PlaylistService {
     contributorId: string,
     userId: string
   ): Promise<void> {
-
     // Checa se a playlist existe
     const playlist = await this.getPlaylist(playlistId);
     if (!playlist) {
