@@ -48,4 +48,25 @@ Feature: Playlist Routers
         And there is an existing playlist with id "3" named "Chill Vibes" created by user "1" without followers in
         When a PUT request is sent to "/api/playlists/follow/3" with user id "2"
         Then the response status should be "200"
+    
+    Scenario: Unfollow a Playlist
+        Given a user with id "2" is logged-in
+        And there is an existing playlist with id "3" named "Chill Vibes" created by user "1"
+        And there is an existing follower with id "2"
+        When a PUT request is sent to "/api/playlists/unfollow/3" with user id "2"
+        Then the response status should be "200"
+
+    Scenario: Add a Contributor to a Playlist
+        Given a user with id "1" is logged-in
+        And there is an existing playlist with id "3" named "Chill Vibes" created by user "1" without contributors
+        And there is an existing user with id "2"
+        When a PUT request is sent to "/api/playlists/addContributor/3/2" with user id "1"
+        Then the response status should be "200"
+
+    Scenario: Remove a Contributor from a Playlist
+        Given a user with id "1" is logged-in
+        And there is an existing playlist with id "3" named "Chill Vibes" created by user "1"
+        And there is an existing contributor with id "2"
+        When a PUT request is sent to "/api/playlists/removeContributor/3/2" with user id "1"
+        Then the response status should be "200"
 

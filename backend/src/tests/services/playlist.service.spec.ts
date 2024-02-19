@@ -134,7 +134,6 @@ describe('PlaylistService', () => {
         };
         jest.spyOn(mockPlaylistRepository, 'createPlaylist').mockResolvedValue(mockPlaylistEntity);
         const createdPlaylist = await playlistService.createPlaylist(mockPlaylistEntity);
-        console.log(createdPlaylist);
         jest.spyOn(mockPlaylistRepository, 'updatePlaylist').mockResolvedValue(updatedData);
   
         const updatedPlaylist = await playlistService.updatePlaylist(playlistId, updatedData, userId);
