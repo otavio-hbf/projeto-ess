@@ -69,6 +69,10 @@ const CreateTest = () => {
         <Link data-cy="view-history" to="/history">
           Histórico
         </Link>
+
+        <Link data-cy="view-history" to="/statistics">
+          Statistics
+        </Link>
       </form>
     </section>
   );

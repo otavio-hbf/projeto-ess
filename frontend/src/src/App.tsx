@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreateTest from "./app/home/pages/CreateTest";
 import ListTests from "./app/home/pages/ListTests";
 import ListHistory from "./app/home/pages/ListHistory";
+import StatisticsPage from "./app/home/pages/Statistics";
 
 /**
  * Creates a browser router and defines the routes for the application.
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/history",
     Component: ListHistory,
+  },
+  {
+    path: "/statistics",
+    Component: StatisticsPage,
   },
 ]);
 

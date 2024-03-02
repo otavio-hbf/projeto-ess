@@ -8,6 +8,7 @@ import RequestStatus from "../../../../shared/types/request-status";
 import { TestFormType } from "../../forms/TestForm";
 import { AppUnknownError } from "../../../../shared/errors/app-error";
 import HistoryModel from "../../models/HistoryModel";
+import StatisticsModel from "../../models/StatisticsModel";
 
 export default class HistoryService {
   private apiService: ApiService;
@@ -78,6 +79,39 @@ export default class HistoryService {
     } catch (_) {
       this.dispatch({
         type: HistoryStateActionType.CHANGE_RS_GET_HISTORY,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
+  async getStatistics(uid: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: HistoryStateActionType.CHANGE_RS_GET_STATISTICS,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.get(`/user/${uid}/statistics`);
+
+      result.handle({
+        onSuccess: (response) => {
+          const data = new StatisticsModel(response.data);
+
+          this.dispatch({
+            type: HistoryStateActionType.CHANGE_RS_GET_STATISTICS,
+            payload: RequestStatus.success(data),
+          });
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: HistoryStateActionType.CHANGE_RS_GET_STATISTICS,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: HistoryStateActionType.CHANGE_RS_GET_STATISTICS,
         payload: RequestStatus.failure(new AppUnknownError()),
       });
     }
