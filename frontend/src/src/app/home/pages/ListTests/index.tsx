@@ -3,12 +3,16 @@ import styles from "./index.module.css";
 import { HomeContext } from "../../context/HomeContext";
 import { Link } from "react-router-dom";
 
+/**
+ * Renders a list of tests.
+ */
 const ListTests = () => {
   const { service, state } = useContext(HomeContext);
 
   useEffect(() => {
     service.getTests();
   }, [service]);
+
   return (
     <section className={styles.container}>
       <h1 className={styles.title}>List Tests</h1>

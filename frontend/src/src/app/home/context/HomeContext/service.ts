@@ -1,3 +1,6 @@
+/**
+ * Service class for handling API requests related to the HomeContext in the application.
+ */
 import { Dispatch } from "react";
 import { HomeStateAction } from "./types";
 import { ApiService } from "../../../../shared/services/ApiService";
@@ -10,6 +13,11 @@ export default class HomeService {
   private apiService: ApiService;
   private dispatch: Dispatch<HomeStateAction>;
 
+  /**
+   * Constructs a new instance of the HomeService class.
+   * @param apiService The ApiService instance used for making API requests.
+   * @param dispatch The dispatch function from the HomeContext reducer.
+   */
   constructor({
     apiService,
     dispatch,
@@ -21,6 +29,11 @@ export default class HomeService {
     this.dispatch = dispatch;
   }
 
+  /**
+   * Creates a new test.
+   * @param testForm The form data for creating the test.
+   * @returns A promise that resolves when the test is created.
+   */
   async createTest(testForm: TestFormType): Promise<void> {
     this.dispatch({
       type: "CHANGE_CREATE_TEST_REQUEST_STATUS",
@@ -45,6 +58,10 @@ export default class HomeService {
     });
   }
 
+  /**
+   * Retrieves the list of tests.
+   * @returns A promise that resolves when the tests are retrieved.
+   */
   async getTests(): Promise<void> {
     try {
       this.dispatch({

@@ -1,3 +1,6 @@
+/**
+ * Component for creating a test.
+ */
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./index.module.css";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +22,10 @@ const CreateTest = () => {
     resolver: zodResolver(TestFormSchema),
   });
 
+  /**
+   * Handles the form submission.
+   * @param body - The form data.
+   */
   const onSubmit: SubmitHandler<TestFormType> = async (body) => {
     service.createTest(body);
     reset();

@@ -1,3 +1,7 @@
+/**
+ * Entry point of the application.
+ * Renders the root component and sets up the application provider.
+ */
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -9,5 +13,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <Provider>
       <App />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
