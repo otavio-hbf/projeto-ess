@@ -49,6 +49,14 @@ class HistoryService {
       (history) => new HistoryModel(history)
     );
 
+    // loop through the history and get the song details
+    for (const history of historiesModel) {
+      const song = await this.songRepository.getSong(history.song_id);
+      if (song) {
+        history.song = song;
+      }
+    }
+
     return historiesModel;
   }
 
