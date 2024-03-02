@@ -21,7 +21,14 @@
     "prettier": "prettier --write src/**/*.{ts,tsx,js,jsx,json,md}"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/inter": "^5.0.16",
     "@hookform/resolvers": "^3.1.0",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@mui/joy": "^5.0.0-beta.29",
+    "ag-grid-react": "^31.1.1",
     "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

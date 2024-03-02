@@ -25,6 +25,11 @@ const historyStateReducer = (
         ...state,
         getHistoryRequestStatus: action.payload,
       };
+    case HistoryStateActionType.CHANGE_RS_GET_STATISTICS:
+      return {
+        ...state,
+        getStatisticsRequestStatus: action.payload,
+      };
 
     default:
       return state;

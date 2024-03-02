@@ -40,6 +40,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const [state, dispatch] = useReducer(HistoryStateReducer, {
     createHistoryRequestStatus: RequestStatus.idle(),
     getHistoryRequestStatus: RequestStatus.idle(),
+    getStatisticsRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);

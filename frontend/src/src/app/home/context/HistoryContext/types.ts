@@ -1,6 +1,6 @@
 import RequestStatus from "../../../../shared/types/request-status";
 import HistoryModel from "../../models/HistoryModel";
-import TestModel from "../../models/TestModel";
+import StatisticsModel from "../../models/StatisticsModel";
 
 /**
  * Enum for the change types of HistoryStateAction.
@@ -8,6 +8,7 @@ import TestModel from "../../models/TestModel";
 export enum HistoryStateActionType {
   CHANGE_RS_CREATE_HISTORY = "CHANGE_CREATE_HISTORY_REQUEST_STATUS",
   CHANGE_RS_GET_HISTORY = "CHANGE_GET_HISTORY_REQUEST_STATUS",
+  CHANGE_RS_GET_STATISTICS = "CHANGE_GET_STATISTICS_REQUEST_STATUS",
 }
 
 /**
@@ -21,6 +22,10 @@ export type HistoryStateAction =
   | {
       type: HistoryStateActionType.CHANGE_RS_GET_HISTORY;
       payload: RequestStatus<HistoryModel[]>;
+    }
+  | {
+      type: HistoryStateActionType.CHANGE_RS_GET_STATISTICS;
+      payload: RequestStatus<StatisticsModel>;
     };
 
 /**
@@ -29,4 +34,5 @@ export type HistoryStateAction =
 export interface HistoryState {
   createHistoryRequestStatus: RequestStatus<any>;
   getHistoryRequestStatus: RequestStatus<HistoryModel[]>;
+  getStatisticsRequestStatus: RequestStatus<StatisticsModel>;
 }
