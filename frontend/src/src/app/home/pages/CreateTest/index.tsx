@@ -65,6 +65,10 @@ const CreateTest = () => {
         <Link data-cy="view-tests" to="/tests">
           VER TESTS
         </Link>
+
+        <Link data-cy="view-history" to="/history">
+          Histórico
+        </Link>
       </form>
     </section>
   );
