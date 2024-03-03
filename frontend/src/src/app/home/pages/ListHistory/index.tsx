@@ -6,6 +6,7 @@ import { Header } from "../../../../shared/components/Header";
 import { HistoryContext } from "../../context/HistoryContext";
 import styles from "./index.module.css";
 import SongItem from "../../../../shared/components/SongItem";
+import HistoryOptions from "../../components/HistoryOptions";
 
 /**
  * Renders a list of songs.
@@ -25,7 +26,7 @@ const ListHistory = () => {
       spacing={2}
       className={styles.container}
     >
-      <Header title="Histórico" />
+      <HistoryOptions />
       <div className={styles.listContainer}>
         {state.getHistoryRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
@@ -35,7 +36,7 @@ const ListHistory = () => {
               {histories.map((history) => {
                 return (
                   <div key={history.id} className={styles.listItem}>
-                    <SongItem song={history.song}/>
+                    <SongItem song={history.song} />
                   </div>
                 );
               })}
