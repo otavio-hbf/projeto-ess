@@ -2,12 +2,6 @@
   padding: 16px
 }
 
-.title {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
 .listContainer {
   display: flex;
   flex-direction: column;
