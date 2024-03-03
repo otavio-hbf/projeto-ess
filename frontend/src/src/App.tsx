@@ -1,36 +1,50 @@
-import { Container, Grid, Sheet } from "@mui/joy";
+import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
 import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
-import StatisticsPage from "./app/home/pages/Statistics";
+import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Navbar from "./shared/components/Navbar";
+import UserConfigPage from "./app/home/pages/UserConfigPage";
+import PlayBar from "./shared/components/PlayBar";
+import SongModel from "./app/home/models/SongModel";
 
 const AppWrapper = () => {
+  // Replace this with the song you want to show playing.
+  const fakeSong = new SongModel({
+    artist: "The Beatles",
+    title: "Hey Jude",
+    duration: 300,
+    genre: "Rock",
+    id: "1",
+    times_ever_played: 32,
+  });
+
   return (
-    <Container maxWidth={"xl"} sx={{ height: "100vh", p: 8 }}>
+    <Container maxWidth={"xl"} sx={{ height: "90vh", p: 8 }}>
       <Sheet
         sx={{
           height: "100%",
           borderRadius: 16,
-          boxShadow: "rgb(144 4 188 / 30%) 0px 0px 0px 8px",
+          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
         }}
       >
         <Grid
           container
           direction="row"
-          sx={{ height: "100%" }}
+          sx={{ height: "100%", borderRadius: 16 }}
           className={styles.containers}
         >
           <Grid xs={"auto"} sx={{ p: 1 }}>
             <Sheet
               sx={{
                 height: "100%",
-                background: "#1e1e1e",
+                background: "#780e6fb8",
                 borderRadius: 16,
                 py: 4,
-                px: 3,
+                px: 2,
+                border: "2px solid #9e0591",
               }}
             >
               <Navbar />
@@ -40,6 +54,16 @@ const AppWrapper = () => {
             <Outlet />
           </Grid>
         </Grid>
+      </Sheet>
+      <Sheet
+        sx={{
+          mt: 5,
+          borderRadius: 16,
+          // height: "64px",
+          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
+        }}
+      >
+        <PlayBar song={fakeSong} progress={80} />
       </Sheet>
     </Container>
   );
@@ -72,8 +96,12 @@ const router = createBrowserRouter([
         Component: ListHistory,
       },
       {
-        path: "/statistics",
-        Component: StatisticsPage,
+        path: "/most-played",
+        Component: MostPlayedPage,
+      },
+      {
+        path: "/my-profile",
+        Component: UserConfigPage,
       },
     ],
   },

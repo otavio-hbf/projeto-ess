@@ -1,20 +1,58 @@
-import { mdiHistory, mdiHomeOutline, mdiLambda, mdiMusicNote } from "@mdi/js";
+import {
+  mdiAccount,
+  mdiAccountOutline,
+  mdiHistory,
+  mdiHomeOutline,
+  mdiLambda,
+  mdiMusicNote,
+  mdiStar,
+  mdiStarOutline,
+  mdiStarThreePointsOutline,
+} from "@mdi/js";
 import Icon from "@mdi/react";
-import { Stack } from "@mui/joy";
-import { Link } from "react-router-dom";
+import { Sheet, Stack, Tooltip } from "@mui/joy";
+import { Link, Location, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const location = useLocation();
+
   return (
     <Stack
       direction="column"
       justifyContent="center"
       alignItems="center"
-      spacing={8}
+      spacing={6}
     >
-      <NavItem path="/" icon={mdiHomeOutline} />
-      <NavItem path="/tests" icon={mdiMusicNote} />
-      <NavItem path="/history" icon={mdiHistory} />
-      <NavItem path="/statistics" icon={mdiLambda} />
+      <NavItem
+        location={location}
+        title="Home"
+        path="/"
+        icon={mdiHomeOutline}
+      />
+      <NavItem
+        location={location}
+        title="Tests"
+        path="/tests"
+        icon={mdiMusicNote}
+      />
+      <NavItem
+        location={location}
+        title="History"
+        path="/history"
+        icon={mdiHistory}
+      />
+      <NavItem
+        location={location}
+        title="Most Played"
+        path="/most-played"
+        icon={mdiStarOutline}
+      />
+      <NavItem
+        location={location}
+        title="My Profile"
+        path="/my-profile"
+        icon={mdiAccountOutline}
+      />
     </Stack>
   );
 };
@@ -22,12 +60,35 @@ const Navbar = () => {
 interface NavItemProps {
   path: string;
   icon: string;
+  title: string;
+  location: Location<any>;
 }
 
 const NavItem = (props: NavItemProps) => {
+  const isInRoute = props.path == props.location.pathname;
   return (
     <Link to={props.path}>
-      <Icon path={props.icon} size={1.5} color="white" />
+      <Tooltip
+        title={props.title}
+        variant="outlined"
+        size="lg"
+        arrow
+        placement="right"
+      >
+        <Sheet
+          sx={{
+            background: isInRoute ? "#5f255a" : "#331030",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 1,
+            borderRadius: 8,
+            border: isInRoute ? "2px solid #b03da6" : "1px solid #54134e",
+          }}
+        >
+          <Icon path={props.icon} size={1.2} color="white" />
+        </Sheet>
+      </Tooltip>
     </Link>
   );
 };

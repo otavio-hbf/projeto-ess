@@ -1,12 +1,32 @@
-import { Sheet, Typography } from "@mui/joy";
+import { Stack, Typography } from "@mui/joy";
 
 interface HeaderProps {
   title: string;
+  children?: any;
 }
-export const Header = (props) => {
+
+const Header = ({ children, title }: HeaderProps) => {
   return (
-    <Sheet sx={{ background: "#212121", p: 4, borderRadius: 16 }}>
-      <Typography level="h2">{props.title}</Typography>
-    </Sheet>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      spacing={4}
+      sx={{ borderRadius: 8 }}
+    >
+      <Typography level="h2">{title}</Typography>
+
+      <Stack
+        direction="row"
+        justifyContent="end"
+        alignItems="center"
+        spacing={4}
+        sx={{ borderRadius: 8, p: 1 }}
+      >
+        {children}
+      </Stack>
+    </Stack>
   );
 };
+
+export default Header;

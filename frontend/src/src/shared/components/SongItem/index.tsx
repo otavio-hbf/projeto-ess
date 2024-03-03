@@ -3,12 +3,18 @@ import Icon from "@mdi/react";
 import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
 import SongModel from "../../../app/home/models/SongModel";
 import { formatTime } from "../../utils/timeUtils";
+import { HistoryContext } from "../../../app/home/context/HistoryContext";
+import { useContext } from "react";
 
 interface SongItemProps {
   song?: SongModel;
+  uid: string;
+  history_id: string;
 }
 
-const SongItem = ({ song }: SongItemProps) => {
+const SongItem = ({ song, history_id, uid }: SongItemProps) => {
+  const { service, state } = useContext(HistoryContext);
+
   return (
     <>
       <Stack
@@ -28,11 +34,11 @@ const SongItem = ({ song }: SongItemProps) => {
         <Stack direction={"row"} alignItems={"center"} spacing={4}>
           <Sheet sx={{ pl: 8 }}>
             <Typography level="body-sm">
-              {formatTime(parseInt(song?.duration))}
+              {formatTime(song?.duration)}
             </Typography>
             <Typography level="body-sm">{song?.genre}</Typography>
           </Sheet>
-          <IconButton>
+          <IconButton onClick={() => service.deleteHistory(history_id, uid)}>
             <Icon path={mdiClose} size={1} color="white" />
           </IconButton>
         </Stack>
