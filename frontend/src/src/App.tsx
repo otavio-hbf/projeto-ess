@@ -1,4 +1,4 @@
-import { Container, Grid, Sheet } from "@mui/joy";
+import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
 import CreateTest from "./app/home/pages/CreateTest";
@@ -7,10 +7,22 @@ import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Navbar from "./shared/components/Navbar";
 import UserConfigPage from "./app/home/pages/UserConfigPage";
+import PlayBar from "./shared/components/PlayBar";
+import SongModel from "./app/home/models/SongModel";
 
 const AppWrapper = () => {
+  // Replace this with the song you want to show playing.
+  const fakeSong = new SongModel({
+    artist: "The Beatles",
+    title: "Hey Jude",
+    duration: 300,
+    genre: "Rock",
+    id: "1",
+    times_ever_played: 32,
+  });
+
   return (
-    <Container maxWidth={"xl"} sx={{ height: "100vh", p: 8 }}>
+    <Container maxWidth={"xl"} sx={{ height: "90vh", p: 8 }}>
       <Sheet
         sx={{
           height: "100%",
@@ -42,6 +54,16 @@ const AppWrapper = () => {
             <Outlet />
           </Grid>
         </Grid>
+      </Sheet>
+      <Sheet
+        sx={{
+          mt: 5,
+          borderRadius: 16,
+          // height: "64px",
+          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
+        }}
+      >
+        <PlayBar song={fakeSong} progress={80} />
       </Sheet>
     </Container>
   );
