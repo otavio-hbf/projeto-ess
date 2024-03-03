@@ -5,7 +5,7 @@ import { Link, Location, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
-  
+
   return (
     <Stack
       direction="column"
@@ -13,10 +13,30 @@ const Navbar = () => {
       alignItems="center"
       spacing={6}
     >
-      <NavItem location={location} title="Home" path="/" icon={mdiHomeOutline} />
-      <NavItem location={location} title="Tests" path="/tests" icon={mdiMusicNote} />
-      <NavItem location={location} title="History" path="/history" icon={mdiHistory} />
-      <NavItem location={location} title="Statistics" path="/statistics" icon={mdiLambda} />
+      <NavItem
+        location={location}
+        title="Home"
+        path="/"
+        icon={mdiHomeOutline}
+      />
+      <NavItem
+        location={location}
+        title="Tests"
+        path="/tests"
+        icon={mdiMusicNote}
+      />
+      <NavItem
+        location={location}
+        title="History"
+        path="/history"
+        icon={mdiHistory}
+      />
+      <NavItem
+        location={location}
+        title="Statistics"
+        path="/statistics"
+        icon={mdiLambda}
+      />
     </Stack>
   );
 };
@@ -41,7 +61,7 @@ const NavItem = (props: NavItemProps) => {
       >
         <Sheet
           sx={{
-            background: isInRoute ? "#54104e" : "#331030" ,
+            background: isInRoute ? "#54104e" : "#331030",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

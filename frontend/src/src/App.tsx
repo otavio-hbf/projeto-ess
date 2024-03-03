@@ -31,7 +31,7 @@ const AppWrapper = () => {
                 borderRadius: 16,
                 py: 4,
                 px: 2,
-                border: "2px solid #331030"
+                border: "2px solid #331030",
               }}
             >
               <Navbar />
