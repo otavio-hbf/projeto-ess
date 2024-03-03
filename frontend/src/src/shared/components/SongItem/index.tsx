@@ -28,7 +28,7 @@ const SongItem = ({ song }: SongItemProps) => {
         <Stack direction={"row"} alignItems={"center"} spacing={4}>
           <Sheet sx={{ pl: 8 }}>
             <Typography level="body-sm">
-              {formatTime(parseInt(song?.duration))}
+              {formatTime(song?.duration)}
             </Typography>
             <Typography level="body-sm">{song?.genre}</Typography>
           </Sheet>
