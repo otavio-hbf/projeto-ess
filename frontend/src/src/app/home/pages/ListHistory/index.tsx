@@ -36,7 +36,11 @@ const ListHistory = () => {
               {histories.map((history) => {
                 return (
                   <div key={history.id} className={styles.listItem}>
-                    <SongItem song={history.song} />
+                    <SongItem
+                      song={history.song}
+                      history_id={history.id}
+                      uid="2"
+                    />
                   </div>
                 );
               })}
