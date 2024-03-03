@@ -1,14 +1,14 @@
-import { Stack } from "@mui/joy";
 import { useContext, useEffect } from "react";
-import SongItem from "../../../../shared/components/SongItem";
-import HistoryOptions from "../../components/HistoryOptions";
-import { HistoryContext } from "../../context/HistoryContext";
 import styles from "./index.module.css";
+import { Link } from "react-router-dom";
+import { HistoryContext } from "../../context/HistoryContext";
+import { Stack } from "@mui/joy";
+import SongItem from "../../../../shared/components/SongItem";
 
 /**
  * Renders a list of songs.
  */
-const ListHistory = () => {
+const MostPlayedPage = () => {
   const { service, state } = useContext(HistoryContext);
 
   useEffect(() => {
@@ -23,7 +23,6 @@ const ListHistory = () => {
       spacing={2}
       className={styles.container}
     >
-      <HistoryOptions />
       <div className={styles.listContainer}>
         {state.getHistoryRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
@@ -50,4 +49,4 @@ const ListHistory = () => {
   );
 };
 
-export default ListHistory;
+export default MostPlayedPage;

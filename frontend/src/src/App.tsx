@@ -4,7 +4,7 @@ import styles from "./app.module.css";
 import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
-import StatisticsPage from "./app/home/pages/Statistics";
+import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Navbar from "./shared/components/Navbar";
 
 const AppWrapper = () => {
@@ -74,7 +74,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/statistics",
-        Component: StatisticsPage,
+        Component: MostPlayedPage,
       },
     ],
   },
