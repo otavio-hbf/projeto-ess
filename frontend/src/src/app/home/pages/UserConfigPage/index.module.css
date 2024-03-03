@@ -1,0 +1,25 @@
+.container {
+    padding: 16px
+  }
+  
+  .listContainer {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 800px;
+    gap: 16px;
+  }
+  
+  .listItem {
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #c196bd;
+    background: #2d0029b8;
+    border-radius: 8px;
+  }
+  
+  .listItemText {
+    font-size: 1.5rem;
+  }
+  

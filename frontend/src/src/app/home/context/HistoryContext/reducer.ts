@@ -45,6 +45,16 @@ const historyStateReducer = (
         ...state,
         getMostPlayedRequestStatus: action.payload,
       };
+    case HistoryStateActionType.CHANGE_RS_TOGGLE_TRACKING:
+      return {
+        ...state,
+        toggleTrackingRequestStatus: action.payload,
+      };
+    case HistoryStateActionType.CHANGE_RS_GET_USER:
+      return {
+        ...state,
+        getUserRequestStatus: action.payload,
+      };
 
     default:
       return state;

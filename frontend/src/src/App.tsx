@@ -6,6 +6,7 @@ import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Navbar from "./shared/components/Navbar";
+import UserConfigPage from "./app/home/pages/UserConfigPage";
 
 const AppWrapper = () => {
   return (
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: "/most-played",
         Component: MostPlayedPage,
+      },
+      {
+        path: "/my-profile",
+        Component: UserConfigPage,
       },
     ],
   },

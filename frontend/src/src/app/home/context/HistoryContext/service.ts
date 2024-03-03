@@ -12,6 +12,8 @@ import StatisticsModel from "../../models/StatisticsModel";
 import { HistorySchema } from "../../forms/HistoryForm";
 import MostPlayedModel from "../../models/MostPlayedModel";
 import { log } from "console";
+import { UserSchema } from "../../forms/UserSchema";
+import UserModel from "../../models/UserModel";
 
 export default class HistoryService {
   private apiService: ApiService;
@@ -52,6 +54,71 @@ export default class HistoryService {
       onFailure: (error) => {
         this.dispatch({
           type: HistoryStateActionType.CHANGE_RS_CREATE_HISTORY,
+          payload: RequestStatus.failure(error),
+        });
+      },
+    });
+  }
+
+  async getUser(uid: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: HistoryStateActionType.CHANGE_RS_GET_USER,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.get(`/users/${uid}`);
+
+      result.handle({
+        onSuccess: (response) => {
+          const user = new UserModel(response.data);
+
+          this.dispatch({
+            type: HistoryStateActionType.CHANGE_RS_GET_USER,
+            payload: RequestStatus.success(user),
+          });
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: HistoryStateActionType.CHANGE_RS_GET_USER,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: HistoryStateActionType.CHANGE_RS_GET_USER,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
+  async toggleHistoryTracking(userSchema: UserSchema): Promise<void> {
+    this.dispatch({
+      type: HistoryStateActionType.CHANGE_RS_TOGGLE_TRACKING,
+      payload: RequestStatus.loading(),
+    });
+
+    userSchema.history_tracking = !userSchema.history_tracking;
+
+    const result = await this.apiService.update(
+      `/users/${userSchema.id}`,
+      userSchema,
+    );
+
+    result.handle({
+      onSuccess: (response) => {
+        this.dispatch({
+          type: HistoryStateActionType.CHANGE_RS_TOGGLE_TRACKING,
+          payload: RequestStatus.success(response),
+        });
+
+        // refetch user
+        this.getUser(userSchema.id);
+      },
+      onFailure: (error) => {
+        this.dispatch({
+          type: HistoryStateActionType.CHANGE_RS_TOGGLE_TRACKING,
           payload: RequestStatus.failure(error),
         });
       },

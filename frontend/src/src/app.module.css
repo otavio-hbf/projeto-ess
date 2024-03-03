@@ -13,8 +13,8 @@
 .containers {
   background-color: #000000;
   opacity: 1;
-  background-image: radial-gradient(#3d2739 0.5px, transparent 0.5px),
-    radial-gradient(#2f232d 0.5px, #000000 0.5px);
+  background-image: radial-gradient(#8b4f80 1px, transparent 1px),
+  radial-gradient(#713567 1px, #1f1f1f 1px);
   background-size: 20px 20px;
   background-position:
     0 0,

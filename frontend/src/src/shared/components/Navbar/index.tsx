@@ -1,4 +1,6 @@
 import {
+  mdiAccount,
+  mdiAccountOutline,
   mdiHistory,
   mdiHomeOutline,
   mdiLambda,
@@ -44,6 +46,12 @@ const Navbar = () => {
         title="Most Played"
         path="/most-played"
         icon={mdiStarOutline}
+      />
+      <NavItem
+        location={location}
+        title="My Profile"
+        path="/my-profile"
+        icon={mdiAccountOutline}
       />
     </Stack>
   );

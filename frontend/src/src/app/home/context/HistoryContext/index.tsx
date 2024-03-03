@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useReducer, useMemo } from "react";
-import { HistoryState as HistoryState } from "./types";
+import { HistoryState as HistoryState, HistoryStateAction } from "./types";
 import HistoryService from "./service";
 import HistoryStateReducer from "./reducer";
 import { ApiService } from "../../../../shared/services/ApiService";
@@ -47,6 +47,8 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     deleteHistoryRequestStatus: RequestStatus.idle(),
     clearHistoryRequestStatus: RequestStatus.idle(),
     getMostPlayedRequestStatus: RequestStatus.idle(),
+    toggleTrackingRequestStatus: RequestStatus.idle(),
+    getUserRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);
