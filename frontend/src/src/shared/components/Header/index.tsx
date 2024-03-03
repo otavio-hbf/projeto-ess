@@ -4,5 +4,5 @@ interface HeaderProps {
   title: string;
 }
 export const Header = (props) => {
-  return <Typography level="h1">{props.title}</Typography>;
+  return <Typography level="h2">{props.title}</Typography>;
 };

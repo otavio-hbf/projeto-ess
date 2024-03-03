@@ -2,10 +2,8 @@ import { useContext, useEffect } from "react";
 import styles from "./index.module.css";
 import { Link } from "react-router-dom";
 import { HistoryContext } from "../../context/HistoryContext";
-import SongTable from "../../components/SongTable";
 import { Container, Sheet, Stack, Typography } from "@mui/joy";
 import { Header } from "../../../../shared/components/Header";
-import { MusicNote, MusicNoteRounded } from "@mui/icons-material";
 import Icon from "@mdi/react";
 import { mdiMusicNote } from "@mdi/js";
 
@@ -69,9 +67,6 @@ const ListHistory = () => {
         })}
       </div>
       <br />
-      <Link to="/" replace>
-        Página Inicial
-      </Link>
     </Stack>
   );
 };
