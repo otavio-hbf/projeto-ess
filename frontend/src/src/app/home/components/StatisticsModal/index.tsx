@@ -13,7 +13,7 @@ const StatisticsModal = (props: StatisticsModalProps) => {
 
   useEffect(() => {
     service.getStatistics("2");
-  }, [service]);
+  }, [service, props.open]);
 
   return (
     <Modal

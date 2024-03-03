@@ -9,6 +9,7 @@ import { TestFormType } from "../../forms/TestForm";
 import { AppUnknownError } from "../../../../shared/errors/app-error";
 import HistoryModel from "../../models/HistoryModel";
 import StatisticsModel from "../../models/StatisticsModel";
+import { HistorySchema } from "../../forms/HistoryForm";
 
 export default class HistoryService {
   private apiService: ApiService;
@@ -25,13 +26,16 @@ export default class HistoryService {
     this.dispatch = dispatch;
   }
 
-  async createHistory(testForm: TestFormType): Promise<void> {
+  async createHistory(
+    historySchema: HistorySchema,
+    uid: string,
+  ): Promise<void> {
     this.dispatch({
       type: HistoryStateActionType.CHANGE_RS_CREATE_HISTORY,
       payload: RequestStatus.loading(),
     });
 
-    const result = await this.apiService.post("/history", testForm);
+    const result = await this.apiService.post("/history", historySchema);
 
     result.handle({
       onSuccess: (response) => {
@@ -39,6 +43,9 @@ export default class HistoryService {
           type: HistoryStateActionType.CHANGE_RS_CREATE_HISTORY,
           payload: RequestStatus.success(response),
         });
+
+        // refetch history
+        this.getHistory(uid);
       },
       onFailure: (error) => {
         this.dispatch({
@@ -131,6 +138,9 @@ export default class HistoryService {
           type: HistoryStateActionType.CHANGE_RS_CLEAR_HISTORY,
           payload: RequestStatus.success(response),
         });
+
+        // refetch history
+        this.getHistory(uid);
       },
       onFailure: (error) => {
         this.dispatch({
@@ -141,7 +151,7 @@ export default class HistoryService {
     });
   }
 
-  async deleteHistory(history_id: string): Promise<void> {
+  async deleteHistory(history_id: string, uid: string): Promise<void> {
     this.dispatch({
       type: HistoryStateActionType.CHANGE_RS_DELETE_HISTORY,
       payload: RequestStatus.loading(),
@@ -155,6 +165,9 @@ export default class HistoryService {
           type: HistoryStateActionType.CHANGE_RS_DELETE_HISTORY,
           payload: RequestStatus.success(response),
         });
+
+        // refetch history
+        this.getHistory(uid);
       },
       onFailure: (error) => {
         this.dispatch({

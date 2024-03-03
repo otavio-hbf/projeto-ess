@@ -5,6 +5,9 @@ import HistoryStateReducer from "./reducer";
 import { ApiService } from "../../../../shared/services/ApiService";
 import RequestStatus from "../../../../shared/types/request-status";
 import usePrevious from "../../../../shared/hooks/usePrevious";
+import { get } from "http";
+import { d } from "vitest/dist/types-dea83b3d.js";
+import { clear } from "console";
 
 /**
  * Interface for the HistoryContext properties.
@@ -41,6 +44,9 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     createHistoryRequestStatus: RequestStatus.idle(),
     getHistoryRequestStatus: RequestStatus.idle(),
     getStatisticsRequestStatus: RequestStatus.idle(),
+    getMostPlayedRequestStatus: RequestStatus.idle(),
+    deleteHistoryRequestStatus: RequestStatus.idle(),
+    clearHistoryRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);

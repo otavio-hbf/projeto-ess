@@ -1,11 +1,13 @@
-import { mdiLambda, mdiSigma, mdiTrashCanOutline } from "@mdi/js";
+import { mdiBug, mdiPacMan, mdiSigma, mdiTrashCanOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Button, Stack, Typography } from "@mui/joy";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import StatisticsModal from "../StatisticsModal";
+import { HistoryContext } from "../../context/HistoryContext";
 
 const HistoryOptions = () => {
   const [statisticsOpen, setStatisticsOpen] = useState<boolean>(false);
+  const { service, state } = useContext(HistoryContext);
 
   return (
     <>
@@ -26,6 +28,19 @@ const HistoryOptions = () => {
           sx={{ borderRadius: 8, p: 1 }}
         >
           <Button
+            onClick={(evt) => {
+              service.createHistory(
+                { user_id: "2", song_id: ((evt.clientX % 10) + 1).toString() },
+                "2",
+              );
+            }}
+            variant="outlined"
+            color="warning"
+            startDecorator={<Icon path={mdiBug} size={1} />}
+          >
+            Add fake song
+          </Button>
+          <Button
             onClick={() => setStatisticsOpen(true)}
             variant="outlined"
             color="neutral"
@@ -35,7 +50,7 @@ const HistoryOptions = () => {
           </Button>
 
           <Button
-            onClick={function () {}}
+            onClick={() => service.clearHistory("2")}
             variant="outlined"
             color="danger"
             startDecorator={<Icon path={mdiTrashCanOutline} size={1} />}
