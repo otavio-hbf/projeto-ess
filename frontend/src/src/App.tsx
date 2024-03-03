@@ -14,24 +14,24 @@ const AppWrapper = () => {
         sx={{
           height: "100%",
           borderRadius: 16,
-          boxShadow: "rgb(144 4 188 / 30%) 0px 0px 0px 8px",
+          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
         }}
       >
         <Grid
           container
           direction="row"
-          sx={{ height: "100%" }}
+          sx={{ height: "100%", borderRadius: 16 }}
           className={styles.containers}
         >
           <Grid xs={"auto"} sx={{ p: 1 }}>
             <Sheet
               sx={{
                 height: "100%",
-                background: "#2d0029b8",
+                background: "#780e6fb8",
                 borderRadius: 16,
                 py: 4,
                 px: 2,
-                border: "2px solid #331030",
+                border: "2px solid #9e0591",
               }}
             >
               <Navbar />
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
         Component: ListHistory,
       },
       {
-        path: "/statistics",
+        path: "/most-played",
         Component: MostPlayedPage,
       },
     ],

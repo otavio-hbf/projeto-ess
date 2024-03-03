@@ -13,7 +13,7 @@ import {
 const historyStateReducer = (
   state: HistoryState,
   action: HistoryStateAction,
-) => {
+): HistoryState => {
   switch (action.type) {
     case HistoryStateActionType.CHANGE_RS_CREATE_HISTORY:
       return {
@@ -29,6 +29,21 @@ const historyStateReducer = (
       return {
         ...state,
         getStatisticsRequestStatus: action.payload,
+      };
+    case HistoryStateActionType.CHANGE_RS_CLEAR_HISTORY:
+      return {
+        ...state,
+        clearHistoryRequestStatus: action.payload,
+      };
+    case HistoryStateActionType.CHANGE_RS_DELETE_HISTORY:
+      return {
+        ...state,
+        deleteHistoryRequestStatus: action.payload,
+      };
+    case HistoryStateActionType.CHANGE_RS_GET_MOST_PLAYED:
+      return {
+        ...state,
+        getMostPlayedRequestStatus: action.payload,
       };
 
     default:

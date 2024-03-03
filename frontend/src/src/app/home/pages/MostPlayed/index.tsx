@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
-import styles from "./index.module.css";
-import { Link } from "react-router-dom";
-import { HistoryContext } from "../../context/HistoryContext";
 import { Stack } from "@mui/joy";
-import SongItem from "../../../../shared/components/SongItem";
+import { useContext, useEffect } from "react";
+import MostPlayedItem from "../../../../shared/components/MostPlayedItem";
+import MostPlayedHeader from "../../components/MostPlayedHeader";
+import { HistoryContext } from "../../context/HistoryContext";
+import styles from "./index.module.css";
 
 /**
  * Renders a list of songs.
@@ -12,7 +12,7 @@ const MostPlayedPage = () => {
   const { service, state } = useContext(HistoryContext);
 
   useEffect(() => {
-    service.getHistory("2");
+    service.getMostPlayed("2");
   }, [service]);
 
   return (
@@ -23,20 +23,17 @@ const MostPlayedPage = () => {
       spacing={2}
       className={styles.container}
     >
+      <MostPlayedHeader />
       <div className={styles.listContainer}>
-        {state.getHistoryRequestStatus.maybeMap({
+        {state.getMostPlayedRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar o histórico!</span>,
-          succeeded: (histories) => (
+          succeeded: (songs) => (
             <>
-              {histories.map((history) => {
+              {songs.map((song) => {
                 return (
-                  <div key={history.id} className={styles.listItem}>
-                    <SongItem
-                      song={history.song}
-                      history_id={history.id}
-                      uid="2"
-                    />
+                  <div key={song.song_id} className={styles.listItem}>
+                    <MostPlayedItem item={song} />
                   </div>
                 );
               })}
@@ -44,7 +41,6 @@ const MostPlayedPage = () => {
           ),
         })}
       </div>
-      <br />
     </Stack>
   );
 };

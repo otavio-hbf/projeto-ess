@@ -10,6 +10,8 @@ import { AppUnknownError } from "../../../../shared/errors/app-error";
 import HistoryModel from "../../models/HistoryModel";
 import StatisticsModel from "../../models/StatisticsModel";
 import { HistorySchema } from "../../forms/HistoryForm";
+import MostPlayedModel from "../../models/MostPlayedModel";
+import { log } from "console";
 
 export default class HistoryService {
   private apiService: ApiService;
@@ -190,8 +192,10 @@ export default class HistoryService {
       result.handle({
         onSuccess: (response) => {
           const songs = response.data.map(
-            (song: any) => new HistoryModel(song),
+            (song: any) => new MostPlayedModel(song),
           );
+
+          console.log("got songs: ", songs);
 
           this.dispatch({
             type: HistoryStateActionType.CHANGE_RS_GET_MOST_PLAYED,

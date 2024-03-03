@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/joy";
 
 interface HeaderProps {
   title: string;
-  children: any;
+  children?: any;
 }
 
 const Header = ({ children, title }: HeaderProps) => {

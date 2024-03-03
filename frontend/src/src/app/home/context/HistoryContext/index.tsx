@@ -44,9 +44,9 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     createHistoryRequestStatus: RequestStatus.idle(),
     getHistoryRequestStatus: RequestStatus.idle(),
     getStatisticsRequestStatus: RequestStatus.idle(),
-    getMostPlayedRequestStatus: RequestStatus.idle(),
     deleteHistoryRequestStatus: RequestStatus.idle(),
     clearHistoryRequestStatus: RequestStatus.idle(),
+    getMostPlayedRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);

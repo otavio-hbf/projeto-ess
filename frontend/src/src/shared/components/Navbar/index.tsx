@@ -1,4 +1,12 @@
-import { mdiHistory, mdiHomeOutline, mdiLambda, mdiMusicNote } from "@mdi/js";
+import {
+  mdiHistory,
+  mdiHomeOutline,
+  mdiLambda,
+  mdiMusicNote,
+  mdiStar,
+  mdiStarOutline,
+  mdiStarThreePointsOutline,
+} from "@mdi/js";
 import Icon from "@mdi/react";
 import { Sheet, Stack, Tooltip } from "@mui/joy";
 import { Link, Location, useLocation } from "react-router-dom";
@@ -33,9 +41,9 @@ const Navbar = () => {
       />
       <NavItem
         location={location}
-        title="Statistics"
-        path="/statistics"
-        icon={mdiLambda}
+        title="Most Played"
+        path="/most-played"
+        icon={mdiStarOutline}
       />
     </Stack>
   );
@@ -61,13 +69,13 @@ const NavItem = (props: NavItemProps) => {
       >
         <Sheet
           sx={{
-            background: isInRoute ? "#54104e" : "#331030",
+            background: isInRoute ? "#5f255a" : "#331030",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             p: 1,
             borderRadius: 8,
-            border: isInRoute ? "1px solid #a41f99" : "1px solid #54134e",
+            border: isInRoute ? "2px solid #b03da6" : "1px solid #54134e",
           }}
         >
           <Icon path={props.icon} size={1.2} color="white" />
