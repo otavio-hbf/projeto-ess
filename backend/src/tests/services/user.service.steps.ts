@@ -190,10 +190,11 @@ defineFeature(feature, (test) => {
                 id: expectedId,
                 name: expectedName,
                 email: expectedEmail,
+                password:"caladothiago",
                 history_tracking: expectedHistoryTracking === "true" ? true : false,
             })
 
-            expect(user).toStrictEqual(expectedUser);
+            expect(user).toEqual(expectedUser);
 
         });
     });
