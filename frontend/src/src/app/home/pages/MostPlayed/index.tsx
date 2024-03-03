@@ -30,13 +30,15 @@ const MostPlayedPage = () => {
           failed: () => <span>Erro ao carregar o histórico!</span>,
           succeeded: (songs) => (
             <>
-              {songs.map((song) => {
-                return (
-                  <div key={song.song_id} className={styles.listItem}>
-                    <MostPlayedItem item={song} />
-                  </div>
-                );
-              })}
+              {songs.length > 0
+                ? songs.map((song) => {
+                    return (
+                      <div key={song.song_id} className={styles.listItem}>
+                        <MostPlayedItem item={song} />
+                      </div>
+                    );
+                  })
+                : "Nenhuma música encontrada!"}
             </>
           ),
         })}

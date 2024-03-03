@@ -55,17 +55,21 @@ const StatisticsModal = (props: StatisticsModalProps) => {
             failed: () => <span>Erro ao carregar as estatísticas!</span>,
             succeeded: (stats) => (
               <>
-                <ul>
-                  <li>
-                    <b>Most played song:</b> {stats.most_played_song}
-                  </li>
-                  <li>
-                    <b>Most played genre:</b> {stats.most_played_genre}
-                  </li>
-                  <li>
-                    <b>Time played:</b> {formatTime(stats.time_played)}
-                  </li>
-                </ul>
+                {stats.time_played === 0 ? (
+                  "Nenhuma música encontrada!"
+                ) : (
+                  <ul>
+                    <li>
+                      <b>Most played song:</b> {stats.most_played_song}
+                    </li>
+                    <li>
+                      <b>Most played genre:</b> {stats.most_played_genre}
+                    </li>
+                    <li>
+                      <b>Time played:</b> {formatTime(stats.time_played)}
+                    </li>
+                  </ul>
+                )}
               </>
             ),
           })}
