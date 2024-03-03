@@ -1,6 +1,4 @@
-import BaseModel from "./base.model";
-import SongModel from "./song.model";
-import UserModel from "./user.model";
+import SongModel from "./SongModel";
 
 export default class MostPlayedModel {
   song_id: string;
