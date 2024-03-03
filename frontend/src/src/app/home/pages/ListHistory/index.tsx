@@ -1,11 +1,11 @@
-import { useContext, useEffect } from "react";
-import styles from "./index.module.css";
-import { Link } from "react-router-dom";
-import { HistoryContext } from "../../context/HistoryContext";
-import { Container, Sheet, Stack, Typography } from "@mui/joy";
-import { Header } from "../../../../shared/components/Header";
-import Icon from "@mdi/react";
 import { mdiMusicNote } from "@mdi/js";
+import Icon from "@mdi/react";
+import { Sheet, Stack, Typography } from "@mui/joy";
+import { useContext, useEffect } from "react";
+import { Header } from "../../../../shared/components/Header";
+import { HistoryContext } from "../../context/HistoryContext";
+import styles from "./index.module.css";
+import SongItem from "../../../../shared/components/SongItem";
 
 /**
  * Renders a list of songs.
@@ -30,35 +30,12 @@ const ListHistory = () => {
         {state.getHistoryRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar o histórico!</span>,
-          succeeded: (tests) => (
+          succeeded: (histories) => (
             <>
-              {tests.map((test) => {
+              {histories.map((history) => {
                 return (
-                  <div key={test.id} className={styles.listItem}>
-                    <Stack
-                      direction={"row"}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Sheet sx={{ p: 1 }}>
-                        <Icon path={mdiMusicNote} size={1} color="white" />
-                      </Sheet>
-                      <Stack sx={{ pl: 1 }}>
-                        <Typography level="body-sm">
-                          {test.song?.artist}
-                        </Typography>
-                        <Typography level="title-md">
-                          {test.song?.title}
-                        </Typography>
-                      </Stack>
-                      <Sheet sx={{ pl: 8 }}>
-                        <Typography level="body-sm">
-                          {test.song?.duration} segundos
-                        </Typography>
-                        <Typography level="body-sm">
-                          {test.song?.genre}
-                        </Typography>
-                      </Sheet>
-                    </Stack>
+                  <div key={history.id} className={styles.listItem}>
+                    <SongItem song={history.song}/>
                   </div>
                 );
               })}
