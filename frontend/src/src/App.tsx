@@ -27,10 +27,11 @@ const AppWrapper = () => {
             <Sheet
               sx={{
                 height: "100%",
-                background: "#1e1e1e",
+                background: "#2d0029b8",
                 borderRadius: 16,
                 py: 4,
-                px: 3,
+                px: 2,
+                border: "2px solid #331030"
               }}
             >
               <Navbar />
