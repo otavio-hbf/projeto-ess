@@ -30,9 +30,7 @@ export default class PlaylistService {
         payload: RequestStatus.loading(),
       });
 
-      const result = await this.apiService.get(
-        `/playlists/${playlistId}`,
-      );
+      const result = await this.apiService.get(`/playlists/${playlistId}`);
 
       result.handle({
         onSuccess: (response) => {

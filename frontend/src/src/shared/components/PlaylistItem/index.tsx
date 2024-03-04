@@ -34,10 +34,10 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
             <Link>
-            <IconButton>
-              <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
-            </IconButton>
-          </Link>
+              <IconButton>
+                <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
+              </IconButton>
+            </Link>
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
