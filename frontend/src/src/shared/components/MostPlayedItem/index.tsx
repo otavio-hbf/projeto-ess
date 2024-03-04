@@ -37,7 +37,7 @@ const MostPlayedItem = ({ item }: MostPlayedItemProps) => {
             <Typography level="body-sm">{item?.song?.genre}</Typography>
           </Sheet>
           <Sheet sx={{ pl: 8, pr: 2 }}>
-            <Typography level="body-sm">
+            <Typography level="body-sm" data-cy={"times-played"}>
               played {item?.times_played} times
             </Typography>
           </Sheet>

@@ -8,6 +8,7 @@ import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Feed from "./app/home/pages/Feed";
 import Navbar from "./shared/components/Navbar";
 import UserConfigPage from "./app/home/pages/UserConfigPage";
+import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 
@@ -89,8 +90,8 @@ const router = createBrowserRouter([
         Component: CreateTest,
       },
       {
-        path: "/tests",
-        Component: ListTests,
+        path: "/MyPlaylists",
+        Component: UserPlaylists,
       },
       {
         path: "/history",

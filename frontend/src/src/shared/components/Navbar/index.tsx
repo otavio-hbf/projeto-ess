@@ -31,8 +31,8 @@ const Navbar = () => {
       />
       <NavItem
         location={location}
-        title="Tests"
-        path="/tests"
+        title="My Playlists"
+        path="/MyPlaylists"
         icon={mdiMusicNote}
       />
       <NavItem
