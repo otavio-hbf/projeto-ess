@@ -8,8 +8,8 @@ import { useContext } from "react";
 
 interface SongItemProps {
   song?: SongModel;
-  uid: string;
-  history_id: string;
+  uid?: string;
+  history_id?: string;
 }
 
 const SongItem = ({ song, history_id, uid }: SongItemProps) => {
@@ -38,9 +38,12 @@ const SongItem = ({ song, history_id, uid }: SongItemProps) => {
             </Typography>
             <Typography level="body-sm">{song?.genre}</Typography>
           </Sheet>
-          <IconButton onClick={() => service.deleteHistory(history_id, uid)}>
-            <Icon path={mdiClose} size={1} color="white" />
-          </IconButton>
+          {/* Only show delete button if uid and history_id args are passed */}
+          {uid && history_id ? (
+            <IconButton onClick={() => service.deleteHistory(history_id, uid)}>
+              <Icon path={mdiClose} size={1} color="white" />
+            </IconButton>
+          ) : null}
         </Stack>
       </Stack>
     </>
