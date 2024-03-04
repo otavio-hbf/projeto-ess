@@ -1,22 +1,18 @@
 import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 
 // Scenario: User turns off tracking of play history
-Given(
-  "the user is logged in the {string} page",
-  (user: string, password: string) => {
-    cy.visit("/my-profile");
-  }
-);
+Given("the user is in the {string} page", (page: string) => {
+  cy.visit(page);
+});
 
 Given(
   "the {string} button is set to {string}",
-  (button: string, value: string) => {
-    // check if the button is set to value. if not, toggle it
-    cy.getDataCy(button).then(($button) => {
-      if ($button.prop("checked") != value) {
-        cy.getDataCy(button).click();
-      }
-    });
+  (switchb: string, value: string) => {
+    if (value == "true") {
+      cy.get('[data-cy="toggle-tracking"] input[type="checkbox"]').check();
+    } else {
+      cy.get('[data-cy="toggle-tracking"] input[type="checkbox"]').uncheck();
+    }
   }
 );
 
@@ -39,5 +35,22 @@ Then(
     } else {
       cy.getDataCy(button).should("not.be.checked");
     }
+  }
+);
+
+// Scenario 2: User has disabled tracking of play history
+
+When("the user visits the {string} page", (page: string) => {
+  cy.visit(page);
+});
+
+When("the user clicks the {string} button", (button: string) => {
+  cy.getDataCy(button).click();
+});
+
+Then(
+  "the {string} list should display {string}",
+  (container: string, msg: string) => {
+    cy.getDataCy(container).contains(msg);
   }
 );

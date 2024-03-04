@@ -24,7 +24,7 @@ const ListHistory = () => {
       className={styles.container}
     >
       <HistoryOptions />
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} data-cy="history-list">
         {state.getHistoryRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar o histórico!</span>,

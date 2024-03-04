@@ -15,7 +15,7 @@ Feature: Most Played Songs
     #         | Never Gonna Give You Up | Rock              | 1000          |
 
     Scenario: User turns off tracking of play history
-        Given the user is logged in the "my-profile" page
+        Given the user is in the "my-profile" page
         And the "toggle-tracking" button is set to "true"
         When click the "toggle-tracking" button to turn off the tracking of my play history
         Then the "toggle-tracking" button should be set to "false"
@@ -27,12 +27,13 @@ Feature: Most Played Songs
     #     Then the system deletes all songs from the user's "song_history" list
     #     And the user's "song_history" list displays a message "Você ainda não escutou nenhuma musica!"
 
-    # Scenario: User has disabled tracking of play history
-    #     Given the user is in the "history" page
-    #     And the user has the "history_tracking" attribute set to "false"
-    #     And the user has the songs "Yellow Submarine" and "Clair de Lune" in their "song_history" list
-    #     When the user clicks the "listen-to-music" button
-    #     Then the "song_history" list should not be updated
+    Scenario: User has disabled tracking of play history
+        Given the user is in the "my-profile" page
+        And the "toggle-tracking" button is set to "false"
+        When the user visits the "history" page
+        And the user clicks the "clear-history" button
+        And the user clicks the "listen-to-song" button
+        Then the "history-list" list should display "Você ainda não escutou nenhuma musica!"
 
     # Scenario: User asks for most played songs
     #     Given the user is logged in the "my-profile" page

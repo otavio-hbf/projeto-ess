@@ -22,14 +22,16 @@ const HistoryOptions = () => {
           }}
           variant="outlined"
           color="warning"
+          data-cy="listen-to-song"
           startDecorator={<Icon path={mdiBug} size={1} />}
         >
-          Add fake song
+          Listen to Song
         </Button>
         <Button
           onClick={() => setStatisticsOpen(true)}
           variant="outlined"
           color="neutral"
+          data-cy="view-statistics"
           startDecorator={<Icon path={mdiSigma} size={1} />}
         >
           Estatísticas
@@ -39,6 +41,7 @@ const HistoryOptions = () => {
           onClick={() => service.clearHistory("2")}
           variant="outlined"
           color="danger"
+          data-cy="clear-history"
           startDecorator={<Icon path={mdiTrashCanOutline} size={1} />}
         >
           Limpar Histórico
