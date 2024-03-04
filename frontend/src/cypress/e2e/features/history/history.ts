@@ -54,3 +54,31 @@ Then(
     cy.getDataCy(container).contains(msg);
   }
 );
+
+
+// Scenario 3: User clears play history
+Given("the user has tracking of play history {string}", (value: string) => {
+  cy.visit("my-profile");
+  if (value == "enabled") {
+    cy.get('[data-cy="toggle-tracking"] input[type="checkbox"]').check();
+  } else {
+    cy.get('[data-cy="toggle-tracking"] input[type="checkbox"]').uncheck();
+  }
+
+  // go back to original page
+  cy.go("back");
+});
+
+When("the user clicks the {string} button {string} times", (button: string, times: string) => {
+  for (let i = 0; i < parseInt(times); i++) {
+    cy.getDataCy(button).click();
+  }
+})
+
+Then("the {string} list should have {string} songs", (container: string, count: string) => {
+  cy.getDataCy(container).children().should("have.length", parseInt(count));
+});
+
+Then("the user's {string} list displays a message {string}", (container: string, msg: string) => {
+  cy.getDataCy(container).contains(msg);
+})

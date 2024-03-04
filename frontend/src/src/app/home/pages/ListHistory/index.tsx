@@ -33,9 +33,12 @@ const ListHistory = () => {
               {histories.length > 0
                 ? histories.map((history) => {
                     return (
-                      <div key={history.id} className={styles.listItem}>
+                      <div
+                        key={history.id}
+                        className={styles.listItem}
+                        data-cy={`history-item-${history.id}`}
+                      >
                         <SongItem
-                          data-cy={`history-item-${history.id}`}
                           song={history.song}
                           history_id={history.id}
                           uid="2"

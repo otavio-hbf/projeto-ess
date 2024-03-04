@@ -20,16 +20,16 @@ Feature: Most Played Songs
         When click the "toggle-tracking" button to turn off the tracking of my play history
         Then the "toggle-tracking" button should be set to "false"
 
-    # Scenario: User clears play history
-    #     Given the user is logged in the "history" page
-    #     And the user has the songs "Yellow Submarine" and "Clair de Lune" in their "song_history" list
-    #     When the user clicks the "clear-history" button
-    #     Then the system deletes all songs from the user's "song_history" list
-    #     And the user's "song_history" list displays a message "Você ainda não escutou nenhuma musica!"
+    Scenario: User clears play history
+        Given the user has tracking of play history "enabled"
+        And the user is in the "history" page
+        When the user clicks the "listen-to-song" button "4" times
+        Then the "history-list" list should have "4" songs
+        When the user clicks the "clear-history" button
+        Then the "history-list" list should display "Você ainda não escutou nenhuma musica!"
 
     Scenario: User has disabled tracking of play history
-        Given the user is in the "my-profile" page
-        And the "toggle-tracking" button is set to "false"
+        Given the user has tracking of play history "disabled"
         When the user visits the "history" page
         And the user clicks the "clear-history" button
         And the user clicks the "listen-to-song" button
