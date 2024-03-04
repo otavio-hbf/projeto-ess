@@ -5,6 +5,7 @@ import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
+import Feed from "./app/home/pages/Feed";
 import Navbar from "./shared/components/Navbar";
 import UserConfigPage from "./app/home/pages/UserConfigPage";
 import PlayBar from "./shared/components/PlayBar";
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: "/my-profile",
         Component: UserConfigPage,
+      },
+      {
+        path: "/feed",
+        Component: Feed,
       },
     ],
   },
