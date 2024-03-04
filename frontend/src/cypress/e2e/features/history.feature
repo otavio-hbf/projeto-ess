@@ -29,18 +29,10 @@ Feature: Most Played Songs
         And the user clicks the "listen-to-song" button
         Then the "history-list" list should display "Você ainda não escutou nenhuma musica!"
 
-    # Scenario: User asks for most played songs
-    #     Given the user is logged in the "my-profile" page
-    #     And the user has played the following songs
-    #         | times_played | song_id | title                   | artist      | genre | duration |
-    #         | 3            | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 300      |
-    #         | 3            | 2       | Yellow                  | Coldplay    | Pop   | 150      |
-    #         | 1            | 3       | Yellow Submarine        | The Beatles | Rock  | 100      |
-    #         | 2            | 4       | Ticket to Ride          | The Beatles | Rock  | 250      |
-    #     When the user opens the "most-played-songs" page
-    #     Then the system displays a list with the following songs
-    #         | song_id | title                   | artist      | genre | times_played |
-    #         | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 3            |
-    #         | 2       | Yellow                  | Coldplay    | Pop   | 3            |
-    #         | 4       | Ticket to Ride          | The Beatles | Rock  | 2            |
-    #         | 3       | Yellow Submarine        | The Beatles | Rock  | 1            |
+    Scenario: User asks for most played songs
+        Given the "history-list" list has "8" songs
+        When the user visits the "most-played" page
+        Then the user should see the "most-played-list" list
+        And the "most-played-list" list should not be empty
+        And the sum of the times played of each song should be "8"
+        And the "most-played-list" list should display the songs in descending order of times played
