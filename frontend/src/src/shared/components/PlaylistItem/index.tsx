@@ -1,7 +1,8 @@
 import { mdiPlaylistMusic, mdiDelete, mdiPlayBoxMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
-import { Sheet, Stack, Typography, IconButton, Link } from "@mui/joy";
+import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
+import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
 import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModal";
 
@@ -33,7 +34,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           </Sheet>
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
-            <Link>
+            <Link to={`/playlist?playlistId=${playlist?.id}`}>
               <IconButton>
                 <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
               </IconButton>
