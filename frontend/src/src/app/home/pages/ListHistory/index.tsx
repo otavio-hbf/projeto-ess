@@ -35,6 +35,7 @@ const ListHistory = () => {
                     return (
                       <div key={history.id} className={styles.listItem}>
                         <SongItem
+                          data-cy={`history-item-${history.id}`}
                           song={history.song}
                           history_id={history.id}
                           uid="2"
