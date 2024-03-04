@@ -30,7 +30,6 @@ export default class FeedService {
     this.dispatch = dispatch;
   }
 
-
   async getSongs(): Promise<void> {
     try {
       this.dispatch({
@@ -42,9 +41,7 @@ export default class FeedService {
 
       result.handle({
         onSuccess: (response) => {
-          const items = response.data.map(
-            (item: any) => new SongModel(item),
-          );
+          const items = response.data.map((item: any) => new SongModel(item));
 
           this.dispatch({
             type: FeedStateActionType.CHANGE_RS_GET_SONGS,
@@ -64,5 +61,5 @@ export default class FeedService {
         payload: RequestStatus.failure(new AppUnknownError()),
       });
     }
-  } 
+  }
 }

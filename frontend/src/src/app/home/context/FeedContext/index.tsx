@@ -42,7 +42,6 @@ interface FeedProviderProps {
 export const FeedProvider = ({ children }: FeedProviderProps) => {
   const [state, dispatch] = useReducer(FeedStateReducer, {
     getSongsRequestStatus: RequestStatus.idle(),
-
   });
 
   const prevState = usePrevious(state);
