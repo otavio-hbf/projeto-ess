@@ -30,17 +30,19 @@ const ListHistory = () => {
           failed: () => <span>Erro ao carregar o histórico!</span>,
           succeeded: (histories) => (
             <>
-              {histories.map((history) => {
-                return (
-                  <div key={history.id} className={styles.listItem}>
-                    <SongItem
-                      song={history.song}
-                      history_id={history.id}
-                      uid="2"
-                    />
-                  </div>
-                );
-              })}
+              {histories.length > 0
+                ? histories.map((history) => {
+                    return (
+                      <div key={history.id} className={styles.listItem}>
+                        <SongItem
+                          song={history.song}
+                          history_id={history.id}
+                          uid="2"
+                        />
+                      </div>
+                    );
+                  })
+                : "Você ainda não escutou nenhuma musica!"}
             </>
           ),
         })}
