@@ -27,7 +27,9 @@ const PlaylistPage = () => {
       <div className={styles.listContainer}>
         {state.getUserPlaylistsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
-          failed: (states) => <span>Erro ao carregar as playlists! {states.message} </span>,
+          failed: (states) => (
+            <span>Erro ao carregar as playlists! {states.message} </span>
+          ),
           succeeded: (playlists) => (
             <>
               {playlists.length > 0 ? (

@@ -1,4 +1,4 @@
-export default class PlaylistModel{
+export default class PlaylistModel {
   playlist_id: string;
   name: string;
   songs: string[]; // IDs das músicas na playlist

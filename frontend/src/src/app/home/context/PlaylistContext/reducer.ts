@@ -1,4 +1,8 @@
-import { PlaylistState, PlaylistStateAction, PlaylistStateActionType } from './types';
+import {
+  PlaylistState,
+  PlaylistStateAction,
+  PlaylistStateActionType,
+} from "./types";
 
 /**
  * Reducer function for the PlaylistState context.
@@ -8,7 +12,7 @@ import { PlaylistState, PlaylistStateAction, PlaylistStateActionType } from './t
  */
 const playlistStateReducer = (
   state: PlaylistState,
-  action: PlaylistStateAction
+  action: PlaylistStateAction,
 ): PlaylistState => {
   switch (action.type) {
     case PlaylistStateActionType.CHANGE_RS_GET_USER_PLAYLISTS:

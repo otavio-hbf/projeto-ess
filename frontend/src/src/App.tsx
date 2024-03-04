@@ -7,7 +7,7 @@ import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Navbar from "./shared/components/Navbar";
 import UserConfigPage from "./app/home/pages/UserConfigPage";
-import UserPlaylists from "./app/home/pages/UserPlaylists"
+import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 

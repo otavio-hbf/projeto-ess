@@ -1,10 +1,10 @@
-import { Dispatch } from 'react';
-import { PlaylistStateAction, PlaylistStateActionType } from './types';
-import { ApiService } from '../../../../shared/services/ApiService';
-import RequestStatus from '../../../../shared/types/request-status';
-import PlaylistModel from '../../models/PlaylistModel';
-import { PlaylistSchema } from '../../forms/PlaylistForm';
-import { AppUnknownError } from '../../../../shared/errors/app-error';
+import { Dispatch } from "react";
+import { PlaylistStateAction, PlaylistStateActionType } from "./types";
+import { ApiService } from "../../../../shared/services/ApiService";
+import RequestStatus from "../../../../shared/types/request-status";
+import PlaylistModel from "../../models/PlaylistModel";
+import { PlaylistSchema } from "../../forms/PlaylistForm";
+import { AppUnknownError } from "../../../../shared/errors/app-error";
 import { UserSchema } from "../../forms/UserSchema";
 import UserModel from "../../models/UserModel";
 
@@ -30,11 +30,15 @@ export default class PlaylistService {
         payload: RequestStatus.loading(),
       });
 
-      const result = await this.apiService.get(`/playlists/MyPlaylists`);
+      const result = await this.apiService.get(
+        `/playlists/MyPlaylists/${userId}`,
+      );
 
       result.handle({
         onSuccess: (response) => {
-          const playlists = response.data.map((playlist: any) => new PlaylistModel(playlist));
+          const playlists = response.data.map(
+            (playlist: any) => new PlaylistModel(playlist),
+          );
 
           this.dispatch({
             type: PlaylistStateActionType.CHANGE_RS_GET_USER_PLAYLISTS,
@@ -56,18 +60,14 @@ export default class PlaylistService {
     }
   }
 
-  async createPlaylist(
-    userSchema: UserSchema,
-    playlistSchema: PlaylistSchema): 
-    Promise<void> {
+  async createPlaylist(playlistSchema: PlaylistSchema): Promise<void> {
     try {
       this.dispatch({
         type: PlaylistStateActionType.CHANGE_RS_CREATE_PLAYLIST,
         payload: RequestStatus.loading(),
       });
 
-      playlistSchema.createdBy = userSchema.id; 
-      const result = await this.apiService.post('/playlists', playlistSchema);
+      const result = await this.apiService.post("/playlists", playlistSchema);
 
       result.handle({
         onSuccess: (response) => {
@@ -76,8 +76,8 @@ export default class PlaylistService {
             payload: RequestStatus.success(response.data),
           });
 
-            // refetch playlists
-            this.getUserPlaylists(userSchema.id);
+          // refetch playlists
+          this.getUserPlaylists(playlistSchema.createdBy);
         },
         onFailure: (error) => {
           this.dispatch({
@@ -94,14 +94,20 @@ export default class PlaylistService {
     }
   }
 
-  async updatePlaylist(playlistId: string, playlistSchema: PlaylistSchema): Promise<void> {
+  async updatePlaylist(
+    playlistId: string,
+    playlistSchema: PlaylistSchema,
+  ): Promise<void> {
     try {
       this.dispatch({
         type: PlaylistStateActionType.CHANGE_RS_UPDATE_PLAYLIST,
         payload: RequestStatus.loading(),
       });
 
-      const result = await this.apiService.update(`/playlists/${playlistId}`, playlistSchema);
+      const result = await this.apiService.update(
+        `/playlists/${playlistId}`,
+        playlistSchema,
+      );
 
       result.handle({
         onSuccess: (response) => {
@@ -110,8 +116,8 @@ export default class PlaylistService {
             payload: RequestStatus.success(response.data),
           });
 
-            // refetch playlists
-            this.getUserPlaylists(playlistSchema.createdBy);
+          // refetch playlists
+          this.getUserPlaylists(playlistSchema.createdBy);
         },
         onFailure: (error) => {
           this.dispatch({
@@ -134,7 +140,10 @@ export default class PlaylistService {
       payload: RequestStatus.loading(),
     });
 
-    const result = await this.apiService.delete(`/playlists/${playlistId}`, userId);
+    const result = await this.apiService.delete(
+      `/playlists/${playlistId}`,
+      userId,
+    );
 
     result.handle({
       onSuccess: (response) => {
