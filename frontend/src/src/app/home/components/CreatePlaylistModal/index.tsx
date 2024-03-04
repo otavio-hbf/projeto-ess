@@ -7,7 +7,7 @@ import {
   Typography,
   Button,
 } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
 interface CreatePlaylistModalProps {
@@ -15,31 +15,40 @@ interface CreatePlaylistModalProps {
   setOpen: (open: boolean) => void;
 }
 
-const CreatePlaylistModal = ({ open, setOpen }: CreatePlaylistModalProps) => {
+const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
   const { service } = useContext(PlaylistContext);
   const [playlistName, setPlaylistName] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Limpa a mensagem de erro ao abrir o modal
+    setErrorMessage(null);
+  }, [props.open]);
 
   const handleCreatePlaylist = async () => {
-    if (!playlistName.trim()) return;
-
-    try {
-      await service.createPlaylist({
-        name: playlistName,
-        createdBy: "1",
-        private: false,
-      });
-      setOpen(false);
-    } catch (error) {
-      console.error("Erro ao criar a playlist:", error);
+    // Verifica se o nome da playlist está vazio
+    if (!playlistName.trim()) {
+      setErrorMessage("O nome da playlist não pode estar vazio");
+      return;
     }
+
+    service.createPlaylist({
+      name: playlistName,
+      createdBy: "1",
+      private: false,
+    });
   };
 
   return (
     <Modal
       aria-labelledby="modal-title"
       aria-describedby="modal-desc"
-      open={open}
-      onClose={() => setOpen(false)}
+      open={props.open}
+      onClose={() => {
+        // Limpa a mensagem de erro ao fechar o modal
+        setErrorMessage(null);
+        props.setOpen(false);
+      }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
@@ -71,6 +80,11 @@ const CreatePlaylistModal = ({ open, setOpen }: CreatePlaylistModalProps) => {
             value={playlistName}
             onChange={(e) => setPlaylistName(e.target.value)}
           />
+          {errorMessage && (
+          <Typography textColor="red" sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+            {errorMessage}
+          </Typography>
+          )}
           <Button
             onClick={handleCreatePlaylist}
             variant="outlined"
