@@ -26,7 +26,7 @@ class PlaylistController {
     );
 
     this.router.get(
-      `${this.prefix}/MyPlaylists`,
+      `${this.prefix}/MyPlaylists/:uid`,
       (req: Request, res: Response) => this.getUserPlaylists(req, res)
     );
 
@@ -82,7 +82,7 @@ class PlaylistController {
   }
 
   private async getUserPlaylists(req: Request, res: Response) {
-    const userId = req.body.userId;
+    const userId = req.params.uid;
     const playlists = await this.playlistService.getUserPlaylists(userId);
 
     return new SuccessResult({
