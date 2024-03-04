@@ -15,6 +15,11 @@ const playlistStateReducer = (
   action: PlaylistStateAction,
 ): PlaylistState => {
   switch (action.type) {
+    case PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST:
+      return {
+        ...state,
+        getPlaylistRequestStatus: action.payload,
+      };
     case PlaylistStateActionType.CHANGE_RS_GET_USER_PLAYLISTS:
       return {
         ...state,

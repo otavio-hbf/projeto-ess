@@ -23,6 +23,41 @@ export default class PlaylistService {
     this.dispatch = dispatch;
   }
 
+  async getPlaylist(playlistId: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.get(
+        `/playlists/${playlistId}`,
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          const playlist = response.data;
+
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST,
+            payload: RequestStatus.success(playlist),
+          });
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
   async getUserPlaylists(userId: string): Promise<void> {
     try {
       this.dispatch({

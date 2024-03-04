@@ -38,6 +38,7 @@ interface PlaylistProviderProps {
  */
 export const PlaylistProvider = ({ children }: PlaylistProviderProps) => {
   const [state, dispatch] = useReducer(PlaylistStateReducer, {
+    getPlaylistRequestStatus: RequestStatus.idle(),
     createPlaylistRequestStatus: RequestStatus.idle(),
     getUserPlaylistsRequestStatus: RequestStatus.idle(),
     updatePlaylistRequestStatus: RequestStatus.idle(),

@@ -81,9 +81,12 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
             onChange={(e) => setPlaylistName(e.target.value)}
           />
           {errorMessage && (
-          <Typography textColor="red" sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
-            {errorMessage}
-          </Typography>
+            <Typography
+              textColor="red"
+              sx={{ mb: 2, display: "flex", justifyContent: "center" }}
+            >
+              {errorMessage}
+            </Typography>
           )}
           <Button
             onClick={handleCreatePlaylist}
