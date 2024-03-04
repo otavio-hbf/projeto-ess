@@ -1,13 +1,25 @@
-import { mdiPlaylistMusic, mdiPlaylistPlay } from "@mdi/js";
+import { mdiPlaylistMusic, mdiDelete } from "@mdi/js";
 import Icon from "@mdi/react";
-import { Sheet, Stack, Typography } from "@mui/joy";
+import React, { useState } from "react";
+import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
+import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModal";
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
 }
 
 const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleOpenDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
     <>
       <Stack
@@ -32,8 +44,17 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
               Followers: {playlist?.followers.length}
             </Typography>
           </Sheet>
+          <IconButton onClick={handleOpenDeleteModal}>
+            <Icon path={mdiDelete} size={1} color="white" />
+          </IconButton>
         </Stack>
       </Stack>
+      <PlaylistDeleteModal
+        open={deleteModalOpen}
+        setOpen={handleCloseDeleteModal}
+        playlistId={playlist?.id || ""}
+        userId={"1"}
+      />
     </>
   );
 };

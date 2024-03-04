@@ -141,8 +141,7 @@ export default class PlaylistService {
     });
 
     const result = await this.apiService.delete(
-      `/playlists/${playlistId}`,
-      userId,
+      `/playlists/${playlistId}/${userId}`,
     );
 
     result.handle({
