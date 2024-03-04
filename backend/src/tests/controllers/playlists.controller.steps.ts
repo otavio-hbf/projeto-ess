@@ -244,9 +244,7 @@ defineFeature(feature, (test) => {
         when(
             /^a DELETE request is sent to "(.*)" with user id "(.*)"$/,
             async (req_url, userId) => {
-                response = await request.delete(req_url).send({
-                    userId: userId,
-                });
+                response = await request.delete(req_url + '/' + userId).send();
             }
         );
 
@@ -335,9 +333,9 @@ defineFeature(feature, (test) => {
         );
     
         when(
-            /^a DELETE request is sent to "(.*)" with user id "(.*)"$/,
+            /^a PUT request is sent to "(.*)" with user id "(.*)"$/,
             async (req_url, userId) => {
-                response = await request.delete(req_url).send({
+                response = await request.put(req_url).send({
                     userId: userId,
                 });
             }
@@ -354,7 +352,7 @@ defineFeature(feature, (test) => {
             /^the response JSON should contain the updated playlist with the song id "(.*)" removed from the list of songs$/,
             async (songId) => {
                 const updatedPlaylist = await request.get('/api/playlists/' + mockPlaylistEntity.id).send();
-                //console.log(updatedPlaylist.body.data);
+                //console.log(updatedPlaylist.body);
                 expect(updatedPlaylist.body.data.songs).not.toContain(songId);
             }
         );
