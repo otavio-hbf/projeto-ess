@@ -19,6 +19,7 @@ const StatisticsModal = (props: StatisticsModalProps) => {
     <Modal
       aria-labelledby="modal-title"
       aria-describedby="modal-desc"
+      data-cy="statistics-modal"
       open={props.open}
       onClose={() => props.setOpen(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

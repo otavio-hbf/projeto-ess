@@ -3,16 +3,11 @@ Feature: Most Played Songs
     I want to see my most played songs of the month,
     So that I can get to know my taste in music.
 
-    # Scenario: User asks for detailed stats
-    #     Given the user is logged in on the "history" page
-    #     And the user has played the following songs
-    #         | times_played | song_id | title                   | artist      | genre | duration |
-    #         | 3            | 1       | Never Gonna Give You Up | Rick Astley | Rock  | 300      |
-    #         | 1            | 2       | Yellow Submarine        | The Beatles | Rock  | 100      |
-    #     When the user clicks the "detailed-statistics" button
-    #     Then the user will see a dialog with the following information
-    #         | most_played_song        | most_played_genre | play_duration |
-    #         | Never Gonna Give You Up | Rock              | 1000          |
+    Scenario: User asks for detailed stats
+        Given the user is in the "history" page
+        And the "history-list" list has "4" songs
+        When the user clicks the "view-statistics" button
+        Then the user will see the "statistics-modal" dialog
 
     Scenario: User turns off tracking of play history
         Given the user is in the "my-profile" page
@@ -23,8 +18,7 @@ Feature: Most Played Songs
     Scenario: User clears play history
         Given the user has tracking of play history "enabled"
         And the user is in the "history" page
-        When the user clicks the "listen-to-song" button "4" times
-        Then the "history-list" list should have "4" songs
+        And the "history-list" list has "4" songs
         When the user clicks the "clear-history" button
         Then the "history-list" list should display "Você ainda não escutou nenhuma musica!"
 

@@ -69,16 +69,26 @@ Given("the user has tracking of play history {string}", (value: string) => {
   cy.go("back");
 });
 
-When("the user clicks the {string} button {string} times", (button: string, times: string) => {
+Given("the user clicks the {string} button {string} times", (button: string, times: string) => {
   for (let i = 0; i < parseInt(times); i++) {
     cy.getDataCy(button).click();
   }
 })
 
-Then("the {string} list should have {string} songs", (container: string, count: string) => {
+Given("the {string} list has {string} songs", (container: string, count: string) => {
+  cy.toggleTracking(true);
+  cy.clearHistory();
+  for (let i = 0; i < parseInt(count); i++) {
+    cy.getDataCy("listen-to-song").click();
+  }
   cy.getDataCy(container).children().should("have.length", parseInt(count));
 });
 
 Then("the user's {string} list displays a message {string}", (container: string, msg: string) => {
   cy.getDataCy(container).contains(msg);
 })
+
+// Scenario 4: user asks for detailed stats
+Then("the user will see the {string} dialog", (dialog: string) => {
+  cy.getDataCy(dialog).should("be.visible");
+});
