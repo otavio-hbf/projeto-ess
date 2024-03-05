@@ -5,6 +5,7 @@ import {
   mdiHomeOutline,
   mdiLambda,
   mdiMusicNote,
+  mdiSearchWeb,
   mdiStar,
   mdiStarOutline,
   mdiStarThreePointsOutline,
@@ -28,6 +29,12 @@ const Navbar = () => {
         title="Home"
         path="/feed"
         icon={mdiHomeOutline}
+      />
+      <NavItem
+        location={location}
+        title="Search"
+        path="/feed"
+        icon={mdiSearchWeb}
       />
       <NavItem
         location={location}
