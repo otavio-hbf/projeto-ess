@@ -24,7 +24,7 @@ const MostPlayedPage = () => {
       className={styles.container}
     >
       <MostPlayedHeader />
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} data-cy="most-played-list">
         {state.getMostPlayedRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar o histórico!</span>,
@@ -33,7 +33,11 @@ const MostPlayedPage = () => {
               {songs.length > 0
                 ? songs.map((song) => {
                     return (
-                      <div key={song.song_id} className={styles.listItem}>
+                      <div
+                        key={song.song_id}
+                        data-cy={`most-played-item-${song.song_id}`}
+                        className={styles.listItem}
+                      >
                         <MostPlayedItem item={song} />
                       </div>
                     );

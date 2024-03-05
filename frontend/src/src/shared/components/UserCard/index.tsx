@@ -20,6 +20,7 @@ const UserCard = (props: UserCardProps) => {
         endDecorator={
           <Switch
             sx={{ ml: 1 }}
+            data-cy="toggle-tracking"
             checked={props.user?.history_tracking}
             onChange={() => service.toggleHistoryTracking(props.user)}
           />

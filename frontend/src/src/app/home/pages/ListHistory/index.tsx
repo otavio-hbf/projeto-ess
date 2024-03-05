@@ -24,23 +24,29 @@ const ListHistory = () => {
       className={styles.container}
     >
       <HistoryOptions />
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} data-cy="history-list">
         {state.getHistoryRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar o histórico!</span>,
           succeeded: (histories) => (
             <>
-              {histories.map((history) => {
-                return (
-                  <div key={history.id} className={styles.listItem}>
-                    <SongItem
-                      song={history.song}
-                      history_id={history.id}
-                      uid="2"
-                    />
-                  </div>
-                );
-              })}
+              {histories.length > 0
+                ? histories.map((history) => {
+                    return (
+                      <div
+                        key={history.id}
+                        className={styles.listItem}
+                        data-cy={`history-item-${history.id}`}
+                      >
+                        <SongItem
+                          song={history.song}
+                          history_id={history.id}
+                          uid="2"
+                        />
+                      </div>
+                    );
+                  })
+                : "Você ainda não escutou nenhuma musica!"}
             </>
           ),
         })}

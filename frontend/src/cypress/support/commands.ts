@@ -41,12 +41,29 @@ declare global {
   namespace Cypress {
     interface Chainable {
       getDataCy(dataCySelector: string): Chainable<JQuery<HTMLElement>>;
+      toggleTracking(enabled: boolean): Chainable<AUTWindow>;
+      clearHistory(): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
 
 Cypress.Commands.add("getDataCy", (dataCySelector) => {
   return cy.get(`[data-cy="${dataCySelector}"]`);
+});
+
+// visits "my-profile", and checks the "history-tracking" checkbox
+Cypress.Commands.add("toggleTracking", (enabled) => {
+  const _cy = cy.visit("my-profile").get('[data-cy="toggle-tracking"] input[type="checkbox"]')
+  if (enabled) {
+    return _cy.check().go("back");
+  } else {
+    return _cy.uncheck().go("back");
+  }
+});
+
+// visits "history" and clicks the "clear-history" button
+Cypress.Commands.add("clearHistory", () => {
+  return cy.visit("history").getDataCy("clear-history").click();
 });
 
 export {};

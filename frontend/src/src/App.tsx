@@ -5,6 +5,7 @@ import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
+import Feed from "./app/home/pages/Feed";
 import Navbar from "./shared/components/Navbar";
 import UserConfigPage from "./app/home/pages/UserConfigPage";
 import UserPlaylists from "./app/home/pages/UserPlaylists";
@@ -27,7 +28,7 @@ const AppWrapper = () => {
     <Container maxWidth={"xl"} sx={{ height: "90vh", p: 8 }}>
       <Sheet
         sx={{
-          height: "100%",
+          height: "80vh",
           borderRadius: 16,
           boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
         }}
@@ -35,7 +36,7 @@ const AppWrapper = () => {
         <Grid
           container
           direction="row"
-          sx={{ height: "100%", borderRadius: 16 }}
+          sx={{ height: "80vh", borderRadius: 16 }}
           className={styles.containers}
         >
           <Grid xs={"auto"} sx={{ p: 1 }}>
@@ -53,7 +54,9 @@ const AppWrapper = () => {
             </Sheet>
           </Grid>
           <Grid xs>
-            <Outlet />
+            <Sheet sx={{ height: "80vh", background: "#ffffff00" }}>
+              <Outlet />
+            </Sheet>
           </Grid>
         </Grid>
       </Sheet>
@@ -61,8 +64,9 @@ const AppWrapper = () => {
         sx={{
           mt: 5,
           borderRadius: 16,
-          // height: "64px",
+          // height: "20vh",
           boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
+          background: "red",
         }}
       >
         <PlayBar song={fakeSong} progress={80} />
@@ -108,6 +112,10 @@ const router = createBrowserRouter([
       {
         path: "/playlist",
         Component: PlaylistSongsPage,
+      },
+      {
+        path: "/feed",
+        Component: Feed,
       },
     ],
   },
