@@ -209,7 +209,7 @@ export default class PlaylistService {
 
       const result = await this.apiService.update(
         `/playlists/addSong/${playlistId}/${songId}`,
-        userId,
+        { userId: userId },
       );
 
       result.handle({
@@ -219,8 +219,8 @@ export default class PlaylistService {
             payload: RequestStatus.success(response.data),
           });
 
-          // refetch playlists
-          this.getUserPlaylists(userId);
+          // refetch playlist
+          this.getPlaylist(playlistId);
         },
         onFailure: (error) => {
           this.dispatch({
@@ -249,8 +249,8 @@ export default class PlaylistService {
       });
 
       const result = await this.apiService.update(
-        `/playlists/addSong/${playlistId}/${songId}`,
-        userId,
+        `/playlists/removeSong/${playlistId}/${songId}`,
+        { userId: userId },
       );
 
       result.handle({
@@ -260,8 +260,8 @@ export default class PlaylistService {
             payload: RequestStatus.success(response.data),
           });
 
-          // refetch playlists
-          this.getUserPlaylists(userId);
+          // refetch playlist
+          this.getPlaylist(playlistId);
         },
         onFailure: (error) => {
           this.dispatch({

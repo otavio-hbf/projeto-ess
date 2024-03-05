@@ -1,10 +1,12 @@
 import { mdiClose, mdiMusicNote, mdiCloseBox } from "@mdi/js";
 import Icon from "@mdi/react";
+import React, { useState } from "react";
 import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
 import SongModel from "../../../app/home/models/SongModel";
 import { formatTime } from "../../utils/timeUtils";
 import { HistoryContext } from "../../../app/home/context/HistoryContext";
 import { useContext } from "react";
+import SongDeleteModal from "../../../app/home/components/SongDeleteModal";
 
 interface SongItemProps {
   song?: SongModel;
@@ -15,6 +17,15 @@ interface SongItemProps {
 
 const SongItem = ({ song, history_id, uid, playlist_id }: SongItemProps) => {
   const { service, state } = useContext(HistoryContext);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleOpenDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
 
   return (
     <>
@@ -46,12 +57,21 @@ const SongItem = ({ song, history_id, uid, playlist_id }: SongItemProps) => {
             </IconButton>
           ) : null}
           {uid && playlist_id ? (
-            <IconButton>
+            <IconButton onClick={handleOpenDeleteModal}>
               <Icon path={mdiCloseBox} size={1.5} color="red" />
             </IconButton>
           ) : null}
         </Stack>
       </Stack>
+      {uid && playlist_id && song ? (
+        <SongDeleteModal
+          open={deleteModalOpen}
+          setOpen={handleCloseDeleteModal}
+          playlistId={playlist_id}
+          userId={uid}
+          songId={song.id}
+        />
+      ) : null}
     </>
   );
 };
