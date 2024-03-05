@@ -38,10 +38,13 @@ interface PlaylistProviderProps {
  */
 export const PlaylistProvider = ({ children }: PlaylistProviderProps) => {
   const [state, dispatch] = useReducer(PlaylistStateReducer, {
+    getPlaylistRequestStatus: RequestStatus.idle(),
     createPlaylistRequestStatus: RequestStatus.idle(),
     getUserPlaylistsRequestStatus: RequestStatus.idle(),
     updatePlaylistRequestStatus: RequestStatus.idle(),
     deletePlaylistRequestStatus: RequestStatus.idle(),
+    addSongPlaylistRequestStatus: RequestStatus.idle(),
+    removeSongPlaylistRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);

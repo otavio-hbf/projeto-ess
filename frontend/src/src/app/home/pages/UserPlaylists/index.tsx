@@ -35,7 +35,7 @@ const PlaylistPage = () => {
               {playlists.length > 0 ? (
                 playlists.map((playlist) => {
                   return (
-                    <div key={playlist.playlist_id} className={styles.listItem}>
+                    <div key={playlist.id} className={styles.listItem}>
                       <PlaylistItem playlist={playlist} />
                     </div>
                   );

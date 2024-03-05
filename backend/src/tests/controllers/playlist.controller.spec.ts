@@ -45,7 +45,10 @@ describe('PlaylistController', () => {
     const result = response.body.data;
 
     expect(response.status).toBe(200);
-    expect(result).toEqual(mockedPlaylistEntity);
+    expect(result).toEqual({
+      ...mockedPlaylistEntity,
+      songsContent: [],
+    });
 });
 
 it('should throw an error when playlist is not found by id', async () => {
@@ -93,7 +96,7 @@ it('should create a playlist', async () => {
   
   it('should add a song to a playlist', async () => {
       const addSongtoPlaylistData = {userId: mockedUserId};
-      const response = await request.put('/api/playlists/' + mockedPlaylistId + '/' + mockedSongId).send(addSongtoPlaylistData);
+      const response = await request.put('/api/playlists/addSong/' + mockedPlaylistId + '/' + mockedSongId).send(addSongtoPlaylistData);
       const result = response.body.data;
 
       expect(response.status).toBe(200);
@@ -102,7 +105,7 @@ it('should create a playlist', async () => {
     
     it('should remove a song from a playlist', async () => {
         const addSongtoPlaylistData = {userId: mockedUserId};
-        const response = await request.delete('/api/playlists/' + mockedPlaylistId + '/' + mockedSongId).send(addSongtoPlaylistData);
+        const response = await request.put('/api/playlists/removeSong/' + mockedPlaylistId + '/' + mockedSongId).send(addSongtoPlaylistData);
         const result = response.body.data;
         
         expect(response.status).toBe(200);
@@ -110,8 +113,7 @@ it('should create a playlist', async () => {
     });
     
     it('should delete a playlist', async () => {
-      const deletePlaylistData = {userId: mockedUserId};
-      const response = await request.delete('/api/playlists/' + mockedPlaylistId).send(deletePlaylistData);
+      const response = await request.delete('/api/playlists/' + mockedPlaylistId + '/' + mockedUserId).send();
     
       expect(response.status).toBe(200);
     });

@@ -11,6 +11,7 @@ import UserConfigPage from "./app/home/pages/UserConfigPage";
 import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
+import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
       {
         path: "/my-profile",
         Component: UserConfigPage,
+      },
+      {
+        path: "/playlist",
+        Component: PlaylistSongsPage,
       },
       {
         path: "/feed",

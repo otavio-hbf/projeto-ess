@@ -1,13 +1,26 @@
-import { mdiPlaylistMusic, mdiPlaylistPlay } from "@mdi/js";
+import { mdiPlaylistMusic, mdiDelete, mdiPlayBoxMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
-import { Sheet, Stack, Typography } from "@mui/joy";
+import React, { useState } from "react";
+import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
+import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
+import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModal";
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
 }
 
 const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleOpenDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
     <>
       <Stack
@@ -19,8 +32,13 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           <Sheet sx={{ p: 4, mr: 2 }}>
             <Icon path={mdiPlaylistMusic} size={3} color="white" />
           </Sheet>
-          <Stack>
+          <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
+            <Link to={`/playlist?playlistId=${playlist?.id}`}>
+              <IconButton>
+                <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
+              </IconButton>
+            </Link>
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
@@ -32,8 +50,17 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
               Followers: {playlist?.followers.length}
             </Typography>
           </Sheet>
+          <IconButton onClick={handleOpenDeleteModal}>
+            <Icon path={mdiDelete} size={1} color="white" />
+          </IconButton>
         </Stack>
       </Stack>
+      <PlaylistDeleteModal
+        open={deleteModalOpen}
+        setOpen={handleCloseDeleteModal}
+        playlistId={playlist?.id || ""}
+        userId={"1"}
+      />
     </>
   );
 };

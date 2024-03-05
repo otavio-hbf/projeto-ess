@@ -15,6 +15,11 @@ const playlistStateReducer = (
   action: PlaylistStateAction,
 ): PlaylistState => {
   switch (action.type) {
+    case PlaylistStateActionType.CHANGE_RS_GET_PLAYLIST:
+      return {
+        ...state,
+        getPlaylistRequestStatus: action.payload,
+      };
     case PlaylistStateActionType.CHANGE_RS_GET_USER_PLAYLISTS:
       return {
         ...state,
@@ -34,6 +39,16 @@ const playlistStateReducer = (
       return {
         ...state,
         deletePlaylistRequestStatus: action.payload,
+      };
+    case PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST:
+      return {
+        ...state,
+        addSongPlaylistRequestStatus: action.payload,
+      };
+    case PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST:
+      return {
+        ...state,
+        removeSongPlaylistRequestStatus: action.payload,
       };
 
     default:
