@@ -41,7 +41,6 @@ jobs:
 
   build_frontend_and_run_e2e:
 
-    needs: build_backend
     runs-on: ubuntu-latest
 
     strategy:
