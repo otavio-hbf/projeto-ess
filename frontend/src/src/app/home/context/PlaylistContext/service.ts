@@ -195,4 +195,86 @@ export default class PlaylistService {
       },
     });
   }
+
+  async addSongToPlaylist(
+    playlistId: string,
+    songId: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/addSong/${playlistId}/${songId}`,
+        userId,
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+
+          // refetch playlists
+          this.getUserPlaylists(userId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
+  async removeSongToPlaylist(
+    playlistId: string,
+    songId: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/addSong/${playlistId}/${songId}`,
+        userId,
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+
+          // refetch playlists
+          this.getUserPlaylists(userId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
 }

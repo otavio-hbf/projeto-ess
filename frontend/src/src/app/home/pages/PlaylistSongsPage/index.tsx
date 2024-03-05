@@ -43,9 +43,9 @@ const PlaylistSongsPage = () => {
           failed: () => <span>Erro ao carregar a playlist!</span>,
           succeeded: (playlist) => (
             <>
-              {playlist.songs.map((song) => (
-                <div key={song} className={styles.listItem}>
-                  <SongItem uid={song} />
+              {playlist.songsContent?.map((song) => (
+                <div key={song.id} className={styles.listItem}>
+                  <SongItem song={song} uid="1" playlist_id={playlist.id} />
                 </div>
               ))}
             </>

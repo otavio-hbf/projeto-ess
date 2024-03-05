@@ -40,6 +40,16 @@ const playlistStateReducer = (
         ...state,
         deletePlaylistRequestStatus: action.payload,
       };
+    case PlaylistStateActionType.CHANGE_RS_ADD_SONG_IN_PLAYLIST:
+      return {
+        ...state,
+        addSongPlaylistRequestStatus: action.payload,
+      };
+    case PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST:
+      return {
+        ...state,
+        removeSongPlaylistRequestStatus: action.payload,
+      };
 
     default:
       return state;

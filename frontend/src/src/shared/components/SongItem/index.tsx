@@ -1,4 +1,4 @@
-import { mdiClose, mdiMusicNote } from "@mdi/js";
+import { mdiClose, mdiMusicNote, mdiCloseBox } from "@mdi/js";
 import Icon from "@mdi/react";
 import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
 import SongModel from "../../../app/home/models/SongModel";
@@ -10,9 +10,10 @@ interface SongItemProps {
   song?: SongModel;
   uid?: string;
   history_id?: string;
+  playlist_id?: string;
 }
 
-const SongItem = ({ song, history_id, uid }: SongItemProps) => {
+const SongItem = ({ song, history_id, uid, playlist_id }: SongItemProps) => {
   const { service, state } = useContext(HistoryContext);
 
   return (
@@ -42,6 +43,11 @@ const SongItem = ({ song, history_id, uid }: SongItemProps) => {
           {uid && history_id ? (
             <IconButton onClick={() => service.deleteHistory(history_id, uid)}>
               <Icon path={mdiClose} size={1} color="white" />
+            </IconButton>
+          ) : null}
+          {uid && playlist_id ? (
+            <IconButton>
+              <Icon path={mdiCloseBox} size={1.5} color="red" />
             </IconButton>
           ) : null}
         </Stack>
