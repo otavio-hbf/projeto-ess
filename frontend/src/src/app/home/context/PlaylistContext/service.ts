@@ -129,7 +129,8 @@ export default class PlaylistService {
 
   async updatePlaylist(
     playlistId: string,
-    playlistSchema: PlaylistSchema,
+    playlistModel: PlaylistModel,
+    userId: string,
   ): Promise<void> {
     try {
       this.dispatch({
@@ -137,10 +138,17 @@ export default class PlaylistService {
         payload: RequestStatus.loading(),
       });
 
+      const body = {
+        userId,
+        ...playlistModel,
+      };
+
       const result = await this.apiService.update(
         `/playlists/${playlistId}`,
-        playlistSchema,
+        body,
       );
+
+      console.log(body);
 
       result.handle({
         onSuccess: (response) => {
@@ -149,8 +157,8 @@ export default class PlaylistService {
             payload: RequestStatus.success(response.data),
           });
 
-          // refetch playlists
-          this.getUserPlaylists(playlistSchema.createdBy);
+          // refetch playlist
+          this.getPlaylist(playlistId);
         },
         onFailure: (error) => {
           this.dispatch({

@@ -22,9 +22,21 @@ const PlaylistSongsPage = () => {
     }, [service]);
   }
 
+  const songsIds = playlistId
+    ? state.getPlaylistRequestStatus.maybeMap({
+        succeeded: (playlist) => playlist.songs,
+      })
+    : []; // Se não houver playlistId
+
   const pName = playlistId
     ? state.getPlaylistRequestStatus.maybeMap({
         succeeded: (playlist) => playlist.name,
+      })
+    : "????"; // Se não houver playlistId
+
+  const pId = playlistId
+    ? state.getPlaylistRequestStatus.maybeMap({
+        succeeded: (playlist) => playlist.id,
       })
     : "????"; // Se não houver playlistId
 
@@ -36,7 +48,11 @@ const PlaylistSongsPage = () => {
       spacing={2}
       className={styles.container}
     >
-      <PlaylistHeader playlistName={pName} />
+      <PlaylistHeader
+        playlistName={pName}
+        playlistId={pId}
+        songsIds={songsIds}
+      />
       <div className={styles.listContainer}>
         {state.getPlaylistRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,

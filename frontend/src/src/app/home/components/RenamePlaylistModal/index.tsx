@@ -10,33 +10,44 @@ import {
 import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
-interface CreatePlaylistModalProps {
+interface RenamePlaylistModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  playlistId: string;
 }
 
-const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
-  const { service } = useContext(PlaylistContext);
+const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
+  const { service, state } = useContext(PlaylistContext);
   const [playlistName, setPlaylistName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    service.getPlaylist(props.playlistId);
     // Limpa a mensagem de erro ao abrir o modal
     setErrorMessage(null);
-  }, [props.open]);
+  }, [service, props.open]);
 
-  const handleCreatePlaylist = async () => {
+  const playlistModel = props.playlistId
+    ? state.getPlaylistRequestStatus.maybeMap({
+        succeeded: (playlist) => playlist,
+      })
+    : null; // Se não houver playlistId
+
+  const handleRenamePlaylist = async () => {
     // Verifica se o nome da playlist está vazio
     if (!playlistName.trim()) {
       setErrorMessage("O nome da playlist não pode estar vazio");
       return;
     }
 
-    service.createPlaylist({
-      name: playlistName,
-      createdBy: "1",
-      private: false,
-    });
+    if (!playlistModel) {
+      setErrorMessage("A playlist não existe?");
+      return;
+    }
+
+    playlistModel.name = playlistName;
+
+    service.updatePlaylist(props.playlistId, playlistModel, "1");
 
     props.setOpen(false);
   };
@@ -91,11 +102,11 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
             </Typography>
           )}
           <Button
-            onClick={handleCreatePlaylist}
+            onClick={handleRenamePlaylist}
             variant="outlined"
             color="primary"
           >
-            Criar Playlist
+            Renomear Playlist
           </Button>
         </Stack>
       </Sheet>
@@ -103,4 +114,4 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
   );
 };
 
-export default CreatePlaylistModal;
+export default RenamePlaylistModal;
