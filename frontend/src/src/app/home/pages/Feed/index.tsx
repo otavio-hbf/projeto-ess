@@ -1,17 +1,15 @@
 import { Stack } from "@mui/joy";
 import { useContext, useEffect } from "react";
-// import FeedOptions from "../../components/FeedOptions";
 import { FeedContext } from "../../context/FeedContext";
 import styles from "./index.module.css";
+import FeedSongItem from "../../components/FeedSongItem";
 
-/**
- * Renders a list of songs.
- */
 const Feed = () => {
   const { service, state } = useContext(FeedContext);
 
   useEffect(() => {
     service.getSongs();
+    service.getReccomendations("2");
   }, [service]);
 
   return (
@@ -22,22 +20,42 @@ const Feed = () => {
       spacing={2}
       className={styles.container}
     >
-      {/* <FeedOptions /> */}
+      <h1>Músicas</h1>
       <div className={styles.listContainer}>
         {state.getSongsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar as músicas!</span>,
           succeeded: (songs) => (
             <>
-              <ul>
+              <ul className={styles.songList}>
                 {songs.map((song) => (
-                  <li key={song.id}>{song.title}</li>
+                  <li key={song.id} className={styles.songListItem}>
+                    <FeedSongItem song={song} />
+                  </li>
                 ))}
               </ul>
             </>
           ),
         })}
       </div>
+
+      <h1>Para você</h1>
+      <div className={styles.listContainer}></div>
+      {state.getRecommendationsRequestStatus.maybeMap({
+        loading: () => <span>Carregando...</span>,
+        failed: () => <span>Erro ao carregar as músicas!</span>,
+        succeeded: (songs) => (
+          <>
+            <ul className={styles.songList}>
+              {songs.map((song) => (
+                <li key={song.id} className={styles.songListItem}>
+                  <FeedSongItem song={song} />
+                </li>
+              ))}
+            </ul>
+          </>
+        ),
+      })}
       <br />
     </Stack>
   );

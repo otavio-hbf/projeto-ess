@@ -61,4 +61,38 @@ export default class FeedService {
       });
     }
   }
+
+  async getReccomendations(uid: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: FeedStateActionType.CHANGE_RS_GET_RECOMMENDATIONS,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.get(
+        `/feed/user/${uid}/recommendations`,
+      );
+      result.handle({
+        onSuccess: (response) => {
+          const items = response.data.map((item: any) => new SongModel(item));
+
+          this.dispatch({
+            type: FeedStateActionType.CHANGE_RS_GET_RECOMMENDATIONS,
+            payload: RequestStatus.success(items),
+          });
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: FeedStateActionType.CHANGE_RS_GET_RECOMMENDATIONS,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: FeedStateActionType.CHANGE_RS_GET_RECOMMENDATIONS,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
 }
