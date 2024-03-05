@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18.x, 20.x]
 
     defaults:
       run:
@@ -39,13 +39,13 @@ jobs:
         id: backend_tests
         run: yarn test
 
-  build_frontend:
+  build_frontend_and_run_e2e:
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18.x, 20.x]
 
     defaults:
       run:
@@ -59,13 +59,28 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: ./frontend/src/yarn.lock
-        
-      - name: Install Yarn
+
+      - name: Install Yarn globally
         run: npm install -g yarn
+
       - name: Install husky
         run: npm install -g husky
-      - name: Install dependencies
+        
+      - name: Install backend dependencies
         run: yarn
-      - name: Run tests
-        id: frontend_tests
+        working-directory: ./backend/src
+        
+      - name: Start backend server
+        run: yarn start-linux &
+        working-directory: ./backend/src
+        env:
+          CI: true
+      
+      - name: Wait for backend to be up
+        run: sleep 10 # Adjust the sleep time as necessary
+
+      - name: Install frontend dependencies
+        run: yarn
+        
+      - name: Run frontend e2e tests
         run: yarn run cy:e2e-headless
