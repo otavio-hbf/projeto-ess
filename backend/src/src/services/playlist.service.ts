@@ -54,18 +54,28 @@ class PlaylistService {
 
   public async getPlaylist(id: string): Promise<PlaylistModel> {
     const playlistEntity = await this.playlistRepository.getPlaylist(id);
-
+  
     if (!playlistEntity) {
       throw new HttpNotFoundError({
         msg: "Playlist not found",
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
-
+  
     const playlistModel = new PlaylistModel(playlistEntity);
-
+    playlistModel.songsContent = [];
+  
+    // Loop through the playlist songs and get the song details
+    for (const songId of playlistModel.songs) {
+      const song = await this.songRepository.getSong(songId);
+      if (song) {
+        playlistModel.songsContent.push(song);
+      }
+    }
+  
     return playlistModel;
   }
+  
 
   public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
     // Validate the playlist data using class-validator

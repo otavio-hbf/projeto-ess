@@ -45,7 +45,10 @@ describe('PlaylistController', () => {
     const result = response.body.data;
 
     expect(response.status).toBe(200);
-    expect(result).toEqual(mockedPlaylistEntity);
+    expect(result).toEqual({
+      ...mockedPlaylistEntity,
+      songsContent: [],
+    });
 });
 
 it('should throw an error when playlist is not found by id', async () => {
