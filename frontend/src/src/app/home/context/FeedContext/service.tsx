@@ -69,7 +69,9 @@ export default class FeedService {
         payload: RequestStatus.loading(),
       });
 
-      const result = await this.apiService.get(`/feed/user/${uid}/recommendations`);
+      const result = await this.apiService.get(
+        `/feed/user/${uid}/recommendations`,
+      );
       result.handle({
         onSuccess: (response) => {
           const items = response.data.map((item: any) => new SongModel(item));

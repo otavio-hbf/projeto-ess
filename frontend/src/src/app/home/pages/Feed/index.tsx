@@ -9,7 +9,7 @@ const Feed = () => {
 
   useEffect(() => {
     service.getSongs();
-    service.getReccomendations("2")
+    service.getReccomendations("2");
   }, [service]);
 
   return (
@@ -41,21 +41,21 @@ const Feed = () => {
 
       <h1>Para você</h1>
       <div className={styles.listContainer}></div>
-        {state.getRecommendationsRequestStatus.maybeMap({
-            loading: () => <span>Carregando...</span>,
-            failed: () => <span>Erro ao carregar as músicas!</span>,
-            succeeded: (songs) => (
-              <>
-                <ul className={styles.songList}>
-                  {songs.map((song) => (
-                    <li key={song.id} className={styles.songListItem}>
-                      <FeedSongItem song={song} />
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ),
-          })}
+      {state.getRecommendationsRequestStatus.maybeMap({
+        loading: () => <span>Carregando...</span>,
+        failed: () => <span>Erro ao carregar as músicas!</span>,
+        succeeded: (songs) => (
+          <>
+            <ul className={styles.songList}>
+              {songs.map((song) => (
+                <li key={song.id} className={styles.songListItem}>
+                  <FeedSongItem song={song} />
+                </li>
+              ))}
+            </ul>
+          </>
+        ),
+      })}
       <br />
     </Stack>
   );

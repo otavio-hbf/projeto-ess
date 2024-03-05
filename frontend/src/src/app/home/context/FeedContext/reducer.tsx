@@ -17,10 +17,10 @@ const feedStateReducer = (
         getSongsRequestStatus: action.payload,
       };
     case FeedStateActionType.CHANGE_RS_GET_RECOMMENDATIONS:
-        return {
-          ...state,
-          getRecommendationsRequestStatus: action.payload,
-    };
+      return {
+        ...state,
+        getRecommendationsRequestStatus: action.payload,
+      };
 
     default:
       return state;
