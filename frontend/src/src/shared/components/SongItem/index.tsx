@@ -23,7 +23,7 @@ const SongItem = ({ song, history_id, uid }: SongItemProps) => {
         justifyContent={"space-between"}
       >
         <Stack direction={"row"}>
-          <Sheet sx={{ p: 1, mr: 1 }}>
+          <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>
             <Icon path={mdiMusicNote} size={1} color="white" />
           </Sheet>
           <Stack>
@@ -32,7 +32,7 @@ const SongItem = ({ song, history_id, uid }: SongItemProps) => {
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={4}>
-          <Sheet sx={{ pl: 8 }}>
+          <Sheet sx={{ pl: 8, background: "#ffffff00" }}>
             <Typography level="body-sm">
               {formatTime(song?.duration)}
             </Typography>

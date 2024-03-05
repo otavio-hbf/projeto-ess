@@ -1,12 +1,13 @@
 .container {
-  padding: 16px
+  padding: 16px;
+  height: 80vh;
 }
 
 .listContainer {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  max-height: 800px;
+  height: 100vh;
   gap: 16px;
 }
 

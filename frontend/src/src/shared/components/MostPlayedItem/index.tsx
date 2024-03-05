@@ -21,7 +21,7 @@ const MostPlayedItem = ({ item }: MostPlayedItemProps) => {
         justifyContent={"space-between"}
       >
         <Stack direction={"row"}>
-          <Sheet sx={{ p: 1, mr: 1 }}>
+          <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>
             <Icon path={mdiMusicNote} size={1} color="white" />
           </Sheet>
           <Stack>
@@ -30,13 +30,13 @@ const MostPlayedItem = ({ item }: MostPlayedItemProps) => {
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={4}>
-          <Sheet sx={{ pl: 8 }}>
+          <Sheet sx={{ pl: 8, background: "#ffffff00" }}>
             <Typography level="body-sm">
               {formatTime(item?.song?.duration)}
             </Typography>
             <Typography level="body-sm">{item?.song?.genre}</Typography>
           </Sheet>
-          <Sheet sx={{ pl: 8, pr: 2 }}>
+          <Sheet sx={{ pl: 8, pr: 2, background: "#ffffff00" }}>
             <Typography level="body-sm" data-cy={"times-played"}>
               played {item?.times_played} times
             </Typography>
