@@ -26,7 +26,7 @@ const Feed = () => {
       <div className={styles.listContainer}>
         {state.getSongsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
-          failed: () => <span>Erro ao carregar o histórico!</span>,
+          failed: () => <span>Erro ao carregar as músicas!</span>,
           succeeded: (songs) => (
             <>
               <ul>
