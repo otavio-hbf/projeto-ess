@@ -26,7 +26,7 @@ const Navbar = () => {
       <NavItem
         location={location}
         title="Home"
-        path="/"
+        path="/feed"
         icon={mdiHomeOutline}
       />
       <NavItem
