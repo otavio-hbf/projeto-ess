@@ -43,6 +43,7 @@ const PlaylistHeader = ({
           }}
           variant="outlined"
           color="warning"
+          data-cy="add-song"
           startDecorator={<Icon path={mdiBug} size={1} />}
         >
           Add fake song

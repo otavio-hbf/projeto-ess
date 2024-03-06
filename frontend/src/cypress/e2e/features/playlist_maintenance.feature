@@ -11,6 +11,13 @@ Feature: Playlist Management
         And clicks the "create-playlist" button in the modal
         Then the user should have "3" playlists, including "Wild Songs"
 
+    Scenario: Add a Song to Playlist
+        Given the user is in the "/MyPlaylists" page
+        And there is an existing playlist named "Wild Songs"
+        And the "playlist-songs" list of "Wild Songs" has "0" songs
+        When the user clicks the "add-song" button
+        Then the "playlist-songs" list of "My Favorites" should display "1" songs
+
     Scenario: Delete a Playlist
         Given the user is in the "/MyPlaylists" page
         And the "playlist-list" list has "3" playlists
