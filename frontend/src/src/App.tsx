@@ -1,7 +1,7 @@
 import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
-import CreateTest from "./app/home/pages/Search";
+import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
