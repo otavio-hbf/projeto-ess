@@ -35,7 +35,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
             <Link to={`/playlist?playlistId=${playlist?.id}`}>
-              <IconButton>
+              <IconButton data-cy="view-songs">
                 <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
               </IconButton>
             </Link>
@@ -50,7 +50,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
               Followers: {playlist?.followers.length}
             </Typography>
           </Sheet>
-          <IconButton onClick={handleOpenDeleteModal}>
+          <IconButton onClick={handleOpenDeleteModal} data-cy="delete-playlist">
             <Icon path={mdiDelete} size={1} color="white" />
           </IconButton>
         </Stack>

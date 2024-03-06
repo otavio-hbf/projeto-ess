@@ -57,6 +57,7 @@ const PlaylistDeleteModal = (props: PlaylistDeleteModalProps) => {
         <Button
           variant="outlined"
           color="primary"
+          data-cy="confirm-delete-playlist"
           onClick={handleDeletePlaylist}
         >
           Confirmar Exclusão
