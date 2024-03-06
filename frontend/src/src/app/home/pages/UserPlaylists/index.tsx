@@ -40,7 +40,7 @@ const PlaylistPage = () => {
                       className={styles.listItem}
                       data-cy={`playlist-item-${playlist.name}`}
                     >
-                      <PlaylistItem playlist={playlist} userId="1"/>
+                      <PlaylistItem playlist={playlist} userId="1" />
                     </div>
                   );
                 })

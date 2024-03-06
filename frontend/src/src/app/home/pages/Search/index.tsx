@@ -50,54 +50,47 @@ const Search = () => {
       spacing={2}
       className={styles.container}
     >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formInputContainer}>
+          <input
+            data-cy="input-name"
+            {...register("name")}
+            placeholder="O que deseja ouvir?"
+            className={styles.formInput}
+          />
+          {errors.name && (
+            <span data-cy="input-name-error" className={styles.formError}>
+              {errors.name.message}
+            </span>
+          )}
+        </div>
+      </form>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.formInputContainer}>
-            <input
-              data-cy="input-name"
-              {...register("name")}
-              placeholder="O que deseja ouvir?"
-              className={styles.formInput}
-            />
-            {errors.name && (
-              <span data-cy="input-name-error" className={styles.formError}>
-                {errors.name.message}
-              </span>
-            )}
-          </div>
-
-        </form>
-
-
-      
       <h1>Músicas:</h1>
       <div className={styles.listContainer}>
         <section className={styles.container}>
-          
           <ul className={styles.songList}>
             {searchSongsResults.map((result) => (
               <li key={result.id}>
-                  <FeedSongItem song={result} />
+                <FeedSongItem song={result} />
               </li>
             ))}
           </ul>
         </section>
       </div>
-      
+
       <h1>Playlists:</h1>
       <div className={styles.listContainer}>
-          <section className={styles.container}>
-            
-            <ul className={styles.songList}>
-              {searchPlaylistsResults.map((result) => (
-                <li key={result.id}>
-                    <PlaylistItem playlist={result} />
-                </li>
-              ))}
-            </ul>
-          </section>
+        <section className={styles.container}>
+          <ul className={styles.songList}>
+            {searchPlaylistsResults.map((result) => (
+              <li key={result.id}>
+                <PlaylistItem playlist={result} />
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
-
     </Stack>
   );
 };
