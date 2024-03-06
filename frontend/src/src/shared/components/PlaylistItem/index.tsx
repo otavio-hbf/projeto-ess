@@ -1,6 +1,6 @@
 import { mdiPlaylistMusic, mdiDelete, mdiPlayBoxMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
@@ -8,9 +8,10 @@ import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModa
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
+  userId?: string;
 }
 
-const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleOpenDeleteModal = () => {
@@ -35,7 +36,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
             <Link to={`/playlist?playlistId=${playlist?.id}`}>
-              <IconButton>
+              <IconButton data-cy="view-songs">
                 <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
               </IconButton>
             </Link>
@@ -50,16 +51,18 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
               Followers: {playlist?.followers.length}
             </Typography>
           </Sheet>
-          <IconButton onClick={handleOpenDeleteModal}>
+          {userId && playlist && (userId==playlist.createdBy)  ? (
+          <IconButton onClick={handleOpenDeleteModal} data-cy="delete-playlist">
             <Icon path={mdiDelete} size={1} color="white" />
           </IconButton>
+          ) : null}
         </Stack>
       </Stack>
       <PlaylistDeleteModal
         open={deleteModalOpen}
         setOpen={handleCloseDeleteModal}
         playlistId={playlist?.id || ""}
-        userId={"1"}
+        userId={userId || ""}
       />
     </>
   );

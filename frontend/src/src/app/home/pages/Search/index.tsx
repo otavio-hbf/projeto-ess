@@ -9,6 +9,8 @@ import Button from "../../../../shared/components/Button";
 import { Stack } from "@mui/joy";
 import SongModel from "../../models/SongModel";
 import PlaylistModel from "../../models/PlaylistModel";
+import FeedSongItem from "../../components/FeedSongItem";
+import PlaylistItem from "../../../../shared/components/PlaylistItem";
 
 const Search = () => {
   const { state, prevState, service } = useContext(SearchContext);
@@ -48,7 +50,7 @@ const Search = () => {
       spacing={2}
       className={styles.container}
     >
-      <h1>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.formInputContainer}>
             <input
@@ -63,36 +65,39 @@ const Search = () => {
               </span>
             )}
           </div>
-          <Button data-cy="create" type="submit">
-            search
-          </Button>
+
         </form>
-      </h1>
-      <div className={styles.resultsContainer}>
+
+
+      
+      <h1>Músicas:</h1>
+      <div className={styles.listContainer}>
         <section className={styles.container}>
-          <h2>Resultados de musicas:</h2>
-          <ul>
+          
+          <ul className={styles.songList}>
             {searchSongsResults.map((result) => (
               <li key={result.id}>
-                {/* Display search result information */}
-                {result.title}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className={styles.container}>
-          <h2>Resultados de Podcasts:</h2>
-          <ul>
-            {searchPlaylistsResults.map((result) => (
-              <li key={result.id}>
-                {/* Display search result information */}
-                {result.name}
+                  <FeedSongItem song={result} />
               </li>
             ))}
           </ul>
         </section>
       </div>
+      
+      <h1>Playlists:</h1>
+      <div className={styles.listContainer}>
+          <section className={styles.container}>
+            
+            <ul className={styles.songList}>
+              {searchPlaylistsResults.map((result) => (
+                <li key={result.id}>
+                    <PlaylistItem playlist={result} />
+                </li>
+              ))}
+            </ul>
+          </section>
+      </div>
+
     </Stack>
   );
 };
