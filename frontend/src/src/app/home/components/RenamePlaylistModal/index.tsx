@@ -9,11 +9,12 @@ import {
 } from "@mui/joy";
 import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
+import PlaylistModel from "../../models/PlaylistModel";
 
 interface RenamePlaylistModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  playlistId: string;
+  playlist: PlaylistModel;
 }
 
 const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
@@ -21,17 +22,6 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
   const [playlistName, setPlaylistName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    service.getPlaylist(props.playlistId);
-    // Limpa a mensagem de erro ao abrir o modal
-    setErrorMessage(null);
-  }, [service, props.open]);
-
-  const playlistModel = props.playlistId
-    ? state.getPlaylistRequestStatus.maybeMap({
-        succeeded: (playlist) => playlist,
-      })
-    : null; // Se não houver playlistId
 
   const handleRenamePlaylist = async () => {
     // Verifica se o nome da playlist está vazio
@@ -40,14 +30,9 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
       return;
     }
 
-    if (!playlistModel) {
-      setErrorMessage("A playlist não existe?");
-      return;
-    }
+    props.playlist.name = playlistName;
 
-    playlistModel.name = playlistName;
-
-    service.updatePlaylist(props.playlistId, playlistModel, "1");
+    service.updatePlaylist(props.playlist.id, props.playlist, "1");
 
     props.setOpen(false);
   };

@@ -12,33 +12,10 @@ const PlaylistSongsPage = () => {
   const playlistId = params.get("playlistId");
   const { service, state } = useContext(PlaylistContext);
 
-  if (playlistId) {
-    useEffect(() => {
-      service.getPlaylist(playlistId);
-    }, [service]);
-  } else {
-    useEffect(() => {
-      service.getPlaylist("");
-    }, [service]);
-  }
+  useEffect(() => {
+    service.getPlaylist(playlistId ? playlistId : "");
+  }, [service]);
 
-  const songsIds = playlistId
-    ? state.getPlaylistRequestStatus.maybeMap({
-        succeeded: (playlist) => playlist.songs,
-      })
-    : []; // Se não houver playlistId
-
-  const pName = playlistId
-    ? state.getPlaylistRequestStatus.maybeMap({
-        succeeded: (playlist) => playlist.name,
-      })
-    : "????"; // Se não houver playlistId
-
-  const pId = playlistId
-    ? state.getPlaylistRequestStatus.maybeMap({
-        succeeded: (playlist) => playlist.id,
-      })
-    : "????"; // Se não houver playlistId
 
   return (
     <Stack
@@ -48,17 +25,15 @@ const PlaylistSongsPage = () => {
       spacing={2}
       className={styles.container}
     >
-      <PlaylistHeader
-        playlistName={pName}
-        playlistId={pId}
-        songsIds={songsIds}
-      />
-      <div className={styles.listContainer} data-cy="playlist-songs">
-        {state.getPlaylistRequestStatus.maybeMap({
-          loading: () => <span>Carregando...</span>,
-          failed: () => <span>Erro ao carregar a playlist!</span>,
-          succeeded: (playlist) => (
-            <>
+      {state.getPlaylistRequestStatus.maybeMap({
+        loading: () => <span>Carregando...</span>,
+        failed: () => <span>Erro ao carregar a playlist!</span>,
+        succeeded: (playlist) => (
+          <>
+            <PlaylistHeader
+              playlist={playlist}
+            />
+            <div className={styles.listContainer} data-cy="playlist-songs">
               {playlist.songsContent?.map((song) => (
                 <div
                   key={song.id}
@@ -68,10 +43,10 @@ const PlaylistSongsPage = () => {
                   <SongItem song={song} uid="1" playlist_id={playlist.id} />
                 </div>
               ))}
-            </>
-          ),
-        })}
-      </div>
+            </div>
+          </>
+        ),
+      })}
     </Stack>
   );
 };
