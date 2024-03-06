@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+echo "formatting for pre-commit"
+. "$(dirname -- "$0")/_/husky.sh"
+cd frontend/src/
+yarn run prettier

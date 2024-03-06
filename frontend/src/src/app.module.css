@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 32px;
+  border-radius: 8px;
+  margin: 64px;
+  height: 100vh;
+}
+
+.containers {
+  background-color: #000000;
+  opacity: 1;
+  background-image: radial-gradient(#8b4f80 1px, transparent 1px),
+  radial-gradient(#713567 1px, #1f1f1f 1px);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.listItem {
+  height: 100%;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.listItemText {
+  font-size: 1.5rem;
+}

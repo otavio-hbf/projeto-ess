@@ -10,7 +10,7 @@ Feature: Playlist Routers
         Given a user with id "999" is logged-in
         And there is an existing playlist with id "12345" named "Breakfast and Furious" created by user "999" without songs in
         And there is an existing song with id "3" named "Apple" by "Spongebob"
-        When a PUT request is sent to "/api/playlists/12345/3" with user id "999"
+        When a PUT request is sent to "/api/playlists/addSong/12345/3" with user id "999"
         Then the response status should be "200"
         And the response JSON should contain the updated playlist with the added song id "3" in the list of songs
 
@@ -25,7 +25,7 @@ Feature: Playlist Routers
         Given a user with id "2" is logged-in
         And there is an existing playlist with id "2" named "Road Trip Playlist" created by user "2"
         And there is an existing song with id "2" named "Watermelon" by "Spongebob" in the playlist
-        When a DELETE request is sent to "/api/playlists/2/2" with user id "2"
+        When a PUT request is sent to "/api/playlists/removeSong/2/2" with user id "2"
         Then the response status should be "200"
         And the response JSON should contain the updated playlist with the song id "2" removed from the list of songs
 

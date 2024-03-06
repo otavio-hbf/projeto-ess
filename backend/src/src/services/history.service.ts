@@ -49,6 +49,14 @@ class HistoryService {
       (history) => new HistoryModel(history)
     );
 
+    // loop through the history and get the song details
+    for (const history of historiesModel) {
+      const song = await this.songRepository.getSong(history.song_id);
+      if (song) {
+        history.song = song;
+      }
+    }
+
     return historiesModel;
   }
 
@@ -85,9 +93,7 @@ class HistoryService {
       } else {
         const newMostPlayed = new MostPlayedModel({
           song_id: history.song_id,
-          song_name: songName,
-          song_duration: song?.duration,
-          song_genre: song?.genre,
+          song: song,
           times_played: 1,
         });
         mostPlayedModel.push(newMostPlayed);
@@ -126,20 +132,20 @@ class HistoryService {
 
         // find most played genre
         if (!mostPlayedGenre) {
-          mostPlayedGenre = mostPlayed.song_genre;
+          mostPlayedGenre = mostPlayed.song?.genre;
         } else if (mostPlayed.times_played > mostPlayedSong.times_played) {
-          mostPlayedGenre = mostPlayed.song_genre;
+          mostPlayedGenre = mostPlayed.song?.genre;
         }
 
         // find total duration
         totalDuration +=
-          mostPlayed.song_duration * mostPlayed.times_played || 0;
+          mostPlayed.song?.duration * mostPlayed.times_played || 0;
       }
     }
 
     return new StatisticsModel({
       most_played_genre: mostPlayedGenre,
-      most_played_song: mostPlayedSong?.song_name,
+      most_played_song: mostPlayedSong?.song?.title,
       time_played: totalDuration,
     });
   }

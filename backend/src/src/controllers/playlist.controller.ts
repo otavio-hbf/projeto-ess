@@ -26,7 +26,7 @@ class PlaylistController {
     );
 
     this.router.get(
-      `${this.prefix}/MyPlaylists`,
+      `${this.prefix}/MyPlaylists/:uid`,
       (req: Request, res: Response) => this.getUserPlaylists(req, res)
     );
 
@@ -43,7 +43,7 @@ class PlaylistController {
     this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.updatePlaylist(req, res)
     );
-    this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
+    this.router.delete(`${this.prefix}/:pid/:uid`, (req: Request, res: Response) =>
       this.deletePlaylist(req, res)
     );
     this.router.put(
@@ -55,11 +55,11 @@ class PlaylistController {
       (req: Request, res: Response) => this.unfollowPlaylist(req, res)
     );
     this.router.put(
-      `${this.prefix}/:id/:songId`,
+      `${this.prefix}/addSong/:id/:songId`,
       (req: Request, res: Response) => this.addSongToPlaylist(req, res)
     );
-    this.router.delete(
-      `${this.prefix}/:id/:songId`,
+    this.router.put(
+      `${this.prefix}/removeSong/:id/:songId`,
       (req: Request, res: Response) => this.removeSongToPlaylist(req, res)
     );
     this.router.put(
@@ -82,7 +82,7 @@ class PlaylistController {
   }
 
   private async getUserPlaylists(req: Request, res: Response) {
-    const userId = req.body.userId;
+    const userId = req.params.uid;
     const playlists = await this.playlistService.getUserPlaylists(userId);
 
     return new SuccessResult({
@@ -191,9 +191,9 @@ class PlaylistController {
 
   private async deletePlaylist(req: Request, res: Response) {
     try {
-      const userId = req.body.userId; // informação do ID do usuário na requisição
+      const userId = req.params.uid; // informação do ID do usuário na requisição
 
-      await this.playlistService.deletePlaylist(req.params.id, userId);
+      await this.playlistService.deletePlaylist(req.params.pid, userId);
 
       return new SuccessResult({
         msg: Result.transformRequestOnMsg(req),

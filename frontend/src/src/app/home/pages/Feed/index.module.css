@@ -1,0 +1,57 @@
+.container {
+    padding: 16px
+  }
+  
+  .listContainer {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 800px;
+    gap: 16px;
+  }
+  
+  .listItem {
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #c196bd;
+    background: #2d0029b8;
+    border-radius: 8px;
+  }
+  
+  .listItemText {
+    font-size: 1.5rem;
+  }
+
+  .songList {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    overflow-x: visible;
+  }
+  
+  .songList li {
+    margin-right: 10px; /* Adjust the spacing between items */
+  }
+  
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color:transparent;
+    border-radius: 10px;
+    border: 8px solid transparent;
+    background-clip: content-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #c196bd;
+
+  }

@@ -78,7 +78,12 @@ describe('PlaylistService', () => {
 
       const playlist = await playlistService.getPlaylist(playlistId);
 
-      expect(playlist).toEqual(new PlaylistModel(mockPlaylistEntity));
+      const expectedPlaylistModel = new PlaylistModel(mockPlaylistEntity);
+
+      expect(playlist).toEqual({
+        ...expectedPlaylistModel,
+        songsContent: [],
+      });
       expect(mockPlaylistRepository.getPlaylist).toHaveBeenCalledWith(playlistId);
     });
 
