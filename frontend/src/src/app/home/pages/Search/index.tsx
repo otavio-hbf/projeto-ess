@@ -82,7 +82,7 @@ const Search = () => {
         </section>
 
         <section className={styles.container}>
-          <h2>Resultados da Pesquisa:</h2>
+          <h2>Resultados de Podcasts:</h2>
           <ul>
             {searchPlaylistsResults.map((result) => (
               <li key={result.id}>
