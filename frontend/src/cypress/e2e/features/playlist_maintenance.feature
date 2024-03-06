@@ -45,3 +45,11 @@ Feature: Playlist Management
         And clicks the "confirm-remove-song" button in the modal
         Then the "playlist-songs" list of "My Favorites" should display "2" songs
         And there should be no song named "Apple"
+
+    Scenario: Attempt to Create a Playlist Without Name
+        Given the user is in the "/MyPlaylists" page
+        And the "playlist-list" list has "2" playlists
+        When the user clicks the "new-playlist" button
+        And clicks the "create-playlist" button in the modal
+        Then the user should see an error message in the modal
+        And the user should still have "2" playlists in the "playlist-list" list

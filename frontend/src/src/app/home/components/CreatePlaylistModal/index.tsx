@@ -86,6 +86,7 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
           {errorMessage && (
             <Typography
               textColor="red"
+              data-cy="error-message"
               sx={{ mb: 2, display: "flex", justifyContent: "center" }}
             >
               {errorMessage}

@@ -73,3 +73,12 @@ Then("in the {string} page should be a playlist named {string}", (page: string, 
     cy.visit(page);
     cy.get('[data-cy^="playlist-item-"]').contains(playlistName);
 });
+
+//Scenario: Attempt to Create a Playlist Without Name
+Then("the user should see an error message in the modal", () => {
+    cy.get('[data-cy="playlist-name-input"] + [data-cy="error-message"]').should("be.visible");
+});
+
+Then("the user should still have {string} playlists in the {string} list", (count: string, container: string) => {
+    cy.getDataCy(container).children().should("have.length", parseInt(count));
+});
