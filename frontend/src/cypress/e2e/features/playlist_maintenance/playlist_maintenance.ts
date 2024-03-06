@@ -62,3 +62,14 @@ Then('the {string} list of {string} should display {string} songs', (container: 
 Then('there should be no song named {string}', (songName: string) => {
     cy.get('[data-cy^="song-item-"]').should("not.contain", songName);
 });
+
+//Scenario: Rename a Playlist
+Then("in the {string} page should be no playlist named {string}", (page: string, playlistName: string) => {
+    cy.visit(page);
+    cy.get('[data-cy^="playlist-item-"]').should("not.contain", playlistName);
+});
+
+Then("in the {string} page should be a playlist named {string}", (page: string, playlistName: string) => {
+    cy.visit(page);
+    cy.get('[data-cy^="playlist-item-"]').contains(playlistName);
+});

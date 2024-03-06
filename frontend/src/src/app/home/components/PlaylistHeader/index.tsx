@@ -52,6 +52,7 @@ const PlaylistHeader = ({
           onClick={() => setRenamePlaylistOpen(true)}
           variant="outlined"
           color="primary"
+          data-cy="rename-playlist"
           startDecorator={<Icon path={mdiRename} size={1} />}
         >
           Renomear Playlist

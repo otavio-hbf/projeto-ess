@@ -84,13 +84,14 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
           mb={4}
           sx={{ display: "flex", justifyContent: "center" }}
         >
-          Criar Nova Playlist
+          Renomear Playlist
         </Typography>
         <Stack spacing={2}>
           <Input
             type="text"
             placeholder="Nome da Playlist"
             value={playlistName}
+            data-cy="playlist-name-input"
             onChange={(e) => setPlaylistName(e.target.value)}
           />
           {errorMessage && (
@@ -105,6 +106,7 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
             onClick={handleRenamePlaylist}
             variant="outlined"
             color="primary"
+            data-cy="confirm-rename-playlist"
           >
             Renomear Playlist
           </Button>

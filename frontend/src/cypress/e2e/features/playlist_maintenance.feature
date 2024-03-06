@@ -17,6 +17,16 @@ Feature: Playlist Management
         And the "playlist-songs" list of "Wild Songs" has "0" songs
         When the user clicks the "add-song" button
         Then the "playlist-songs" list of "My Favorites" should display "1" songs
+    
+    Scenario: Rename a Playlist
+        Given the user is in the "/MyPlaylists" page
+        And there is an existing playlist named "Chill Vibes"
+        When the user clicks the "view-songs" button for "Chill Vibes"
+        And the user clicks the "rename-playlist" button
+        And the user enters the name "Focus Beats" in the modal input
+        And clicks the "confirm-rename-playlist" button in the modal
+        Then in the "/MyPlaylists" page should be no playlist named "Chill Vibes"
+        And in the "/MyPlaylists" page should be a playlist named "Focus Beats"
 
     Scenario: Delete a Playlist
         Given the user is in the "/MyPlaylists" page
