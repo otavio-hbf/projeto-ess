@@ -11,9 +11,7 @@ interface PlaylistProps {
   playlist: PlaylistModel;
 }
 
-const PlaylistHeader = ({
-  playlist
-}: PlaylistProps) => {
+const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");

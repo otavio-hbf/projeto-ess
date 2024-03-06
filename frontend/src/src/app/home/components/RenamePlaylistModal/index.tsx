@@ -22,7 +22,6 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
   const [playlistName, setPlaylistName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-
   const handleRenamePlaylist = async () => {
     // Verifica se o nome da playlist está vazio
     if (!playlistName.trim()) {

@@ -9,6 +9,11 @@ Given("the {string} list has {string} playlists", (container: string, count: str
     cy.getDataCy(container).children().should("have.length", parseInt(count));
 });
 
+Given('the {string} list of {string} has {string} songs', (container: string, playlistName: string, songCount: string) => {
+    cy.get(`[data-cy="playlist-item-${playlistName}"] [data-cy="view-songs"]`).click();
+    cy.getDataCy(container).children().should("have.length", parseInt(songCount));
+});
+
 When("the user clicks the {string} button", (button: string) => {
     cy.getDataCy(button).click();
 });
@@ -46,7 +51,8 @@ Then('there should be no playlist named {string}', (playlistName: string) => {
 });
 
 //Scenario: Remove a Song from Playlist
-Given('the {string} list of {string} has {string} songs', (container: string, playlistName: string, songCount: string) => {
+Given('the {string} list of {string} has {string} songs already', (container: string, playlistName: string, songCount: string) => {
+    cy.request('PUT', 'http://localhost:5001/api/playlists/addSong/1/9', { userId: "1" });
     cy.get(`[data-cy="playlist-item-${playlistName}"] [data-cy="view-songs"]`).click();
     cy.getDataCy(container).children().should("have.length", parseInt(songCount));
 });
@@ -64,6 +70,11 @@ Then('there should be no song named {string}', (songName: string) => {
 });
 
 //Scenario: Rename a Playlist
+Given('there is an old existing playlist named {string}', (playlistName: string) => {
+    cy.request('POST', 'http://localhost:5001/api/playlists', { name: playlistName, createdBy: "1" });
+    cy.get('[data-cy^="playlist-item-"]').contains(playlistName);
+});
+
 Then("in the {string} page should be no playlist named {string}", (page: string, playlistName: string) => {
     cy.visit(page);
     cy.get('[data-cy^="playlist-item-"]').should("not.contain", playlistName);
@@ -72,6 +83,8 @@ Then("in the {string} page should be no playlist named {string}", (page: string,
 Then("in the {string} page should be a playlist named {string}", (page: string, playlistName: string) => {
     cy.visit(page);
     cy.get('[data-cy^="playlist-item-"]').contains(playlistName);
+    cy.get(`[data-cy="playlist-item-${playlistName}"] [data-cy="delete-playlist"]`).click();
+    cy.getDataCy("confirm-delete-playlist").click();
 });
 
 //Scenario: Attempt to Create a Playlist Without Name

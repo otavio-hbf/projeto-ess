@@ -16,7 +16,6 @@ const PlaylistSongsPage = () => {
     service.getPlaylist(playlistId ? playlistId : "");
   }, [service]);
 
-
   return (
     <Stack
       direction="column"
@@ -30,9 +29,7 @@ const PlaylistSongsPage = () => {
         failed: () => <span>Erro ao carregar a playlist!</span>,
         succeeded: (playlist) => (
           <>
-            <PlaylistHeader
-              playlist={playlist}
-            />
+            <PlaylistHeader playlist={playlist} />
             <div className={styles.listContainer} data-cy="playlist-songs">
               {playlist.songsContent?.map((song) => (
                 <div

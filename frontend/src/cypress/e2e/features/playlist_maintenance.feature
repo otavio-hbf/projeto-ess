@@ -20,12 +20,12 @@ Feature: Playlist Management
     
     Scenario: Rename a Playlist
         Given the user is in the "/MyPlaylists" page
-        And there is an existing playlist named "Chill Vibes"
-        When the user clicks the "view-songs" button for "Chill Vibes"
+        And there is an old existing playlist named "Study Vibes"
+        When the user clicks the "view-songs" button for "Study Vibes"
         And the user clicks the "rename-playlist" button
         And the user enters the name "Focus Beats" in the modal input
         And clicks the "confirm-rename-playlist" button in the modal
-        Then in the "/MyPlaylists" page should be no playlist named "Chill Vibes"
+        Then in the "/MyPlaylists" page should be no playlist named "Study Vibes"
         And in the "/MyPlaylists" page should be a playlist named "Focus Beats"
 
     Scenario: Delete a Playlist
@@ -40,11 +40,11 @@ Feature: Playlist Management
     Scenario: Remove a Song from Playlist
         Given the user is in the "/MyPlaylists" page
         And there is an existing playlist named "My Favorites"
-        And the "playlist-songs" list of "My Favorites" has "3" songs
-        When the user clicks the "remove-song" button for "Apple" song in the playlist
+        And the "playlist-songs" list of "My Favorites" has "4" songs already
+        When the user clicks the "remove-song" button for "Many Men" song in the playlist
         And clicks the "confirm-remove-song" button in the modal
-        Then the "playlist-songs" list of "My Favorites" should display "2" songs
-        And there should be no song named "Apple"
+        Then the "playlist-songs" list of "My Favorites" should display "3" songs
+        And there should be no song named "Many Men"
 
     Scenario: Attempt to Create a Playlist Without Name
         Given the user is in the "/MyPlaylists" page
