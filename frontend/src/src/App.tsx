@@ -1,7 +1,7 @@
 import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
-import CreateTest from "./app/home/pages/CreateTest";
+import CreateTest from "./app/home/pages/Search";
 import ListHistory from "./app/home/pages/ListHistory";
 import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
@@ -12,6 +12,8 @@ import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
+import Search from "./app/home/pages/Search";
+
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
@@ -116,6 +118,10 @@ const router = createBrowserRouter([
       {
         path: "/feed",
         Component: Feed,
+      },
+      {
+        path: "/search",
+        Component: Search,
       },
     ],
   },

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { HomeProvider } from "./app/home/context/HomeContext";
+import { SearchProvider } from "./app/home/context/SearchContext";
 import { HistoryProvider } from "./app/home/context/HistoryContext";
 import { PlaylistProvider } from "./app/home/context/PlaylistContext";
 import { FeedProvider } from "./app/home/context/FeedContext";
@@ -12,13 +12,15 @@ import { FeedProvider } from "./app/home/context/FeedContext";
  */
 const Provider = ({ children }: { children: ReactNode }) => {
   return (
+    <SearchProvider>
     <FeedProvider>
       <PlaylistProvider>
         <HistoryProvider>
-          <HomeProvider>{children}</HomeProvider>
+          {children}
         </HistoryProvider>
       </PlaylistProvider>
     </FeedProvider>
+    </SearchProvider>
   );
 };
 
