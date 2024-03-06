@@ -15,6 +15,7 @@ const UserPlaylistsOptions = () => {
           onClick={() => setCreatePlaylistOpen(true)}
           variant="outlined"
           color="primary"
+          data-cy="new-playlist"
           startDecorator={<Icon path={mdiPlus} size={1} />}
         >
           Criar Nova Playlist

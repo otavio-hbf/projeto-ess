@@ -57,7 +57,7 @@ const SongItem = ({ song, history_id, uid, playlist_id }: SongItemProps) => {
             </IconButton>
           ) : null}
           {uid && playlist_id ? (
-            <IconButton onClick={handleOpenDeleteModal}>
+            <IconButton onClick={handleOpenDeleteModal} data-cy="remove-song">
               <Icon path={mdiCloseBox} size={1.5} color="red" />
             </IconButton>
           ) : null}

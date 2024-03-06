@@ -24,7 +24,7 @@ const PlaylistPage = () => {
       className={styles.container}
     >
       <PlaylistHeader />
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} data-cy="playlist-list">
         {state.getUserPlaylistsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: (states) => (
@@ -35,7 +35,11 @@ const PlaylistPage = () => {
               {playlists.length > 0 ? (
                 playlists.map((playlist) => {
                   return (
-                    <div key={playlist.id} className={styles.listItem}>
+                    <div
+                      key={playlist.id}
+                      className={styles.listItem}
+                      data-cy={`playlist-item-${playlist.name}`}
+                    >
                       <PlaylistItem playlist={playlist} />
                     </div>
                   );

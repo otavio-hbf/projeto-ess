@@ -80,6 +80,7 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
             type="text"
             placeholder="Nome da Playlist"
             value={playlistName}
+            data-cy="playlist-name-input"
             onChange={(e) => setPlaylistName(e.target.value)}
           />
           {errorMessage && (
@@ -94,6 +95,7 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
             onClick={handleCreatePlaylist}
             variant="outlined"
             color="primary"
+            data-cy="create-playlist"
           >
             Criar Playlist
           </Button>

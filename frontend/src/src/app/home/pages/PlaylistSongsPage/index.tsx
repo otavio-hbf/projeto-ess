@@ -53,14 +53,18 @@ const PlaylistSongsPage = () => {
         playlistId={pId}
         songsIds={songsIds}
       />
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} data-cy="playlist-songs">
         {state.getPlaylistRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => <span>Erro ao carregar a playlist!</span>,
           succeeded: (playlist) => (
             <>
               {playlist.songsContent?.map((song) => (
-                <div key={song.id} className={styles.listItem}>
+                <div
+                  key={song.id}
+                  className={styles.listItem}
+                  data-cy={`song-item-${song.title}`}
+                >
                   <SongItem song={song} uid="1" playlist_id={playlist.id} />
                 </div>
               ))}
