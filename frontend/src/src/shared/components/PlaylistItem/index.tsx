@@ -1,6 +1,6 @@
 import { mdiPlaylistMusic, mdiDelete, mdiPlayBoxMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
@@ -8,9 +8,10 @@ import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModa
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
+  userId?: string;
 }
 
-const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleOpenDeleteModal = () => {
@@ -59,7 +60,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
         open={deleteModalOpen}
         setOpen={handleCloseDeleteModal}
         playlistId={playlist?.id || ""}
-        userId={"1"}
+        userId={userId || ""}
       />
     </>
   );

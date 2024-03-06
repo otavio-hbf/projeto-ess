@@ -1,6 +1,7 @@
-import { mdiPlayOutline } from "@mdi/js";
+import { mdiPlayOutline, mdiPauseBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import { IconButton, LinearProgress, Sheet, Stack, Typography } from "@mui/joy";
+import { useState } from "react";
 import SongModel from "../../../app/home/models/SongModel";
 
 interface PlayBarProps {
@@ -9,6 +10,12 @@ interface PlayBarProps {
 }
 
 const PlayBar = (props: PlayBarProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlayPause = () => {
+    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
+  };
+
   return (
     <Sheet
       sx={{
@@ -21,8 +28,12 @@ const PlayBar = (props: PlayBarProps) => {
       }}
     >
       <Stack>
-        <IconButton onClick={() => console.log("play clicked")}>
-          <Icon path={mdiPlayOutline} size={1.5} color="white" />
+        <IconButton onClick={togglePlayPause}>
+          <Icon
+            path={isPlaying ? mdiPauseBoxOutline : mdiPlayOutline}
+            size={1.5}
+            color="white"
+          />
         </IconButton>
       </Stack>
 

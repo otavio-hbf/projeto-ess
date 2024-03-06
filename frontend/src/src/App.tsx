@@ -12,6 +12,7 @@ import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
+import Search from "./app/home/pages/Search";
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "/feed",
         Component: Feed,
+      },
+      {
+        path: "/search",
+        Component: Search,
       },
     ],
   },

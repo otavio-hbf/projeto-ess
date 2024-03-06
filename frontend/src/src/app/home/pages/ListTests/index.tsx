@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import styles from "./index.module.css";
-import { HomeContext } from "../../context/HomeContext";
+import { HomeContext } from "../../context/SearchContext";
 import { Link } from "react-router-dom";
 
 /**

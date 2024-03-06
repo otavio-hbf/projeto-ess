@@ -33,7 +33,7 @@ const Navbar = () => {
       <NavItem
         location={location}
         title="Search"
-        path="/feed"
+        path="/search"
         icon={mdiSearchWeb}
       />
       <NavItem
