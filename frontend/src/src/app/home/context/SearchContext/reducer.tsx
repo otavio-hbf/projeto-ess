@@ -6,7 +6,10 @@ import { SearchState, SearchStateAction, SearchStateActionType } from "./types";
  * @param action - The action object that describes the state change.
  * @returns The new state after applying the action.
  */
-const searchStateReducer = (state: SearchState, action: SearchStateAction): SearchState => {
+const searchStateReducer = (
+  state: SearchState,
+  action: SearchStateAction,
+): SearchState => {
   switch (action.type) {
     case SearchStateActionType.CHANGE_RS_GET_SEARCH_SONGS:
       return {

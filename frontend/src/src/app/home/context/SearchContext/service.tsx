@@ -2,7 +2,7 @@
  * Service class for handling API requests related to the HomeContext in the application.
  */
 import { Dispatch } from "react";
-import { SearchStateAction, SearchStateActionType} from "./types";
+import { SearchStateAction, SearchStateActionType } from "./types";
 import { ApiService } from "../../../../shared/services/ApiService";
 import RequestStatus from "../../../../shared/types/request-status";
 import { AppUnknownError } from "../../../../shared/errors/app-error";
@@ -31,8 +31,8 @@ export default class HomeService {
 
   /**
    * Creates a new test.
-   * 
-   * @returns 
+   *
+   * @returns
    */
   async searchSongs(query: string): Promise<SongModel[]> {
     this.dispatch({
@@ -40,8 +40,10 @@ export default class HomeService {
       payload: RequestStatus.loading(),
     });
     let ret = [];
-    const result = await this.apiService.get(`/feed/search/songs/?keyword=${query}`);
-    
+    const result = await this.apiService.get(
+      `/feed/search/songs/?keyword=${query}`,
+    );
+
     result.handle({
       onSuccess: (response) => {
         const items = response.data.map((item: any) => new SongModel(item));
@@ -50,8 +52,8 @@ export default class HomeService {
           type: SearchStateActionType.CHANGE_RS_GET_SEARCH_SONGS,
           payload: RequestStatus.success(items),
         });
-        
-        ret = items
+
+        ret = items;
       },
       onFailure: (error) => {
         this.dispatch({
@@ -77,13 +79,17 @@ export default class HomeService {
         type: SearchStateActionType.CHANGE_RS_GET_SEARCH_PLAYLISTS,
         payload: RequestStatus.loading(),
       });
-      
-      const result = await this.apiService.get(`/feed/search/playlists/?keyword=${query}`);
+
+      const result = await this.apiService.get(
+        `/feed/search/playlists/?keyword=${query}`,
+      );
 
       result.handle({
         onSuccess: (response) => {
-          const items = response.data.map((item: any) => new PlaylistModel(item));
-  
+          const items = response.data.map(
+            (item: any) => new PlaylistModel(item),
+          );
+
           this.dispatch({
             type: SearchStateActionType.CHANGE_RS_GET_SEARCH_PLAYLISTS,
             payload: RequestStatus.success(items),
@@ -97,7 +103,7 @@ export default class HomeService {
             payload: RequestStatus.failure(error),
           });
 
-          ret = []
+          ret = [];
         },
       });
     } catch (_) {

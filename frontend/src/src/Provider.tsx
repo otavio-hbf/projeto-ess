@@ -13,13 +13,11 @@ import { FeedProvider } from "./app/home/context/FeedContext";
 const Provider = ({ children }: { children: ReactNode }) => {
   return (
     <SearchProvider>
-    <FeedProvider>
-      <PlaylistProvider>
-        <HistoryProvider>
-          {children}
-        </HistoryProvider>
-      </PlaylistProvider>
-    </FeedProvider>
+      <FeedProvider>
+        <PlaylistProvider>
+          <HistoryProvider>{children}</HistoryProvider>
+        </PlaylistProvider>
+      </FeedProvider>
     </SearchProvider>
   );
 };

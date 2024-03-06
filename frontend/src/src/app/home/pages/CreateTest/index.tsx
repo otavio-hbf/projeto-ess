@@ -12,22 +12,15 @@ import Button from "../../../../shared/components/Button";
 import { Stack } from "@mui/joy";
 
 const CreateTest = () => {
-
   return (
     <Stack
-    direction="column"
-    justifyContent="center"
-    alignItems="stretch"
-    spacing={2}
-    className={styles.container}
+      direction="column"
+      justifyContent="center"
+      alignItems="stretch"
+      spacing={2}
+      className={styles.container}
     >
-
-    <section className={styles.container}>
-
-
-
-    </section>
-
+      <section className={styles.container}></section>
     </Stack>
   );
 };

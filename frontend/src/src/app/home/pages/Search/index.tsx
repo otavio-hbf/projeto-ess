@@ -13,7 +13,9 @@ import PlaylistModel from "../../models/PlaylistModel";
 const Search = () => {
   const { state, prevState, service } = useContext(SearchContext);
   const [searchSongsResults, setSearchSongsResults] = useState<SongModel[]>([]);
-  const [searchPlaylistsResults, setSearchPlaylistsResults] = useState<PlaylistModel[]>([]);
+  const [searchPlaylistsResults, setSearchPlaylistsResults] = useState<
+    PlaylistModel[]
+  >([]);
 
   const {
     register,
@@ -29,7 +31,6 @@ const Search = () => {
    * @param formData - The form data.
    */
   const onSubmit: SubmitHandler<TestFormType> = async (formData) => {
-    
     const { name } = formData;
     const songs = await service.searchSongs(name);
     const playlists = await service.searchPlaylists(name);

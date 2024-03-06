@@ -22,8 +22,6 @@ export type SearchStateAction =
       payload: RequestStatus<PlaylistModel[]>;
     };
 
-
-
 export interface SearchState {
   getSearchSongsRequestStatus: RequestStatus<SongModel[]>;
   getSearchPlaylistsRequestStatus: RequestStatus<PlaylistModel[]>;

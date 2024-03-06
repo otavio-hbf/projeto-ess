@@ -14,7 +14,6 @@ import SongModel from "./app/home/models/SongModel";
 import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
 import Search from "./app/home/pages/Search";
 
-
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
   const fakeSong = new SongModel({

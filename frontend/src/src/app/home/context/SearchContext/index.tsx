@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useReducer, useMemo } from "react";
-import { SearchState as SearchState} from "./types";
+import { SearchState as SearchState } from "./types";
 import SearchService from "./service";
 import searchStateReducer from "./reducer";
 import { ApiService } from "../../../../shared/services/ApiService";
