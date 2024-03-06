@@ -38,7 +38,7 @@ defineFeature(feature, (test) => {
 
     test('Registration successful', ({ given, when, then, and }) => {
         given(/^the system does not have an account with the email "(.*)" registered$/, (email) => {
-
+            //Não há um usuário com esse email no database
         });
 
         when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, async (url, name, email, password) => {
@@ -56,7 +56,7 @@ defineFeature(feature, (test) => {
 
     test('Unsuccessful registration', ({ given, when, then }) => {
         given(/^the system has an account with the email "(.*)" registered$/, async (email) => {
-            
+            //Já existe um usuário com esse e-mail no database
         });
 
         when(/^a POST request is sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, async (url, name, email, password) => {
