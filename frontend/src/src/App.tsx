@@ -1,7 +1,6 @@
 import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
-import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Feed from "./app/home/pages/Feed";
@@ -90,11 +89,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        Component: CreateTest,
-      },
-      {
-        path: "/create-test",
-        Component: CreateTest,
+        Component: Feed,
       },
       {
         path: "/MyPlaylists",
