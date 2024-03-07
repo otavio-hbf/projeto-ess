@@ -14,6 +14,14 @@ const FeedSongItem = ({ song }: FeedSongItemProps) => {
         direction={"row"}
         alignItems={"center"}
         justifyContent={"space-between"}
+        sx={{
+          background: "#262626a8",
+          height: "100%",
+          width: 200,
+          p: 2,
+          borderRadius: 8,
+          border: "2px solid #5a039d",
+        }}
       >
         <Stack direction={"row"}>
           <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>

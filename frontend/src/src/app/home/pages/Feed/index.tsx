@@ -1,4 +1,4 @@
-import { Stack } from "@mui/joy";
+import { Stack, Typography } from "@mui/joy";
 import { useContext, useEffect } from "react";
 import { FeedContext } from "../../context/FeedContext";
 import styles from "./index.module.css";
@@ -20,7 +20,7 @@ const Feed = () => {
       spacing={2}
       className={styles.container}
     >
-      <h1>Músicas</h1>
+      <Typography level="h1">Músicas</Typography>
       <div className={styles.listContainer}>
         {state.getSongsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
@@ -39,8 +39,8 @@ const Feed = () => {
         })}
       </div>
 
-      <h1>Para você</h1>
-      <div className={styles.listContainer}></div>
+      <Typography level="h1">Para você</Typography>
+      <div className={styles.listContainer}>
       {state.getRecommendationsRequestStatus.maybeMap({
         loading: () => <span>Carregando...</span>,
         failed: () => <span>Erro ao carregar as músicas!</span>,
@@ -56,7 +56,7 @@ const Feed = () => {
           </>
         ),
       })}
-      <br />
+      </div>
     </Stack>
   );
 };
