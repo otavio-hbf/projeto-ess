@@ -41,7 +41,6 @@ const PlaylistPage = () => {
                       data-cy={`playlist-item-${playlist.name}`}
                     >
                       <PlaylistItem playlist={playlist} userId="1" />
-
                     </div>
                   );
                 })

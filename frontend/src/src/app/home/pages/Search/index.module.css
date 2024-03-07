@@ -18,18 +18,8 @@
 .formInputContainer {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 2rem;
-}
-
-.formInput {
-  width: 100%;
-  padding: 0.25rem;
-  border: 1px solid #c196bd;
-  border-radius: 20px;
-  font-size: 1.5rem;
-  background-color: transparent;
-  color: white;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .formError {

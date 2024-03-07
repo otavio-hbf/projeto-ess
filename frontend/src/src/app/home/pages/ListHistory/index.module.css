@@ -1,13 +1,15 @@
 .container {
   padding: 16px;
-  height: 80vh;
+  height: 100%;
+  overflow: auto;
+
 }
 
 .listContainer {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  height: 100vh;
+  height: 100%;
   gap: 16px;
 }
 
