@@ -28,9 +28,14 @@ const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
         direction={"row"}
         alignItems={"center"}
         justifyContent={"space-between"}
+        sx={{
+          border: "2px solid #5a039d",
+          background: "#262626a8",
+          borderRadius: 8,
+        }}
       >
         <Stack direction={"row"}>
-          <Sheet sx={{ p: 4, mr: 2 }}>
+          <Sheet sx={{ p: 4, mr: 2, background: "none" }}>
             <Icon path={mdiPlaylistMusic} size={3} color="white" />
           </Sheet>
           <Stack justifyContent={"space-evenly"}>
@@ -43,7 +48,7 @@ const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Sheet sx={{ pl: 5 }}>
+          <Sheet sx={{ pl: 5, background: "none" }}>
             <Typography level="body-lg">
               Songs: {playlist?.songs.length}
             </Typography>

@@ -41,21 +41,21 @@ const Feed = () => {
 
       <Typography level="h1">Para você</Typography>
       <div className={styles.listContainer}>
-      {state.getRecommendationsRequestStatus.maybeMap({
-        loading: () => <span>Carregando...</span>,
-        failed: () => <span>Erro ao carregar as músicas!</span>,
-        succeeded: (songs) => (
-          <>
-            <ul className={styles.songList}>
-              {songs.map((song) => (
-                <li key={song.id} className={styles.songListItem}>
-                  <FeedSongItem song={song} />
-                </li>
-              ))}
-            </ul>
-          </>
-        ),
-      })}
+        {state.getRecommendationsRequestStatus.maybeMap({
+          loading: () => <span>Carregando...</span>,
+          failed: () => <span>Erro ao carregar as músicas!</span>,
+          succeeded: (songs) => (
+            <>
+              <ul className={styles.songList}>
+                {songs.map((song) => (
+                  <li key={song.id} className={styles.songListItem}>
+                    <FeedSongItem song={song} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ),
+        })}
       </div>
     </Stack>
   );
