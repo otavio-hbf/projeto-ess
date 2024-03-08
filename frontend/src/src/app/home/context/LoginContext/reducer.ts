@@ -1,8 +1,4 @@
-import {
-  LoginState,
-  LoginStateAction,
-  LoginStateActionType,
-} from "./types";
+import { LoginState, LoginStateAction, LoginStateActionType } from "./types";
 
 /**
  * Reducer function for the PlaylistState context.

@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
-    name: string;
+  name: string;
 }
 
 const MyComponent: React.FC<Props> = ({ name }) => {
-    return <h1>Hello, {name}!</h1>;
+  return <h1>Hello, {name}!</h1>;
 };
 
 export default MyComponent;

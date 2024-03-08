@@ -2,8 +2,6 @@ import { Dispatch } from "react";
 import { LoginStateAction, LoginStateActionType } from "./types";
 import { ApiService } from "../../../../shared/services/ApiService";
 import RequestStatus from "../../../../shared/types/request-status";
-import PlaylistModel from "../../models/PlaylistModel";
-import { PlaylistSchema } from "../../forms/PlaylistForm";
 import { AppUnknownError } from "../../../../shared/errors/app-error";
 import { UserSchema } from "../../forms/UserSchema";
 import UserModel from "../../models/UserModel";
@@ -68,10 +66,7 @@ export default class PlaylistService {
         password,
       };
 
-      const result = await this.apiService.post(
-        `/users/login`,
-        body,
-      );
+      const result = await this.apiService.post(`/users/login`, body);
 
       result.handle({
         onSuccess: (response) => {
@@ -97,7 +92,11 @@ export default class PlaylistService {
     }
   }
 
-  async createUser(name: string, email: string, password: string): Promise<void> {
+  async createUser(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<void> {
     try {
       this.dispatch({
         type: LoginStateActionType.CHANGE_RS_CREATE_USER,
@@ -134,10 +133,7 @@ export default class PlaylistService {
     }
   }
 
-  async updateUser(
-    userId: string,
-    userModel: UserModel,
-  ): Promise<void> {
+  async updateUser(userId: string, userModel: UserModel): Promise<void> {
     try {
       this.dispatch({
         type: LoginStateActionType.CHANGE_RS_UPDATE_USER,
@@ -149,10 +145,7 @@ export default class PlaylistService {
         userModel,
       };
 
-      const result = await this.apiService.update(
-        `/users`,
-        body,
-      );
+      const result = await this.apiService.update(`/users`, body);
 
       console.log(body);
 
@@ -189,10 +182,7 @@ export default class PlaylistService {
       password,
     };
 
-    const result = await this.apiService.delete(
-      `/users`,
-      body,
-    );
+    const result = await this.apiService.delete(`/users`, body);
 
     result.handle({
       onSuccess: (response) => {
