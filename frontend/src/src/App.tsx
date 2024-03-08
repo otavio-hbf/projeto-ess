@@ -1,9 +1,7 @@
 import { Container, Grid, Sheet, Stack } from "@mui/joy";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import styles from "./app.module.css";
-import CreateTest from "./app/home/pages/CreateTest";
 import ListHistory from "./app/home/pages/ListHistory";
-import ListTests from "./app/home/pages/ListTests";
 import MostPlayedPage from "./app/home/pages/MostPlayed";
 import Feed from "./app/home/pages/Feed";
 import Navbar from "./shared/components/Navbar";
@@ -12,6 +10,7 @@ import UserPlaylists from "./app/home/pages/UserPlaylists";
 import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
+import Search from "./app/home/pages/Search";
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
@@ -25,21 +24,24 @@ const AppWrapper = () => {
   });
 
   return (
-    <Container maxWidth={"xl"} sx={{ height: "90vh", p: 8 }}>
-      <Sheet
-        sx={{
-          height: "80vh",
-          borderRadius: 16,
-          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
-        }}
+    <Container maxWidth={"xl"} sx={{ height: "100vh", padding: 8 }}>
+      <Grid
+        container
+        direction={"column"}
+        sx={{ height: "100%", flexGrow: 1, flexWrap: "nowrap" }}
       >
         <Grid
           container
           direction="row"
-          sx={{ height: "80vh", borderRadius: 16 }}
+          sx={{
+            height: "80%",
+            borderRadius: 16,
+            boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
+            flexGrow: 10,
+          }}
           className={styles.containers}
         >
-          <Grid xs={"auto"} sx={{ p: 1 }}>
+          <Grid xs="auto" sx={{ height: "100%", p: 1, flexWrap: "nowrap" }}>
             <Sheet
               sx={{
                 height: "100%",
@@ -48,29 +50,29 @@ const AppWrapper = () => {
                 py: 4,
                 px: 2,
                 border: "2px solid #9e0591",
+                overflowY: "auto",
               }}
             >
               <Navbar />
             </Sheet>
           </Grid>
-          <Grid xs>
-            <Sheet sx={{ height: "80vh", background: "#ffffff00" }}>
-              <Outlet />
-            </Sheet>
+          <Grid
+            xs
+            sx={{ height: "100%", overflowY: "auto", background: "#ffffff00" }}
+          >
+            <Outlet />
           </Grid>
         </Grid>
-      </Sheet>
-      <Sheet
-        sx={{
-          mt: 5,
-          borderRadius: 16,
-          // height: "20vh",
-          boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
-          background: "red",
-        }}
-      >
-        <PlayBar song={fakeSong} progress={80} />
-      </Sheet>
+        <Grid
+          sx={{
+            my: 5,
+            borderRadius: 16,
+            boxShadow: "rgb(144 4 188 / 60%) 0px 0px 0px 12px",
+          }}
+        >
+          <PlayBar song={fakeSong} progress={80} />
+        </Grid>
+      </Grid>
     </Container>
   );
 };
@@ -87,11 +89,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        Component: CreateTest,
-      },
-      {
-        path: "/create-test",
-        Component: CreateTest,
+        Component: Feed,
       },
       {
         path: "/MyPlaylists",
@@ -116,6 +114,10 @@ const router = createBrowserRouter([
       {
         path: "/feed",
         Component: Feed,
+      },
+      {
+        path: "/search",
+        Component: Search,
       },
     ],
   },

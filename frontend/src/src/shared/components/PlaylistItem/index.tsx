@@ -1,6 +1,6 @@
 import { mdiPlaylistMusic, mdiDelete, mdiPlayBoxMultiple } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
@@ -8,9 +8,10 @@ import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModa
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
+  userId?: string;
 }
 
-const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleOpenDeleteModal = () => {
@@ -27,9 +28,14 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
         direction={"row"}
         alignItems={"center"}
         justifyContent={"space-between"}
+        sx={{
+          border: "2px solid #5a039d",
+          background: "#262626a8",
+          borderRadius: 8,
+        }}
       >
         <Stack direction={"row"}>
-          <Sheet sx={{ p: 4, mr: 2 }}>
+          <Sheet sx={{ p: 4, mr: 2, background: "none" }}>
             <Icon path={mdiPlaylistMusic} size={3} color="white" />
           </Sheet>
           <Stack justifyContent={"space-evenly"}>
@@ -42,7 +48,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Sheet sx={{ pl: 5 }}>
+          <Sheet sx={{ pl: 5, background: "none" }}>
             <Typography level="body-lg">
               Songs: {playlist?.songs.length}
             </Typography>
@@ -59,7 +65,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
         open={deleteModalOpen}
         setOpen={handleCloseDeleteModal}
         playlistId={playlist?.id || ""}
-        userId={"1"}
+        userId={userId || ""}
       />
     </>
   );
