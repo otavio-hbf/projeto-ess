@@ -50,6 +50,17 @@ const playlistStateReducer = (
         ...state,
         removeSongPlaylistRequestStatus: action.payload,
       };
+    case PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST:
+      return {
+        ...state,
+        followPlaylistRequestStatus: action.payload,
+      };
+    case PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST:
+      return {
+        ...state,
+        unfollowPlaylistRequestStatus: action.payload,
+      };
+      
 
     default:
       return state;

@@ -12,6 +12,8 @@ export enum PlaylistStateActionType {
   CHANGE_RS_DELETE_PLAYLIST = "CHANGE_DELETE_PLAYLIST_REQUEST_STATUS",
   CHANGE_RS_ADD_SONG_IN_PLAYLIST = "CHANGE_ADD_SONG_IN_PLAYLIST_REQUEST_STATUS",
   CHANGE_RS_REMOVE_SONG_IN_PLAYLIST = "CHANGE_ADD_SONG_IN_PLAYLIST_REQUEST_STATUS",
+  CHANGE_RS_FOLLOW_PLAYLIST = "CHANGE_FOLLOW_PLAYLIST_REQUEST_STATUS",
+  CHANGE_RS_UNFOLLOW_PLAYLIST = "CHANGE_UNFOLLOW_PLAYLIST_REQUEST_STATUS",
 }
 
 /**
@@ -45,6 +47,14 @@ export type PlaylistStateAction =
   | {
       type: PlaylistStateActionType.CHANGE_RS_REMOVE_SONG_IN_PLAYLIST;
       payload: RequestStatus<any>;
+    }
+  | {
+      type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST;
+      payload: RequestStatus<any>;
+    }
+  | {
+      type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST;
+      payload: RequestStatus<any>;
     };
 /**
  * Representa o estado do contexto de playlists.
@@ -57,4 +67,6 @@ export interface PlaylistState {
   deletePlaylistRequestStatus: RequestStatus<any>;
   addSongPlaylistRequestStatus: RequestStatus<PlaylistModel>;
   removeSongPlaylistRequestStatus: RequestStatus<PlaylistModel>;
+  followPlaylistRequestStatus: RequestStatus<PlaylistModel>;
+  unfollowPlaylistRequestStatus: RequestStatus<PlaylistModel>;
 }
