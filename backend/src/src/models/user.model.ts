@@ -10,7 +10,7 @@ export default class UserModel extends BaseModel {
     super(data.id || "");
     this.name = data.name;
     this.email = data.email;
-    this.password = data.password;    
+    this.password = data.password;
     this.history_tracking = data.history_tracking;
   }
 }
