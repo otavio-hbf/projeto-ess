@@ -22,6 +22,7 @@ interface SongItemProps {
 const SongItem = (props: SongItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { setSelectedSong } = useSongContext();
+  const { service, state } = useContext(HistoryContext);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -61,14 +62,20 @@ const SongItem = (props: SongItemProps) => {
             </Typography>
             <Typography level="body-sm">{props.song?.genre}</Typography>
           </Sheet>
-          {props.song ? (
-            <IconButton onClick={() => setSelectedSong(props.song)}>
+          {props.uid && props.history_id ? (
+            <IconButton
+              onClick={() =>
+                service.deleteHistory(props.history_id as any, props.uid as any)
+              }
+            >
               <Icon path={mdiClose} size={1} color="white" />
             </IconButton>
           ) : null}
-          <IconButton onClick={handleOpenDeleteModal} data-cy="remove-song">
-            <Icon path={mdiCloseBox} size={1.5} color="red" />
-          </IconButton>
+          {props.uid && props.playlist_id ? (
+            <IconButton onClick={handleOpenDeleteModal} data-cy="remove-song">
+              <Icon path={mdiCloseBox} size={1.5} color="red" />
+            </IconButton>
+          ) : null}
         </Stack>
       </Stack>
       {props.uid && props.playlist_id && props.song ? (
