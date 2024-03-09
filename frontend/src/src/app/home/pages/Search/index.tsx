@@ -36,7 +36,6 @@ const Search = () => {
     const { name } = formData;
     const songs = await service.searchSongs(name);
     const playlists = await service.searchPlaylists(name);
-    console.log(songs);
     setSearchSongsResults(songs);
     setSearchPlaylistsResults(playlists);
     reset();
@@ -50,8 +49,8 @@ const Search = () => {
       spacing={2}
       className={styles.container}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.formInputContainer}>
+      <form onSubmit={handleSubmit(onSubmit)} data-cy="search-bar">
+        <div className={styles.formInputContainer} >
           <Input
             data-cy="input-name"
             {...register("name")}
@@ -67,11 +66,11 @@ const Search = () => {
       </form>
 
       <Typography level="h1">Músicas:</Typography>
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer} >
         <section className={styles.container}>
           <ul className={styles.songList}>
             {searchSongsResults.map((result) => (
-              <li key={result.id}>
+              <li key={result.id} data-cy="search-songs">
                 <FeedSongItem song={result} />
               </li>
             ))}
@@ -84,7 +83,7 @@ const Search = () => {
         <section className={styles.container}>
           <ul className={styles.songList}>
             {searchPlaylistsResults.map((result) => (
-              <li key={result.id}>
+              <li key={result.id} data-cy="search-playlists">
                 <PlaylistItem playlist={result} />
               </li>
             ))}
