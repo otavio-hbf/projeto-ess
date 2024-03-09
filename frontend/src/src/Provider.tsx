@@ -14,13 +14,13 @@ import { SongProvider } from "./app/home/context/SongContext";
 const Provider = ({ children }: { children: ReactNode }) => {
   return (
     <SongProvider>
-    <SearchProvider>
-      <FeedProvider>
-        <PlaylistProvider>
-          <HistoryProvider>{children}</HistoryProvider>
-        </PlaylistProvider>
-      </FeedProvider>
-    </SearchProvider>
+      <SearchProvider>
+        <FeedProvider>
+          <PlaylistProvider>
+            <HistoryProvider>{children}</HistoryProvider>
+          </PlaylistProvider>
+        </FeedProvider>
+      </SearchProvider>
     </SongProvider>
   );
 };

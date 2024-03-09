@@ -9,7 +9,6 @@ import { useContext } from "react";
 import SongDeleteModal from "../../../app/home/components/SongDeleteModal";
 import { useSongContext } from "../../../app/home/context/SongContext";
 
-
 interface SongItemProps {
   song: SongModel | null;
   progress?: number;
