@@ -41,26 +41,34 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
 
   return (
     <>
-      <Header title={playlist.name} button={isFollowing ? (
-        <Button
-          onClick={(evt) => {
-            handleUnfollow(evt);
-          }}
-          variant="outlined"
-          color="warning"
-          data-cy="follow-playlist"
-        >
-          Unfollow
-        </Button>
-      ) : playlist.createdBy !== userId ? (
-        <Button
-          onClick={(evt) => {
-            handleFollow(evt);
-          }}
-          variant="outlined" color="primary" data-cy="follow-playlist">
-          Follow
-        </Button>
-      ) : null}>
+      <Header
+        title={playlist.name}
+        button={
+          isFollowing ? (
+            <Button
+              onClick={(evt) => {
+                handleUnfollow(evt);
+              }}
+              variant="outlined"
+              color="warning"
+              data-cy="follow-playlist"
+            >
+              Unfollow
+            </Button>
+          ) : playlist.createdBy !== userId ? (
+            <Button
+              onClick={(evt) => {
+                handleFollow(evt);
+              }}
+              variant="outlined"
+              color="primary"
+              data-cy="follow-playlist"
+            >
+              Follow
+            </Button>
+          ) : null
+        }
+      >
         {errorMessage && <Alert>{errorMessage}</Alert>}
 
         <Button

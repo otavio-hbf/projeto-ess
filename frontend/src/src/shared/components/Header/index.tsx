@@ -16,7 +16,10 @@ const Header = ({ children, button, title }: HeaderProps) => {
       sx={{ borderRadius: 8 }}
     >
       <Stack direction="row">
-      <Typography level="h2" sx={{mr:4}}>{title}</Typography>{button??null}
+        <Typography level="h2" sx={{ mr: 4 }}>
+          {title}
+        </Typography>
+        {button ?? null}
       </Stack>
 
       <Stack
