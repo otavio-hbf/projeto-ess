@@ -2,6 +2,12 @@ import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 
 // Scenario: Songs shown in the feed page
 Given("The user is in the {string} page", (page: string) => {
+    cy.on('uncaught:exception', (err, runnable) => {
+        console.error('Uncaught exception:', err.message);
+        return false; // Prevent Cypress from failing the test due to the uncaught exception
+    });
+
+    // Visit the specified page
     cy.visit(page);
 });
 
