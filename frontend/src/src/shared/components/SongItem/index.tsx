@@ -66,7 +66,7 @@ const SongItem = (props: SongItemProps) => {
               <Icon path={mdiClose} size={1} color="white" />
             </IconButton>
           ) : null}
-          <IconButton onClick={handleOpenDeleteModal}>
+          <IconButton onClick={handleOpenDeleteModal} data-cy="remove-song">
             <Icon path={mdiCloseBox} size={1.5} color="red" />
           </IconButton>
         </Stack>

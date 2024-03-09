@@ -10,7 +10,6 @@ interface FeedSongItemProps {
 }
 
 const FeedSongItem = ({ song }: FeedSongItemProps) => {
-
   // const { service, state } = useContext(FeedContext);
   const { setSelectedSong } = useSongContext();
 
@@ -26,8 +25,6 @@ const FeedSongItem = ({ song }: FeedSongItemProps) => {
         direction={"row"}
         alignItems={"center"}
         justifyContent={"space-between"}
-        onClick={handleClick}
-
         sx={{
           background: "#262626a8",
           height: "100%",
@@ -36,6 +33,7 @@ const FeedSongItem = ({ song }: FeedSongItemProps) => {
           borderRadius: 8,
           border: "2px solid #5a039d",
         }}
+        onClick={handleClick}
       >
         <Stack direction={"row"}>
           <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>
