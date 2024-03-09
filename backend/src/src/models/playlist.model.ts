@@ -4,11 +4,11 @@ import PlaylistEntity from "../entities/playlist.entity";
 
 export default class PlaylistModel extends BaseModel {
   name: string;
-  songs: string[]; 
+  songs: string[];
   songsContent?: SongModel[];
-  createdBy: string; 
+  createdBy: string;
   private: boolean;
-  followers: string[]; 
+  followers: string[];
   contributors: string[];
 
   constructor(data: PlaylistModel) {
