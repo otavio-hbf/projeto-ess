@@ -5,6 +5,7 @@ import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
 import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModal";
+import Cookies from 'universal-cookie';
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
@@ -13,6 +14,8 @@ interface PlaylistItemProps {
 
 const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const cookies = new Cookies();
+  userId = cookies.get('userId') ? cookies.get('userId') : "";
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -40,7 +43,7 @@ const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
           </Sheet>
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
-            <Link to={`/playlist?playlistId=${playlist?.id}`}>
+            <Link to={`/playlist?userId=${userId}&playlistId=${playlist?.id}`}>
               <IconButton data-cy="view-songs">
                 <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
               </IconButton>

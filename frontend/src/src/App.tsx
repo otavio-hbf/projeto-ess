@@ -11,7 +11,8 @@ import PlayBar from "./shared/components/PlayBar";
 import SongModel from "./app/home/models/SongModel";
 import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
 import Search from "./app/home/pages/Search";
-import RegisterLogin from "./app/home/pages/RegisterLogin";
+import LoginPage from "./app/home/pages/LoginPage";
+import RegisterPage from "./app/home/pages/RegisterPage";
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.
@@ -83,55 +84,70 @@ const AppWrapper = () => {
  * @param {Array} routes - An array of route objects containing the path and component.
  * @returns {Object} - The router object.
  */
-const router = createBrowserRouter([
+
+// Rotas para o layout principal
+const mainRoutes = [
+  {
+    path: "/MyPlaylists",
+    Component: UserPlaylists,
+  },
+  {
+    path: "/history",
+    Component: ListHistory,
+  },
+  {
+    path: "/most-played",
+    Component: MostPlayedPage,
+  },
+  {
+    path: "/my-profile",
+    Component: UserConfigPage,
+  },
+  {
+    path: "/playlist",
+    Component: PlaylistSongsPage,
+  },
+  {
+    path: "/feed",
+    Component: Feed,
+  },
+  {
+    path: "/search",
+    Component: Search,
+  },
+];
+
+// Rotas para as páginas de autenticação
+const authRoutes = [
   {
     path: "/",
+    Component: LoginPage,
+  },
+  {
+    path: "/login",
+    Component: LoginPage,
+  },
+  {
+    path: "/register",
+    Component: RegisterPage,
+  },
+];
+
+// Criando o router
+const router = createBrowserRouter([
+  //Rotas de autenticação não usam o "AppWrapper"
+  {
+    path: '/',
+    children: authRoutes,
+  },
+  {
+    path: '/',
     element: <AppWrapper />,
-    children: [
-      {
-        path: "/",
-        Component: Feed,
-      },
-      {
-        path: "/MyPlaylists",
-        Component: UserPlaylists,
-      },
-      {
-        path: "/history",
-        Component: ListHistory,
-      },
-      {
-        path: "/most-played",
-        Component: MostPlayedPage,
-      },
-      {
-        path: "/my-profile",
-        Component: UserConfigPage,
-      },
-      {
-        path: "/playlist",
-        Component: PlaylistSongsPage,
-      },
-      {
-        path: "/feed",
-        Component: Feed,
-      },
-      {
-        path: "/search",
-        Component: Search,
-      },
-      {
-        path: "/login",
-        Component: RegisterLogin,
-      },
-    ],
+    children: mainRoutes,
   },
 ]);
 
-/**
- * The root component of the application.
- * @returns {JSX.Element} - The rendered application.
- */
+// Componente principal da aplicação
 export default function App() {
   return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 }

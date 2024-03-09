@@ -5,10 +5,14 @@ import RequestStatus from "../../../../shared/types/request-status";
 import { AppUnknownError } from "../../../../shared/errors/app-error";
 import { UserSchema } from "../../forms/UserSchema";
 import UserModel from "../../models/UserModel";
+import { userInfo } from "os";
+import Cookies from 'universal-cookie';
+import { useNavigate } from "react-router-dom";
 
 export default class PlaylistService {
   private apiService: ApiService;
   private dispatch: Dispatch<LoginStateAction>;
+  
 
   constructor({
     apiService,
@@ -72,12 +76,20 @@ export default class PlaylistService {
         onSuccess: (response) => {
           const user = response.data;
 
+          alert("Login realizado com sucesso!");
+
+          const cookies = new Cookies();
+          cookies.set('userId', user.id, { path: '/' });
+          window.location.href = "/feed";
+          console.log(cookies.get('userId'));
+
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USER,
             payload: RequestStatus.success(user),
           });
         },
         onFailure: (error) => {
+          alert("Falha no Login!");
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USER,
             payload: RequestStatus.failure(error),
@@ -113,12 +125,16 @@ export default class PlaylistService {
 
       result.handle({
         onSuccess: (response) => {
+          alert("Cadastro realizado com sucesso!");
+
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_CREATE_USER,
             payload: RequestStatus.success(response.data),
           });
         },
         onFailure: (error) => {
+          alert("Ops! Algo deu errado no cadastro");
+
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_CREATE_USER,
             payload: RequestStatus.failure(error),

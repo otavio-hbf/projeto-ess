@@ -4,15 +4,21 @@ import MostPlayedItem from "../../../../shared/components/MostPlayedItem";
 import MostPlayedHeader from "../../components/MostPlayedHeader";
 import { HistoryContext } from "../../context/HistoryContext";
 import styles from "./index.module.css";
+import { useLocation } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 /**
  * Renders a list of songs.
  */
 const MostPlayedPage = () => {
   const { service, state } = useContext(HistoryContext);
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const userId = params.get("userId");
+  const cookies = new Cookies();
 
   useEffect(() => {
-    service.getMostPlayed("2");
+    service.getMostPlayed(cookies.get('userId') ? cookies.get('userId') : "");
   }, [service]);
 
   return (
