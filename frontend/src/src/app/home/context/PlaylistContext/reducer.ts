@@ -60,7 +60,6 @@ const playlistStateReducer = (
         ...state,
         unfollowPlaylistRequestStatus: action.payload,
       };
-      
 
     default:
       return state;

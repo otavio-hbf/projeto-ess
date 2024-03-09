@@ -292,19 +292,19 @@ export default class PlaylistService {
         type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
         payload: RequestStatus.loading(),
       });
-  
+
       const result = await this.apiService.update(
         `/playlists/follow/${playlistId}`,
         { userId: userId },
       );
-  
+
       result.handle({
         onSuccess: (response) => {
           this.dispatch({
             type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
             payload: RequestStatus.success(response.data),
           });
-            
+
           // refetch playlist
           this.getPlaylist(playlistId);
         },
@@ -322,19 +322,19 @@ export default class PlaylistService {
       });
     }
   }
-  
+
   async unfollowPlaylist(playlistId: string, userId: string): Promise<void> {
     try {
       this.dispatch({
         type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
         payload: RequestStatus.loading(),
       });
-  
+
       const result = await this.apiService.update(
         `/playlists/unfollow/${playlistId}`,
         { userId: userId },
       );
-  
+
       result.handle({
         onSuccess: (response) => {
           this.dispatch({
