@@ -51,14 +51,9 @@ const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
               Followers: {playlist?.followers.length}
             </Typography>
           </Sheet>
-          {userId && playlist && userId == playlist.createdBy ? (
-            <IconButton
-              onClick={handleOpenDeleteModal}
-              data-cy="delete-playlist"
-            >
-              <Icon path={mdiDelete} size={1} color="white" />
-            </IconButton>
-          ) : null}
+          <IconButton onClick={handleOpenDeleteModal} data-cy="delete-playlist">
+            <Icon path={mdiDelete} size={1} color="white" />
+          </IconButton>
         </Stack>
       </Stack>
       <PlaylistDeleteModal
