@@ -16,7 +16,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const isFollowing = playlist.followers.indexOf(userId) > -1
+  const isFollowing = playlist.followers.indexOf(userId) > -1;
   console.log(playlist.followers);
 
   const handleAddFakeSong = (evt) => {
@@ -34,36 +34,35 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const handleFollow = (evt) => {
     service.followPlaylist(playlist.id, userId);
   };
-  
+
   const handleUnfollow = (evt) => {
     service.unfollowPlaylist(playlist.id, userId);
   };
 
   return (
     <>
-      <Header title={playlist.name}>
+      <Header title={playlist.name} button={isFollowing ? (
+        <Button
+          onClick={(evt) => {
+            handleUnfollow(evt);
+          }}
+          variant="outlined"
+          color="warning"
+          data-cy="follow-playlist"
+        >
+          Unfollow
+        </Button>
+      ) : playlist.createdBy !== userId ? (
+        <Button
+          onClick={(evt) => {
+            handleFollow(evt);
+          }}
+          variant="outlined" color="primary" data-cy="follow-playlist">
+          Follow
+        </Button>
+      ) : null}>
         {errorMessage && <Alert>{errorMessage}</Alert>}
-        {isFollowing ? (
-          <Button
-            onClick={(evt) => {
-              handleUnfollow(evt);
-            }}
-            variant="outlined"
-            color="warning"
-            data-cy="follow-playlist"
-            // startDecorator={<Icon path={mdiBug} size={1} />}
-          >
-            Unfollow
-          </Button>
-        ) : playlist.createdBy !== userId ? (
-          <Button
-            onClick={(evt) => {
-              handleFollow(evt);
-            }}
-            variant="outlined" color="warning" data-cy="follow-playlist">
-            Follow
-          </Button>
-        ) : null}
+
         <Button
           onClick={(evt) => {
             handleAddFakeSong(evt);
