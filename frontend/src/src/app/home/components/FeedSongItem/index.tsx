@@ -1,4 +1,4 @@
-import { mdiClose, mdiMusicNote, mdiCloseBox } from "@mdi/js";
+import { mdiMusicNote } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState } from "react";
 import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
@@ -10,6 +10,7 @@ interface FeedSongItemProps {
 }
 
 const FeedSongItem = ({ song }: FeedSongItemProps) => {
+
   // const { service, state } = useContext(FeedContext);
   const { setSelectedSong } = useSongContext();
 
@@ -26,6 +27,15 @@ const FeedSongItem = ({ song }: FeedSongItemProps) => {
         alignItems={"center"}
         justifyContent={"space-between"}
         onClick={handleClick}
+
+        sx={{
+          background: "#262626a8",
+          height: "100%",
+          width: 200,
+          p: 2,
+          borderRadius: 8,
+          border: "2px solid #5a039d",
+        }}
       >
         <Stack direction={"row"}>
           <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>

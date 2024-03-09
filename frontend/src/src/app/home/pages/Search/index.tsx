@@ -6,7 +6,7 @@ import { SearchContext } from "../../context/SearchContext";
 import { TestFormSchema, TestFormType } from "../../forms/TestForm";
 import { Link } from "react-router-dom";
 import Button from "../../../../shared/components/Button";
-import { Stack } from "@mui/joy";
+import { Input, Stack, Typography } from "@mui/joy";
 import SongModel from "../../models/SongModel";
 import PlaylistModel from "../../models/PlaylistModel";
 import FeedSongItem from "../../components/FeedSongItem";
@@ -52,11 +52,11 @@ const Search = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formInputContainer}>
-          <input
+          <Input
             data-cy="input-name"
             {...register("name")}
             placeholder="O que deseja ouvir?"
-            className={styles.formInput}
+            size="lg"
           />
           {errors.name && (
             <span data-cy="input-name-error" className={styles.formError}>
@@ -66,7 +66,7 @@ const Search = () => {
         </div>
       </form>
 
-      <h1>Músicas:</h1>
+      <Typography level="h1">Músicas:</Typography>
       <div className={styles.listContainer}>
         <section className={styles.container}>
           <ul className={styles.songList}>
@@ -79,7 +79,7 @@ const Search = () => {
         </section>
       </div>
 
-      <h1>Playlists:</h1>
+      <Typography level="h1">Playlists:</Typography>
       <div className={styles.listContainer}>
         <section className={styles.container}>
           <ul className={styles.songList}>
