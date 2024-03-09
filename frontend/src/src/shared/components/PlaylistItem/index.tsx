@@ -14,8 +14,6 @@ interface PlaylistItemProps {
 
 const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const cookies = new Cookies();
-  userId = cookies.get("userId") ? cookies.get("userId") : "";
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);

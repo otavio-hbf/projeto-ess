@@ -18,7 +18,7 @@ const MostPlayedPage = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getMostPlayed(cookies.get("userId") ? cookies.get("userId") : "");
+    service.getMostPlayed(cookies.get("userId"));
   }, [service]);
 
   return (

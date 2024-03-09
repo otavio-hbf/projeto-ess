@@ -18,7 +18,7 @@ const ListHistory = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getHistory(cookies.get("userId") ? cookies.get("userId") : "");
+    service.getHistory(cookies.get("userId").toString());
   }, [service]);
 
   return (

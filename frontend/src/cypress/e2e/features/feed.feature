@@ -4,6 +4,9 @@ Feature: Feed
     And personalized recommendations based on my taste
     So that I can listen to them.
 
+    Background:
+        Given I am logged in with user id "2" 
+
     Scenario: Songs shown in the feed page
         Given The user is in the "feed" page
         Then "music-section" must have all "15" songs of the database

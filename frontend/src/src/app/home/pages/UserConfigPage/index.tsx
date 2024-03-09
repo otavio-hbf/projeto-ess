@@ -17,7 +17,7 @@ const UserConfigPage = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getUser(cookies.get("userId") ? cookies.get("userId") : "");
+    service.getUser(cookies.get("userId").toString());
   }, [service]);
 
   return (

@@ -13,9 +13,7 @@ const Feed = () => {
   useEffect(() => {
     if (cookies.get("userId")) {
       service.getSongs();
-      service.getReccomendations(
-        cookies.get("userId") ? cookies.get("userId") : "",
-      );
+      service.getReccomendations(cookies.get("userId").toString());
     }
   }, [service]);
 

@@ -17,16 +17,16 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
-  const userId = cookies.get("userId") ? cookies.get("userId") : "";
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
     randomSongId = ((evt.clientX % 10) + 1).toString();
+    const userId = cookies.get("userId");
 
     if (playlist.songs.includes(randomSongId)) {
       setErrorMessage("Song already added! Try again!");
     } else {
-      service.addSongToPlaylist(playlist.id, randomSongId, userId);
+      service.addSongToPlaylist(playlist.id, randomSongId, userId.toString());
       setErrorMessage("");
     }
   };

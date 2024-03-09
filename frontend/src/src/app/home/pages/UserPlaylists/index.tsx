@@ -1,5 +1,5 @@
 import { Stack } from "@mui/joy";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import PlaylistItem from "../../../../shared/components/PlaylistItem"; // Importando o componente PlaylistItem
 import PlaylistHeader from "../../components/UserPlaylistsOptions"; // Importando o componente PlaylistHeader
 import { PlaylistContext } from "../../context/PlaylistContext";
@@ -14,13 +14,10 @@ const PlaylistPage = () => {
   const { service, state } = useContext(PlaylistContext);
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const userId = params.get("userId");
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getUserPlaylists(
-      cookies.get("userId") ? cookies.get("userId") : "",
-    );
+    service.getUserPlaylists(cookies.get("userId").toString());
   }, [service]);
 
   return (
@@ -50,7 +47,7 @@ const PlaylistPage = () => {
                     >
                       <PlaylistItem
                         playlist={playlist}
-                        userId={userId ? userId : ""}
+                        userId={cookies.get("userId").toString()}
                       />
                     </div>
                   );
