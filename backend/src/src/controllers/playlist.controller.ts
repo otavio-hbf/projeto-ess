@@ -43,8 +43,9 @@ class PlaylistController {
     this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.updatePlaylist(req, res)
     );
-    this.router.delete(`${this.prefix}/:pid/:uid`, (req: Request, res: Response) =>
-      this.deletePlaylist(req, res)
+    this.router.delete(
+      `${this.prefix}/:pid/:uid`,
+      (req: Request, res: Response) => this.deletePlaylist(req, res)
     );
     this.router.put(
       `${this.prefix}/follow/:playlistId`,
