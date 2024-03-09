@@ -341,6 +341,8 @@ export default class PlaylistService {
             type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
             payload: RequestStatus.success(response.data),
           });
+          // refetch playlist
+          this.getPlaylist(playlistId);
         },
         onFailure: (error) => {
           this.dispatch({

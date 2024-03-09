@@ -16,6 +16,8 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const isFollowing = playlist.followers.indexOf(userId) > -1
+  console.log(playlist.followers);
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
@@ -29,28 +31,39 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
     }
   };
 
+  const handleFollow = (evt) => {
+    service.followPlaylist(playlist.id, userId);
+  };
+  
+  const handleUnfollow = (evt) => {
+    service.unfollowPlaylist(playlist.id, userId);
+  };
+
   return (
     <>
       <Header title={playlist.name}>
         {errorMessage && <Alert>{errorMessage}</Alert>}
-        {playlist.followers.indexOf(userId) > -1 ? (
+        {isFollowing ? (
           <Button
-            // onClick={(evt) => {
-            //   handleAddFakeSong(evt);
-            // }}
+            onClick={(evt) => {
+              handleUnfollow(evt);
+            }}
             variant="outlined"
             color="warning"
             data-cy="follow-playlist"
             // startDecorator={<Icon path={mdiBug} size={1} />}
-          >  Unfollow
+          >
+            Unfollow
           </Button>
-          ) : playlist.createdBy !== userId ? (
+        ) : playlist.createdBy !== userId ? (
           <Button
-            variant="outlined"
-            color="warning"
-            data-cy="follow-playlist"
-          >  Follow
-          </Button>) : null}
+            onClick={(evt) => {
+              handleFollow(evt);
+            }}
+            variant="outlined" color="warning" data-cy="follow-playlist">
+            Follow
+          </Button>
+        ) : null}
         <Button
           onClick={(evt) => {
             handleAddFakeSong(evt);
@@ -69,7 +82,6 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
           data-cy="rename-playlist"
           startDecorator={<Icon path={mdiRename} size={1} />}
         >
-          
           Renomear Playlist
         </Button>
       </Header>
