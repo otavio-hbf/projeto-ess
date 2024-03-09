@@ -13,9 +13,9 @@ Given("The user is at the {string} page", (page: string) => {
     cy.visit(page);
 });
 
-When("The user searches for artist {string}", (artist: string) => {
+When("The user searches for keyword {string}", (keyword: string) => {
     // Type the artist's name into the search bar and press Enter
-    cy.get('[data-cy="input-name"]').type(artist).type("{enter}");
+    cy.get('[data-cy="input-name"]').type(keyword).type("{enter}");
 });
 
 Then("At least {string} songs are shown at the {string} section", (minSongs: string, section: string) => {
@@ -37,11 +37,7 @@ Then("The title and artist of the song must appear in the playbar", () => {
     cy.get("[data-cy='artist']").should("exist");
 });
 
-// Scenario: User searchs playlists by name
-    When("The user searches for name {string}", (name: string) => {    
-        cy.get('[data-cy="input-name"]').type(name).type("{enter}");
-    });
-        
+// Scenario: User searchs playlists by name        
     Then("At least {string} playlist is shown at the {string} section", (minSongs: string, section: string) => {
         cy.get(`[data-cy="${section}"]`).should("have.length.at.least", parseInt(minSongs));
     });

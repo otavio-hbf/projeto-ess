@@ -50,7 +50,7 @@ const Search = () => {
       className={styles.container}
     >
       <form onSubmit={handleSubmit(onSubmit)} data-cy="search-bar">
-        <div className={styles.formInputContainer} >
+        <div className={styles.formInputContainer}>
           <Input
             data-cy="input-name"
             {...register("name")}
@@ -66,7 +66,7 @@ const Search = () => {
       </form>
 
       <Typography level="h1">Músicas:</Typography>
-      <div className={styles.listContainer} >
+      <div className={styles.listContainer}>
         <section className={styles.container}>
           <ul className={styles.songList}>
             {searchSongsResults.map((result) => (
