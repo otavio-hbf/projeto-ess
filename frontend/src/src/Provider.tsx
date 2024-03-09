@@ -4,6 +4,7 @@ import { HistoryProvider } from "./app/home/context/HistoryContext";
 import { PlaylistProvider } from "./app/home/context/PlaylistContext";
 import { FeedProvider } from "./app/home/context/FeedContext";
 import { SongProvider } from "./app/home/context/SongContext";
+import { HotPageProvider } from "./app/home/context/HotPageContext";
 
 /**
  * Provider component that wraps the application and provides the necessary context.
@@ -13,15 +14,17 @@ import { SongProvider } from "./app/home/context/SongContext";
  */
 const Provider = ({ children }: { children: ReactNode }) => {
   return (
-    <SongProvider>
-      <SearchProvider>
-        <FeedProvider>
-          <PlaylistProvider>
-            <HistoryProvider>{children}</HistoryProvider>
-          </PlaylistProvider>
-        </FeedProvider>
-      </SearchProvider>
-    </SongProvider>
+    <HotPageProvider>
+      <SongProvider>
+        <SearchProvider>
+          <FeedProvider>
+            <PlaylistProvider>
+              <HistoryProvider>{children}</HistoryProvider>
+            </PlaylistProvider>
+          </FeedProvider>
+        </SearchProvider>
+      </SongProvider>
+    </HotPageProvider>
   );
 };
 
