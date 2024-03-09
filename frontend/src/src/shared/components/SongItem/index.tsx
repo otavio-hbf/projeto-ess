@@ -10,7 +10,7 @@ import SongDeleteModal from "../../../app/home/components/SongDeleteModal";
 import { useSongContext } from "../../../app/home/context/SongContext";
 
 interface SongItemProps {
-  song: SongModel | null;
+  song?: SongModel;
   progress?: number;
   uid?: string;
   history_id?: string;
