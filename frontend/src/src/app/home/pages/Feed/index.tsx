@@ -36,7 +36,11 @@ const Feed = () => {
             <>
               <ul className={styles.songList}>
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem}>
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="music-section"
+                  >
                     <FeedSongItem song={song} />
                   </li>
                 ))}
@@ -55,7 +59,11 @@ const Feed = () => {
             <>
               <ul className={styles.songList}>
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem}>
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="recommendations"
+                  >
                     <FeedSongItem song={song} />
                   </li>
                 ))}

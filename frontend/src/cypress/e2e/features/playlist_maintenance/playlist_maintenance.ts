@@ -2,8 +2,10 @@ import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 
 // Common steps
 Given("the user is in the {string} page", (page: string) => {
+    // Visit the specified page
     cy.visit(page);
 });
+
 
 Given("the {string} list has {string} playlists", (container: string, count: string) => {
     cy.getDataCy(container).children().should("have.length", parseInt(count));

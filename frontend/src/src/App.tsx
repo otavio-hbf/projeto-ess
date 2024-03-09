@@ -13,6 +13,7 @@ import PlaylistSongsPage from "./app/home/pages/PlaylistSongsPage";
 import Search from "./app/home/pages/Search";
 import LoginPage from "./app/home/pages/LoginPage";
 import RegisterPage from "./app/home/pages/RegisterPage";
+import { HotPage } from "./app/home/pages/HotPage";
 
 const AppWrapper = () => {
   // Replace this with the song you want to show playing.

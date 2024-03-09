@@ -1,6 +1,7 @@
 import {
   mdiAccount,
   mdiAccountOutline,
+  mdiFire,
   mdiHistory,
   mdiHomeOutline,
   mdiLambda,
@@ -61,6 +62,12 @@ const Navbar = () => {
         title="My Profile"
         path="/my-profile"
         icon={mdiAccountOutline}
+      />
+      <NavItem
+        location={location}
+        title="Hot Page"
+        path="/hot"
+        icon={mdiFire}
       />
     </Stack>
   );

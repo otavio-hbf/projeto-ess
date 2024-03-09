@@ -130,7 +130,7 @@ export default class Database {
           times_ever_played: 0,
         }),
         new SongEntity({
-          id: "13",
+          id: "14",
           title: "Umbrella",
           duration: 78,
           artist: "Rihanna",
@@ -138,7 +138,7 @@ export default class Database {
           times_ever_played: 90,
         }),
         new SongEntity({
-          id: "13",
+          id: "15",
           title: "Halo theme song",
           duration: 78,
           artist: "Unknown",
