@@ -38,6 +38,13 @@ Then("The title and artist of the song must appear in the playbar", () => {
 });
 
 // Scenario: User searchs playlists by name        
-    Then("At least {string} playlist is shown at the {string} section", (minSongs: string, section: string) => {
-        cy.get(`[data-cy="${section}"]`).should("have.length.at.least", parseInt(minSongs));
-    });
+Then("At least {string} playlist is shown at the {string} section", (minSongs: string, section: string) => {
+    cy.get(`[data-cy="${section}"]`).should("have.length.at.least", parseInt(minSongs));
+});
+
+//Scenario: Clicking in a playlist
+When("The user clicks in a PlaylistItem at the {string} button", (button: string) => {
+    cy.get(`[data-cy="${button}"]`)
+    .should('be.visible')
+    .click();
+});

@@ -19,3 +19,8 @@ Feature: Search
         When The user searches for keyword "Road Trip"
         Then At least "1" playlist is shown at the "search-playlists" section
 
+    Scenario: Clicking in a playlist
+        Given The user is at the "/search" page
+        When The user searches for keyword "Road Trip"
+        And The user clicks in a PlaylistItem at the "view-songs" button
+        Then The user is at the "/playlist?playlistId=2" page
