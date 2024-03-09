@@ -34,6 +34,7 @@ const FeedSongItem = ({ song }: FeedSongItemProps) => {
           border: "2px solid #5a039d",
         }}
         onClick={handleClick}
+        data-cy="song"
       >
         <Stack direction={"row"}>
           <Sheet sx={{ p: 1, mr: 1, background: "#ffffff00" }}>
