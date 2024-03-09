@@ -3,6 +3,7 @@ import Icon from "@mdi/react";
 import { IconButton, LinearProgress, Sheet, Stack, Typography } from "@mui/joy";
 import { useState } from "react";
 import SongModel from "../../../app/home/models/SongModel";
+import { useSongContext } from "../../../app/home/context/SongContext";
 
 interface PlayBarProps {
   song: SongModel;
@@ -11,6 +12,7 @@ interface PlayBarProps {
 
 const PlayBar = (props: PlayBarProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const { selectedSong } = useSongContext();
 
   const togglePlayPause = () => {
     setIsPlaying((prevIsPlaying) => !prevIsPlaying);
@@ -38,8 +40,8 @@ const PlayBar = (props: PlayBarProps) => {
       </Stack>
 
       <Stack sx={{ mx: 6 }}>
-        <Typography level="body-sm">{props.song?.artist}</Typography>
-        <Typography level="title-md">{props.song?.title}</Typography>
+        <Typography level="body-sm">{selectedSong?.artist}</Typography>
+        <Typography level="title-md">{selectedSong?.title}</Typography>
       </Stack>
 
       <LinearProgress
