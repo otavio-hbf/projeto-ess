@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import styles from "./index.module.css";
-import { Stack } from '@mui/material';
+import { Stack } from "@mui/material";
 
 const LoginPage = () => {
   const { service } = useContext(LoginContext);
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -31,15 +31,29 @@ const LoginPage = () => {
     >
       <form onSubmit={handleSubmit}>
         <p>
-            <label htmlFor="iemail">E-mail</label>
-            <input type="email" name="email" id="iemail" value={formData.email} onChange={handleChange} required/> 
+          <label htmlFor="iemail">E-mail</label>
+          <input
+            type="email"
+            name="email"
+            id="iemail"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </p>
         <p>
-            <label htmlFor="ipassword">Senha</label>
-            <input type="password" name="password" id="ipassword" value={formData.password} onChange={handleChange} required/>
+          <label htmlFor="ipassword">Senha</label>
+          <input
+            type="password"
+            name="password"
+            id="ipassword"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
         </p>
         <p>
-            <input type="submit" value="Entrar"/>
+          <input type="submit" value="Entrar" />
         </p>
       </form>
       <p>

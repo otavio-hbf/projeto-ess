@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import styles from "./index.module.css";
-import { Stack } from '@mui/material';
+import { Stack } from "@mui/material";
 
 const RegisterPage = () => {
   const { service } = useContext(LoginContext);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
+    name: "",
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -32,19 +32,40 @@ const RegisterPage = () => {
     >
       <form onSubmit={handleSubmit}>
         <p>
-            <label htmlFor="iname">Nome</label>
-            <input type="text" name="name" id="iname" value={formData.name} onChange={handleChange} required/> 
+          <label htmlFor="iname">Nome</label>
+          <input
+            type="text"
+            name="name"
+            id="iname"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </p>
         <p>
-            <label htmlFor="iemail">E-mail</label>
-            <input type="email" name="email" id="iemail" value={formData.email} onChange={handleChange} required/> 
+          <label htmlFor="iemail">E-mail</label>
+          <input
+            type="email"
+            name="email"
+            id="iemail"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </p>
         <p>
-            <label htmlFor="ipassword">Senha</label>
-            <input type="password" name="password" id="ipassword" value={formData.password} onChange={handleChange} required/>
+          <label htmlFor="ipassword">Senha</label>
+          <input
+            type="password"
+            name="password"
+            id="ipassword"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
         </p>
         <p>
-            <input type="submit" value="Entrar"/>
+          <input type="submit" value="Entrar" />
         </p>
       </form>
       <p>

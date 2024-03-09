@@ -137,11 +137,11 @@ const authRoutes = [
 const router = createBrowserRouter([
   //Rotas de autenticação não usam o "AppWrapper"
   {
-    path: '/',
+    path: "/",
     children: authRoutes,
   },
   {
-    path: '/',
+    path: "/",
     element: <AppWrapper />,
     children: mainRoutes,
   },

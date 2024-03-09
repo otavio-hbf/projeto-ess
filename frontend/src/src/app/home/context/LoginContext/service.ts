@@ -6,13 +6,12 @@ import { AppUnknownError } from "../../../../shared/errors/app-error";
 import { UserSchema } from "../../forms/UserSchema";
 import UserModel from "../../models/UserModel";
 import { userInfo } from "os";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 
 export default class PlaylistService {
   private apiService: ApiService;
   private dispatch: Dispatch<LoginStateAction>;
-  
 
   constructor({
     apiService,
@@ -79,9 +78,9 @@ export default class PlaylistService {
           alert("Login realizado com sucesso!");
 
           const cookies = new Cookies();
-          cookies.set('userId', user.id, { path: '/' });
+          cookies.set("userId", user.id, { path: "/" });
           window.location.href = "/feed";
-          console.log(cookies.get('userId'));
+          console.log(cookies.get("userId"));
 
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USER,

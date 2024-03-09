@@ -5,7 +5,7 @@ import MostPlayedHeader from "../../components/MostPlayedHeader";
 import { HistoryContext } from "../../context/HistoryContext";
 import styles from "./index.module.css";
 import { useLocation } from "react-router-dom";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 /**
  * Renders a list of songs.
@@ -18,7 +18,7 @@ const MostPlayedPage = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getMostPlayed(cookies.get('userId') ? cookies.get('userId') : "");
+    service.getMostPlayed(cookies.get("userId") ? cookies.get("userId") : "");
   }, [service]);
 
   return (

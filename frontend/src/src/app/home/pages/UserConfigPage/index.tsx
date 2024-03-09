@@ -5,7 +5,7 @@ import UserConfigHeader from "../../components/UserConfigHeader";
 import { HistoryContext } from "../../context/HistoryContext";
 import styles from "./index.module.css";
 import { useLocation } from "react-router-dom";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 /**
  * Renders a list of songs.
@@ -17,7 +17,7 @@ const UserConfigPage = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getUser(cookies.get('userId') ? cookies.get('userId') : "");
+    service.getUser(cookies.get("userId") ? cookies.get("userId") : "");
   }, [service]);
 
   return (

@@ -5,7 +5,7 @@ import PlaylistHeader from "../../components/UserPlaylistsOptions"; // Importand
 import { PlaylistContext } from "../../context/PlaylistContext";
 import styles from "./index.module.css";
 import { useLocation } from "react-router-dom";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 /**
  * Renders a list of playlists.
@@ -18,7 +18,9 @@ const PlaylistPage = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    service.getUserPlaylists(cookies.get('userId') ? cookies.get('userId') : "");
+    service.getUserPlaylists(
+      cookies.get("userId") ? cookies.get("userId") : "",
+    );
   }, [service]);
 
   return (
@@ -46,7 +48,10 @@ const PlaylistPage = () => {
                       className={styles.listItem}
                       data-cy={`playlist-item-${playlist.name}`}
                     >
-                      <PlaylistItem playlist={playlist} userId={userId ? userId : ""} />
+                      <PlaylistItem
+                        playlist={playlist}
+                        userId={userId ? userId : ""}
+                      />
                     </div>
                   );
                 })

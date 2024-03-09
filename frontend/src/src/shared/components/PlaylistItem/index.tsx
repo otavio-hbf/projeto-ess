@@ -5,7 +5,7 @@ import { Sheet, Stack, Typography, IconButton } from "@mui/joy";
 import { Link } from "react-router-dom";
 import PlaylistModel from "../../../app/home/models/PlaylistModel";
 import PlaylistDeleteModal from "../../../app/home/components/PlaylistDeleteModal";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 interface PlaylistItemProps {
   playlist?: PlaylistModel;
@@ -15,7 +15,7 @@ interface PlaylistItemProps {
 const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const cookies = new Cookies();
-  userId = cookies.get('userId') ? cookies.get('userId') : "";
+  userId = cookies.get("userId") ? cookies.get("userId") : "";
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);

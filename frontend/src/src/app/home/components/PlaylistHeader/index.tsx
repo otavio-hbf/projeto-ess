@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import RenamePlaylistModal from "../RenamePlaylistModal";
 import PlaylistModel from "../../models/PlaylistModel";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 interface PlaylistProps {
   playlist: PlaylistModel;
@@ -17,7 +17,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
-  const userId = cookies.get('userId') ? cookies.get('userId') : "";
+  const userId = cookies.get("userId") ? cookies.get("userId") : "";
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
