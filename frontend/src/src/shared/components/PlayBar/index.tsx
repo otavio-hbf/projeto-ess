@@ -40,8 +40,12 @@ const PlayBar = (props: PlayBarProps) => {
       </Stack>
 
       <Stack sx={{ mx: 6 }}>
-        <Typography level="body-sm" data-cy="artist">{selectedSong?.artist}</Typography>
-        <Typography level="title-md" data-cy="title">{selectedSong?.title}</Typography>
+        <Typography level="body-sm" data-cy="artist">
+          {selectedSong?.artist}
+        </Typography>
+        <Typography level="title-md" data-cy="title">
+          {selectedSong?.title}
+        </Typography>
       </Stack>
 
       <LinearProgress

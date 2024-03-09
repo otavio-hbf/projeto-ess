@@ -27,9 +27,13 @@ const Feed = () => {
           failed: () => <span>Erro ao carregar as músicas!</span>,
           succeeded: (songs) => (
             <>
-              <ul className={styles.songList} >
+              <ul className={styles.songList}>
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem} data-cy="music-section">
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="music-section"
+                  >
                     <FeedSongItem song={song} />
                   </li>
                 ))}
@@ -46,9 +50,13 @@ const Feed = () => {
           failed: () => <span>Erro ao carregar as músicas!</span>,
           succeeded: (songs) => (
             <>
-              <ul className={styles.songList} >
+              <ul className={styles.songList}>
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem} data-cy="recommendations">
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="recommendations"
+                  >
                     <FeedSongItem song={song} />
                   </li>
                 ))}
