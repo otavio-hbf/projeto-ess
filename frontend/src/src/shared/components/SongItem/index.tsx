@@ -10,7 +10,7 @@ import SongDeleteModal from "../../../app/home/components/SongDeleteModal";
 import { useSongContext } from "../../../app/home/context/SongContext";
 
 interface SongItemProps {
-  song: SongModel | null;
+  song?: SongModel;
   progress?: number;
   uid?: string;
   history_id?: string;
@@ -22,7 +22,7 @@ interface SongItemProps {
 const SongItem = (props: SongItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { setSelectedSong } = useSongContext();
-  const { service, state } = useContext(HistoryContext);
+  const { service } = useContext(HistoryContext);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -35,6 +35,7 @@ const SongItem = (props: SongItemProps) => {
   const handleClick = () => {
     if (props.song) {
       setSelectedSong(props.song);
+      service.createHistory({ user_id: "2", song_id: props.song.id }, "2");
     }
   };
 

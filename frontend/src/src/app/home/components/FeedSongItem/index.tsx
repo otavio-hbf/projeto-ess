@@ -1,21 +1,23 @@
 import { mdiMusicNote } from "@mdi/js";
 import Icon from "@mdi/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
 import SongModel from "../../models/SongModel";
 import { useSongContext } from "../../context/SongContext";
+import { HistoryContext } from "../../context/HistoryContext";
 
 interface FeedSongItemProps {
   song?: SongModel;
 }
 
 const FeedSongItem = ({ song }: FeedSongItemProps) => {
-  // const { service, state } = useContext(FeedContext);
+  const { service } = useContext(HistoryContext);
   const { setSelectedSong } = useSongContext();
 
   const handleClick = () => {
     if (song) {
       setSelectedSong(song);
+      service.createHistory({ user_id: "2", song_id: song.id }, "2");
     }
   };
 

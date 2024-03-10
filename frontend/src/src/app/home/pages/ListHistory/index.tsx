@@ -1,4 +1,4 @@
-import { Stack } from "@mui/joy";
+import { Stack, Typography } from "@mui/joy";
 import { useContext, useEffect } from "react";
 import SongItem from "../../../../shared/components/SongItem";
 import HistoryOptions from "../../components/HistoryOptions";
@@ -36,23 +36,27 @@ const ListHistory = () => {
           failed: () => <span>Erro ao carregar o histórico!</span>,
           succeeded: (histories) => (
             <>
-              {histories.length > 0
-                ? histories.map((history) => {
-                    return (
-                      <div
-                        key={history.id}
-                        className={styles.listItem}
-                        data-cy={`history-item-${history.id}`}
-                      >
-                        <SongItem
-                          song={history.song}
-                          history_id={history.id}
-                          uid="2"
-                        />
-                      </div>
-                    );
-                  })
-                : "Você ainda não escutou nenhuma musica!"}
+              {histories.length > 0 ? (
+                histories.map((history) => {
+                  return (
+                    <div
+                      key={history.id}
+                      className={styles.listItem}
+                      data-cy={`history-item-${history.id}`}
+                    >
+                      <SongItem
+                        song={history.song}
+                        history_id={history.id}
+                        uid="2"
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <Typography level="body-md">
+                  Você ainda não escutou nenhuma musica!
+                </Typography>
+              )}
             </>
           ),
         })}
