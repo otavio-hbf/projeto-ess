@@ -40,6 +40,9 @@ const UserConfigPage = () => {
           ),
         })}
       </div>
+      <div className={styles.logout}>
+        <a href="/">Logout</a>
+      </div>
     </Stack>
   );
 };
