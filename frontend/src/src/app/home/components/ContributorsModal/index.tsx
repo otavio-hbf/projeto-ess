@@ -1,5 +1,8 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import PlaylistModel from "../../models/PlaylistModel";
+import UserModel from "../../models/UserModel";
+import { useContext, useEffect, useState } from "react";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
 interface ContributorsModalProps {
   open: boolean;
@@ -9,6 +12,24 @@ interface ContributorsModalProps {
 
 const ContributorsModal = (props: ContributorsModalProps) => {
   const { open, setOpen, playlist } = props;
+  const { service } = useContext(PlaylistContext);
+  const [contributorsData, setContributorsData] = useState<UserModel[]>([]);
+
+  useEffect(() => {
+    const fetchContributorsData = async () => {
+      if (open) {
+        try {
+          const users = await service.getUserArray(playlist.contributors);
+          setContributorsData(users);
+        } catch (error) {
+          console.error("Error fetching contributors:", error);
+          setContributorsData([]); // Reset contributors data on error
+        }
+      }
+    };
+
+    fetchContributorsData();
+  }, [open, playlist.contributors, service]);
 
   return (
     <Modal
@@ -44,9 +65,9 @@ const ContributorsModal = (props: ContributorsModalProps) => {
           Contributors:
         </Typography>
 
-        {playlist.contributors.map((contributor, index) => (
+        {contributorsData.map((contributor, index) => (
           <Typography key={index} sx={{ mb: 1 }}>
-            {contributor}
+            {contributor.name}
           </Typography>
         ))}
       </Sheet>
