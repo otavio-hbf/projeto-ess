@@ -5,6 +5,7 @@ import { IconButton, Sheet, Stack, Typography } from "@mui/joy";
 import SongModel from "../../models/SongModel";
 import { useSongContext } from "../../context/SongContext";
 import { HistoryContext } from "../../context/HistoryContext";
+import Cookies from "universal-cookie";
 
 interface FeedSongItemProps {
   song?: SongModel;
@@ -13,11 +14,15 @@ interface FeedSongItemProps {
 const FeedSongItem = ({ song }: FeedSongItemProps) => {
   const { service } = useContext(HistoryContext);
   const { setSelectedSong } = useSongContext();
+  const cookies = new Cookies();
 
   const handleClick = () => {
     if (song) {
       setSelectedSong(song);
-      service.createHistory({ user_id: "2", song_id: song.id }, "2");
+      service.createHistory(
+        { user_id: cookies.get("userId").toString(), song_id: song.id },
+        cookies.get("userId").toString(),
+      );
     }
   };
 

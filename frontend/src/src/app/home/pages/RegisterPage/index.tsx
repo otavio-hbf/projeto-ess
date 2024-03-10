@@ -19,6 +19,17 @@ const RegisterPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const { name, email, password } = formData;
+
+    if (name.trim() === "") {
+      alert("O campo de nome não pode estar vazio.");
+      return;
+    }
+
+    if (password.length < 5) {
+      alert("A senha deve ter pelo menos 5 caracteres.");
+      return;
+    }
+
     service.createUser(name, email, password);
   };
 
@@ -65,7 +76,7 @@ const RegisterPage = () => {
           />
         </p>
         <p>
-          <input type="submit" value="Entrar" />
+          <input type="submit" value="Cadastrar" />
         </p>
       </form>
       <p>
