@@ -17,6 +17,8 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
+  const isFollowing =
+    playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
@@ -31,10 +33,46 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
     }
   };
 
+  const handleFollow = (evt) => {
+    service.followPlaylist(playlist.id, cookies.get("userId").toString());
+  };
+
+  const handleUnfollow = (evt) => {
+    service.unfollowPlaylist(playlist.id, cookies.get("userId").toString());
+  };
+
   return (
     <>
-      <Header title={playlist.name}>
+      <Header
+        title={playlist.name}
+        button={
+          isFollowing ? (
+            <Button
+              onClick={(evt) => {
+                handleUnfollow(evt);
+              }}
+              variant="outlined"
+              color="warning"
+              data-cy="follow-playlist"
+            >
+              Unfollow
+            </Button>
+          ) : playlist.createdBy !== cookies.get("userId").toString() ? (
+            <Button
+              onClick={(evt) => {
+                handleFollow(evt);
+              }}
+              variant="outlined"
+              color="primary"
+              data-cy="follow-playlist"
+            >
+              Follow
+            </Button>
+          ) : null
+        }
+      >
         {errorMessage && <Alert>{errorMessage}</Alert>}
+
         <Button
           onClick={(evt) => {
             handleAddFakeSong(evt);
