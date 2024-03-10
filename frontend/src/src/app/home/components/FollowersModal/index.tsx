@@ -1,5 +1,8 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import PlaylistModel from "../../models/PlaylistModel";
+import UserModel from "../../models/UserModel";
+import { useContext, useEffect, useState } from "react";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
 interface FollowersModalProps {
   open: boolean;
@@ -9,6 +12,24 @@ interface FollowersModalProps {
 
 const FollowersModal = (props: FollowersModalProps) => {
   const { open, setOpen, playlist } = props;
+  const { service } = useContext(PlaylistContext);
+  const [followersData, setFollowersData] = useState<UserModel[]>([]);
+
+  useEffect(() => {
+    const fetchFollowersData = async () => {
+      if (open) {
+        try {
+          const users = await service.getUserArray(playlist.followers);
+          setFollowersData(users);
+        } catch (error) {
+          console.error("Error fetching followers:", error);
+          setFollowersData([]); // Reset followers data on error
+        }
+      }
+    };
+
+    fetchFollowersData();
+  }, [open, playlist.followers, service]);
 
   return (
     <Modal
@@ -44,9 +65,9 @@ const FollowersModal = (props: FollowersModalProps) => {
           Followers:
         </Typography>
 
-        {playlist.followers.map((follower, index) => (
+        {followersData.map((follower, index) => (
           <Typography key={index} sx={{ mb: 1 }}>
-            {follower}
+            {follower.name}
           </Typography>
         ))}
       </Sheet>

@@ -358,4 +358,29 @@ export default class PlaylistService {
       });
     }
   }
+
+  async getUserArray(userIds: string[]): Promise<UserModel[]> {
+    try {
+      const users: UserModel[] = [];
+      for (const userId of userIds) {
+        const result = await this.apiService.get(`/users/${userId}`);
+        result.handle({
+          onSuccess: (response) => {
+            const userData = response.data;
+            const user = new UserModel(userData);
+            users.push(user);
+          },
+          onFailure: (error) => {
+            // Handle failure
+            console.error(`Failed to fetch user with ID ${userId}:`, error);
+          },
+        });
+      }
+      return users;
+    } catch (error) {
+      // Handle generic error
+      console.error("Error fetching users:", error);
+      return [];
+    }
+  }
 }
