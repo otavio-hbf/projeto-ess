@@ -359,6 +359,30 @@ export default class PlaylistService {
     }
   }
 
+  async getUser(userId: string): Promise<UserModel> {
+    try {
+      const result = await this.apiService.get(`/users/${userId}`);
+      return new Promise<UserModel>((resolve, reject) => {
+        result.handle({
+          onSuccess: (response) => {
+            const userData = response.data;
+            const user = new UserModel(userData);
+            resolve(user);
+          },
+          onFailure: (error) => {
+            // Handle failure
+            console.error(`Failed to fetch user with ID ${userId}:`, error);
+            reject(error);
+          },
+        });
+      });
+    } catch (error) {
+      // Handle generic error
+      console.error("Error fetching user:", error);
+      throw error;
+    }
+  }
+
   async getUserArray(userIds: string[]): Promise<UserModel[]> {
     try {
       const users: UserModel[] = [];

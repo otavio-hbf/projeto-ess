@@ -2,10 +2,11 @@ import Header from "../../../../shared/components/Header";
 import { mdiBug, mdiRename } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Button, Alert, Typography, Stack } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import RenamePlaylistModal from "../RenamePlaylistModal";
 import PlaylistModel from "../../models/PlaylistModel";
+import UserModel from "../../models/UserModel";
 import Cookies from "universal-cookie";
 import FollowersModal from "../FollowersModal";
 import ContributorsModal from "../ContributorsModal";
@@ -24,6 +25,22 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const cookies = new Cookies();
   const isFollowing =
     playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
+  const [creatorName, setCreatorName] = useState<string>("");
+  
+  useEffect(() => {
+    const fetchCreatorName = async () => {
+      try {
+        const user = await service.getUser(playlist.createdBy);
+        setCreatorName(user.name);
+      } catch (error) {
+        console.error("Error fetching creator name:", error);
+        setCreatorName(""); // Reset creator name on error
+      }
+    };
+
+    fetchCreatorName();
+  }, [service, playlist.createdBy]);
+  
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
@@ -51,7 +68,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
       <Header
         title={playlist.name}
         button={
-          <Stack direction="row" spacing={3} alignItems="center">
+          <Stack direction="row" spacing={4} alignItems="center">
             {isFollowing ? (
               <Button
                 onClick={(evt) => {
@@ -75,6 +92,9 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
                 Follow
               </Button>
             ) : null}
+            <Typography level="body-lg">
+              Created by: {creatorName}
+            </Typography>
             <Typography
               level="body-lg"
               onClick={() => setFollowersModalOpen(true)}
