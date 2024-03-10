@@ -17,6 +17,8 @@ import { Link, Location, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
 
   return (
     <Stack

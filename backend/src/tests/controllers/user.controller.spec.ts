@@ -31,15 +31,13 @@ describe('UserController', () => {
     });
 
     it('should return users', async () => {
-        //const createdUserEntity = await userService.createUser(mockedUserEntity)
         const response = await request.get('/api/users').send();
         const result = response.body.data;
 
         expect(response.status).toBe(200);
-        //expect(result).toContain(createdUserEntity);
-        // You may want to add more detailed assertions here based on the expected response
     });
 
+    // testa a função de GET pelo ID
     it('should return a user by id', async () => {
         const createdUserEntity = await userService.createUser(mockedUserEntity)
         const response = await request.get('/api/users/' + mockedUserId).send();
@@ -49,6 +47,7 @@ describe('UserController', () => {
         expect(result).toEqual(createdUserEntity);
     });
 
+    // testa uma falha na função de GET pelo ID
     it('should throw an error when user is not found by id', async () => {
         const response = await request.get('/api/users/1111').send();
         const result = response.body.msgCode;
@@ -57,6 +56,7 @@ describe('UserController', () => {
         expect(result).toEqual('user_not_found');
     });
 
+    // testa a função de criar usuário
     it('should create a user', async () => {
         const createUserData = { name: "basilia", email: "pbgs@cin.unibra.br", password: "pedin" };
         const response = await request.post('/api/users').send(createUserData);

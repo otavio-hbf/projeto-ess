@@ -10,6 +10,7 @@ import SongService from '../../src/services/song.service';
 import UserRepository from '../../src/repositories/user.repository';
 import UserService from '../../src/services/user.service';
 import UserModel from '../../src/models/user.model';
+import { HttpNotFoundError } from '../../src/utils/errors/http.error';
 import Injector from "../../src/di/injector";
 import { di } from "../../src/di/index";
 
@@ -92,67 +93,27 @@ defineFeature(feature, (test) => {
         });
     });
 
-    test('Delete user', ({ given, when, and, then }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
+    test('excluir usuário', ({ given, when, then, and }) => {
+        let userEmail: string;
+        let userEntity: UserEntity;
 
+        given('o método createUser foi chamado com o name "samanto" email "samanto@gmail.com" e senha "samanto123"', () => {
+            userEmail = 'samanto@gmail.com';
+            userEntity = new UserEntity({ id:'20', name: 'samanto', email: userEmail, password: 'samanto123', history_tracking: true });
+            jest.spyOn(mockUserRepository, 'createUser').mockResolvedValueOnce(userEntity);
         });
 
-        when(/^the system receives a request to delete the account with email "(.*)" and password "(.*)"$/, (arg0, arg1) => {
-
+        when(/^o método deleteUserWithEmailPassword é chamado com o email "(.*)" e senha "(.*)"$/, async () => {
+            await userService.deleteUserWithEmailPassword(userEmail, 'samanto123');
         });
 
-        and(/^the system deletes the email account "(.*)"$/, (arg0) => {
-
+        then(/^o método getUserByEmail é chamado com o email "(.*)"$/, async (email) => {
+            jest.spyOn(mockUserRepository, 'getUserByEmail').mockResolvedValueOnce(null);
+            await expect(userService.getUserByEmail(email)).rejects.toThrow(HttpNotFoundError);
         });
 
-        then(/^the system does not have the email account "(.*)" registered$/, (arg0) => {
-
-        });
-    });
-
-    test('Update user', ({ given, when, then }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
-
-        });
-
-        when(/^a PUT request is sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-    });
-
-    test('Unsuccessful registration', ({ given, when, then }) => {
-        given('the system has an account with the email “ze@gmail.com” registered', () => {
-
-        });
-
-        when(/^a POST request was sent to "(.*)" with the request body being a JSON with name "(.*)" email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2, arg3) => { 
-
-        });
-
-        then(/^the system registers the new email account “ze@gmail.com” and password “ze(\d+)”$/, (arg0) => {
-
-        });
-    });
-
-    test('Unsuccessful login', ({ given, when, then, and }) => {
-        given(/^the system has the account with email “ze@gmail.com” and password “ze(\d+)” registered$/, (arg0) => {
-
-        });
-
-        when(/^a GET request was sent to "(.*)" with the request body being a JSON with email "(.*)" and password "(.*)"$/, (arg0, arg1, arg2) => {
-
-        });
-
-        then(/^the response status should be "(.*)"$/, (arg0) => {
-
-        });
-
-        and(/^the user with email "(.*)" is logged in$/, (arg0) => {
-
+        and('é retornada a mensagem "user_not_found"', () => {
+            // Handled in previous step
         });
     });
 

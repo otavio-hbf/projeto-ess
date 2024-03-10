@@ -3,6 +3,9 @@ Feature: Most Played Songs
     I want to see my most played songs of the month,
     So that I can get to know my taste in music.
 
+    Background:
+        Given I am logged in with user id "2"
+
     Scenario: User asks for detailed stats
         Given the user is in the "history" page
         And the "history-list" list has "4" songs
