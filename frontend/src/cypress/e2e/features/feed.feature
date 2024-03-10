@@ -9,12 +9,12 @@ Feature: Feed
 
     Scenario: Songs shown in the feed page
         Given The user is in the "feed" page
-        Then "music-section" must have all "15" songs of the database
+        Then "music-section" must have all "16" songs of the database
 
     Scenario: Recommendations
         Given The user is in the "feed" page
         Then The "recommendations" section should have at least "1" song
-        And The "recommendations" section should have no more than "15" songs
+        And The "recommendations" section should have no more than "16" songs
 
     Scenario: Clicking in a song
         Given The user is in the "feed" page
