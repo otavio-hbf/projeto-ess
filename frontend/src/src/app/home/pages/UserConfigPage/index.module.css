@@ -22,4 +22,19 @@
   .listItemText {
     font-size: 1.5rem;
   }
-  
+
+  .logout {
+    margin-top: 16px;
+    padding: 8px;
+    border: 1px solid #c196bd;
+    background: #2d0029b8;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    width: 110px;
+    text-align: center;
+  }
+
+  .logout a {
+    text-decoration: none;
+    color: white;
+  }
