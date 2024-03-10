@@ -52,6 +52,7 @@ export const HotPage = () => {
         <form onSubmit={handleSubmit}>
           <div className={styles.formInputContainer}>
             <Input
+              data-cy="input_value"
               placeholder="Digite o gênero"
               size="lg"
               value={searchValue || ""}
@@ -63,7 +64,7 @@ export const HotPage = () => {
         {state.getHotSongsRequestStatus.maybeMap({
           loading: () => <span>Carregando...</span>,
           failed: () => (
-            <span style={{ color: "white" }}>
+            <span style={{ color: "white" }} data-cy="No Songs Found">
               Não há músicas com este gênero!
             </span>
           ),
@@ -74,8 +75,14 @@ export const HotPage = () => {
                 style={{ display: "flex", marginTop: "30px" }}
               >
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem}>
-                    <FeedSongItem song={song} />
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="Hot Songs"
+                  >
+                    <div data-cy="Song Item">
+                      <FeedSongItem song={song} />
+                    </div>
                   </li>
                 ))}
               </div>
