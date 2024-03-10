@@ -41,8 +41,9 @@ const RegisterPage = () => {
       spacing={2}
       className={styles.container}
     >
+      <div className={styles.title}>Cadastro</div>
       <form onSubmit={handleSubmit}>
-        <p>
+        <p className={styles.data}>
           <label htmlFor="iname">Nome</label>
           <input
             type="text"
@@ -53,7 +54,7 @@ const RegisterPage = () => {
             required
           />
         </p>
-        <p>
+        <p className={styles.data}>
           <label htmlFor="iemail">E-mail</label>
           <input
             type="email"
@@ -64,7 +65,7 @@ const RegisterPage = () => {
             required
           />
         </p>
-        <p>
+        <p className={styles.data}>
           <label htmlFor="ipassword">Senha</label>
           <input
             type="password"
@@ -75,11 +76,11 @@ const RegisterPage = () => {
             required
           />
         </p>
-        <p>
+        <p className={styles.btn}>
           <input type="submit" value="Cadastrar" />
         </p>
       </form>
-      <p>
+      <p className={styles.link}>
         Já possui cadastro? <a href="/login">Faça login aqui</a>
       </p>
     </Stack>

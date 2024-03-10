@@ -29,8 +29,9 @@ const LoginPage = () => {
       spacing={2}
       className={styles.container}
     >
+      <div className={styles.title}>Login</div>
       <form onSubmit={handleSubmit}>
-        <p>
+        <p className={styles.data}>
           <label htmlFor="iemail">E-mail</label>
           <input
             type="email"
@@ -41,7 +42,7 @@ const LoginPage = () => {
             required
           />
         </p>
-        <p>
+        <p className={styles.data}>
           <label htmlFor="ipassword">Senha</label>
           <input
             type="password"
@@ -52,11 +53,11 @@ const LoginPage = () => {
             required
           />
         </p>
-        <p>
+        <p className={styles.btn}>
           <input type="submit" value="Entrar" />
         </p>
       </form>
-      <p>
+      <p className={styles.link}>
         Ainda não possui cadastro? <a href="/register">Clique aqui</a>
       </p>
     </Stack>
