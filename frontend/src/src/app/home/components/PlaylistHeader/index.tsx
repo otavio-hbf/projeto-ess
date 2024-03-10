@@ -13,11 +13,12 @@ interface PlaylistProps {
 }
 
 const PlaylistHeader = ({ playlist }: PlaylistProps) => {
-  const userId = "1";
+  
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
+  const isFollowing = playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
@@ -33,11 +34,11 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   };
 
   const handleFollow = (evt) => {
-    service.followPlaylist(playlist.id, userId);
+    service.followPlaylist(playlist.id, cookies.get("userId").toString());
   };
 
   const handleUnfollow = (evt) => {
-    service.unfollowPlaylist(playlist.id, userId);
+    service.unfollowPlaylist(playlist.id, cookies.get("userId").toString());
   };
 
   return (
@@ -56,7 +57,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
             >
               Unfollow
             </Button>
-          ) : playlist.createdBy !== userId ? (
+          ) : playlist.createdBy !== cookies.get("userId").toString() ? (
             <Button
               onClick={(evt) => {
                 handleFollow(evt);
