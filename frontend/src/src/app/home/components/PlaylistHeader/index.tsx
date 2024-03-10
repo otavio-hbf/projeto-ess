@@ -8,6 +8,7 @@ import RenamePlaylistModal from "../RenamePlaylistModal";
 import PlaylistModel from "../../models/PlaylistModel";
 import Cookies from "universal-cookie";
 import FollowersModal from "../FollowersModal";
+import ContributorsModal from "../ContributorsModal";
 
 interface PlaylistProps {
   playlist: PlaylistModel;
@@ -17,6 +18,8 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [followersModalOpen, setFollowersModalOpen] = useState<boolean>(false);
+  const [contributorsModalOpen, setContributorsModalOpen] =
+    useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
   const isFollowing =
@@ -79,7 +82,11 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
             >
               Followers: {playlist?.followers.length}
             </Typography>
-            <Typography level="body-lg">
+            <Typography
+              level="body-lg"
+              onClick={() => setContributorsModalOpen(true)}
+              sx={{ cursor: "pointer" }}
+            >
               Contributors: {playlist?.contributors.length}
             </Typography>
           </Stack>
@@ -116,6 +123,11 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
       <FollowersModal
         open={followersModalOpen}
         setOpen={setFollowersModalOpen}
+        playlist={playlist}
+      />
+      <ContributorsModal
+        open={contributorsModalOpen}
+        setOpen={setContributorsModalOpen}
         playlist={playlist}
       />
     </>
