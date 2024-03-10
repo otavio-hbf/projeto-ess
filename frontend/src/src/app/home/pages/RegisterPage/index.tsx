@@ -76,7 +76,7 @@ const RegisterPage = () => {
           />
         </p>
         <p>
-          <input type="submit" value="Entrar" />
+          <input type="submit" value="Cadastrar" />
         </p>
       </form>
       <p>
