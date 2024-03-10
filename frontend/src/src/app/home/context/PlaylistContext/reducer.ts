@@ -60,6 +60,16 @@ const playlistStateReducer = (
         ...state,
         unfollowPlaylistRequestStatus: action.payload,
       };
+    case PlaylistStateActionType.CHANGE_RS_ADD_CONTRIBUTOR_IN_PLAYLIST:
+      return {
+        ...state,
+        addContributorPlaylistRequestStatus: action.payload,
+      };
+    case PlaylistStateActionType.CHANGE_RS_REMOVE_CONTRIBUTOR_IN_PLAYLIST:
+      return {
+        ...state,
+        removeContributorPlaylistRequestStatus: action.payload,
+      };
 
     default:
       return state;

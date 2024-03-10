@@ -359,6 +359,88 @@ export default class PlaylistService {
     }
   }
 
+  async addContributorToPlaylist(
+    playlistId: string,
+    contributorId: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_ADD_CONTRIBUTOR_IN_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/addContributor/${playlistId}/${contributorId}`,
+        { userId: userId },
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_ADD_CONTRIBUTOR_IN_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+
+          // refetch playlist
+          this.getPlaylist(playlistId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_ADD_CONTRIBUTOR_IN_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_ADD_CONTRIBUTOR_IN_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
+  async removeContributorToPlaylist(
+    playlistId: string,
+    contributorId: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_REMOVE_CONTRIBUTOR_IN_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/removeContributor/${playlistId}/${contributorId}`,
+        { userId: userId },
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_REMOVE_CONTRIBUTOR_IN_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+
+          // refetch playlist
+          this.getPlaylist(playlistId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_REMOVE_CONTRIBUTOR_IN_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_REMOVE_CONTRIBUTOR_IN_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
   async getUser(userId: string): Promise<UserModel> {
     try {
       const result = await this.apiService.get(`/users/${userId}`);
