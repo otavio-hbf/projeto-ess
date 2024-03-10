@@ -133,7 +133,9 @@ export default class PlaylistService {
           });
         },
         onFailure: (error) => {
-          alert("Ops! Este email já está cadastrado, tente novamente com outro email.");
+          alert(
+            "Ops! Este email já está cadastrado, tente novamente com outro email.",
+          );
 
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_CREATE_USER,
