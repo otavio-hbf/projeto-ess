@@ -3,6 +3,9 @@ Feature: Playlist Management
     I want to maintain and manage my playlists,
     So that I can organize and enjoy my music collection effectively.
 
+    Background:
+        Given I am logged in with user id "2"
+
     Scenario: Create a New Playlist
         Given the user is in the "MyPlaylists" page
         And the "playlist-list" list has "2" playlists
@@ -17,7 +20,7 @@ Feature: Playlist Management
         And the "playlist-songs" list of "Wild Songs" has "0" songs
         When the user clicks the "add-song" button
         Then the "playlist-songs" list of "My Favorites" should display "1" songs
-    
+
     Scenario: Rename a Playlist
         Given the user is in the "MyPlaylists" page
         And there is an old existing playlist named "Study Vibes"
@@ -39,11 +42,11 @@ Feature: Playlist Management
 
     Scenario: Remove a Song from Playlist
         Given the user is in the "MyPlaylists" page
-        And there is an existing playlist named "My Favorites"
-        And the "playlist-songs" list of "My Favorites" has "4" songs already
-        When the user clicks the "remove-song" button for "Many Men" song in the playlist
+        And there is an existing playlist named "Workout Beats"
+        And the "playlist-songs" list of "Workout Beats" has "2" songs already
+        When the user clicks the "remove-song" button for "Peanut" song in the playlist
         And clicks the "confirm-remove-song" button in the modal
-        Then the "playlist-songs" list of "My Favorites" should display "3" songs
+        Then the "playlist-songs" list of "Workout Beats" should display "1" songs
         And there should be no song named "Many Men"
 
     Scenario: Attempt to Create a Playlist Without Name

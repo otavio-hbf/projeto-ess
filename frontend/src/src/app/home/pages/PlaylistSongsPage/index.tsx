@@ -5,12 +5,14 @@ import SongItem from "../../../../shared/components/SongItem";
 import PlaylistHeader from "../../components/PlaylistHeader";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import styles from "./index.module.css";
+import Cookies from "universal-cookie";
 
 const PlaylistSongsPage = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const playlistId = params.get("playlistId");
   const { service, state } = useContext(PlaylistContext);
+  const cookies = new Cookies();
 
   useEffect(() => {
     service.getPlaylist(playlistId ? playlistId : "");
@@ -37,7 +39,11 @@ const PlaylistSongsPage = () => {
                   className={styles.listItem}
                   data-cy={`song-item-${song.title}`}
                 >
-                  <SongItem song={song} uid="1" playlist_id={playlist.id} />
+                  <SongItem
+                    song={song}
+                    uid={cookies.get("userId").toString()}
+                    playlist_id={playlist.id}
+                  />
                 </div>
               ))}
             </div>

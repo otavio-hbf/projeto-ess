@@ -3,13 +3,18 @@ import { useContext, useEffect } from "react";
 import { FeedContext } from "../../context/FeedContext";
 import styles from "./index.module.css";
 import FeedSongItem from "../../components/FeedSongItem";
+import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 const Feed = () => {
   const { service, state } = useContext(FeedContext);
+  const cookies = new Cookies();
 
   useEffect(() => {
-    service.getSongs();
-    service.getReccomendations("2");
+    if (cookies.get("userId")) {
+      service.getSongs();
+      service.getReccomendations(cookies.get("userId").toString());
+    }
   }, [service]);
 
   return (

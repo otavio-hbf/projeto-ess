@@ -26,6 +26,14 @@ export default class Database {
     Database.getInstance().data = {
       songs: [
         new SongEntity({
+          id: "0",
+          title: "Paper",
+          duration: 130,
+          artist: "Patrick",
+          genre: "MPB",
+          times_ever_played: 48,
+        }),
+        new SongEntity({
           id: "1",
           title: "Peanut",
           duration: 45,
