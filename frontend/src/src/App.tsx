@@ -116,6 +116,10 @@ const mainRoutes = [
     path: "/search",
     Component: Search,
   },
+  {
+    path: "/hot",
+    Component: HotPage,
+  },
 ];
 
 // Rotas para as páginas de autenticação

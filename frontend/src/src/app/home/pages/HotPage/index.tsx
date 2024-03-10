@@ -75,8 +75,12 @@ export const HotPage = () => {
                 style={{ display: "flex", marginTop: "30px" }}
               >
                 {songs.map((song) => (
-                  <li key={song.id} className={styles.songListItem} data-cy="Hot Songs">
-                    <div data-cy="Song Item" >
+                  <li
+                    key={song.id}
+                    className={styles.songListItem}
+                    data-cy="Hot Songs"
+                  >
+                    <div data-cy="Song Item">
                       <FeedSongItem song={song} />
                     </div>
                   </li>

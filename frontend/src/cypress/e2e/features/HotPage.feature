@@ -3,6 +3,9 @@ Feature: Hot page
     I want to see the hot songs,
     So that I can get to know the top songs ever played.
 
+    Background:
+        Given I am logged in with user id "2"
+
     Scenario: User wants to see the top songs
         Given the user is in the "feed" page
         When the user clicks the "HotPage" icon at the navbar
