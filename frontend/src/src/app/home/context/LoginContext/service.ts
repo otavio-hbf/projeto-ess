@@ -35,7 +35,7 @@ export default class PlaylistService {
 
       result.handle({
         onSuccess: (response) => {
-          const users = response.data; 
+          const users = response.data;
 
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USERS,
