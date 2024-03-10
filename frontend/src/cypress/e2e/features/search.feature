@@ -3,6 +3,9 @@ Feature: Search
     I want to be able to search for songs and playlist
     So that I can listen to them
 
+    Background:
+        Given I am logged in with user id "2"
+
     Scenario: User searchs songs by artist's name
         Given The user is in the "search" page
         When The user searches for keyword "Spongebob"

@@ -2,10 +2,11 @@ import { Stack, Typography } from "@mui/joy";
 
 interface HeaderProps {
   title: string;
+  button?: any;
   children?: any;
 }
 
-const Header = ({ children, title }: HeaderProps) => {
+const Header = ({ children, button, title }: HeaderProps) => {
   return (
     <Stack
       direction="row"
@@ -14,7 +15,12 @@ const Header = ({ children, title }: HeaderProps) => {
       spacing={4}
       sx={{ borderRadius: 8 }}
     >
-      <Typography level="h2">{title}</Typography>
+      <Stack direction="row">
+        <Typography level="h2" sx={{ mr: 4 }}>
+          {title}
+        </Typography>
+        {button ?? null}
+      </Stack>
 
       <Stack
         direction="row"

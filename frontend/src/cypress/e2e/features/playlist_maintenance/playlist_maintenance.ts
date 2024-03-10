@@ -54,7 +54,7 @@ Then('there should be no playlist named {string}', (playlistName: string) => {
 
 //Scenario: Remove a Song from Playlist
 Given('the {string} list of {string} has {string} songs already', (container: string, playlistName: string, songCount: string) => {
-    cy.request('PUT', 'http://localhost:5001/api/playlists/addSong/1/9', { userId: "1" });
+    cy.request('PUT', 'http://localhost:5001/api/playlists/addSong/2/9', { userId: "2" });
     cy.get(`[data-cy="playlist-item-${playlistName}"] [data-cy="view-songs"]`).click();
     cy.getDataCy(container).children().should("have.length", parseInt(songCount));
 });
@@ -73,7 +73,7 @@ Then('there should be no song named {string}', (songName: string) => {
 
 //Scenario: Rename a Playlist
 Given('there is an old existing playlist named {string}', (playlistName: string) => {
-    cy.request('POST', 'http://localhost:5001/api/playlists', { name: playlistName, createdBy: "1" });
+    cy.request('POST', 'http://localhost:5001/api/playlists', { name: playlistName, createdBy: "2" });
     cy.get('[data-cy^="playlist-item-"]').contains(playlistName);
 });
 

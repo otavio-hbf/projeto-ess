@@ -10,6 +10,7 @@ import {
 import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import PlaylistModel from "../../models/PlaylistModel";
+import Cookies from "universal-cookie";
 
 interface RenamePlaylistModalProps {
   open: boolean;
@@ -21,6 +22,7 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
   const { service, state } = useContext(PlaylistContext);
   const [playlistName, setPlaylistName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const cookies = new Cookies();
 
   const handleRenamePlaylist = async () => {
     // Verifica se o nome da playlist está vazio
@@ -31,7 +33,11 @@ const RenamePlaylistModal = (props: RenamePlaylistModalProps) => {
 
     props.playlist.name = playlistName;
 
-    service.updatePlaylist(props.playlist.id, props.playlist, "1");
+    service.updatePlaylist(
+      props.playlist.id,
+      props.playlist,
+      cookies.get("userId").toString(),
+    );
 
     props.setOpen(false);
   };

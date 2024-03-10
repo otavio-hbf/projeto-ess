@@ -9,6 +9,7 @@ import {
 } from "@mui/joy";
 import { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
+import Cookies from "universal-cookie";
 
 interface CreatePlaylistModalProps {
   open: boolean;
@@ -19,6 +20,7 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
   const { service } = useContext(PlaylistContext);
   const [playlistName, setPlaylistName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const cookies = new Cookies();
 
   useEffect(() => {
     // Limpa a mensagem de erro ao abrir o modal
@@ -34,7 +36,7 @@ const CreatePlaylistModal = (props: CreatePlaylistModalProps) => {
 
     service.createPlaylist({
       name: playlistName,
-      createdBy: "1",
+      createdBy: cookies.get("userId").toString(),
       private: false,
     });
 

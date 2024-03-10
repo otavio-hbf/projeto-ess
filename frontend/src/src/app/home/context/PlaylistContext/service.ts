@@ -285,4 +285,77 @@ export default class PlaylistService {
       });
     }
   }
+
+  async followPlaylist(playlistId: string, userId: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/follow/${playlistId}`,
+        { userId: userId },
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+
+          // refetch playlist
+          this.getPlaylist(playlistId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_FOLLOW_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
+
+  async unfollowPlaylist(playlistId: string, userId: string): Promise<void> {
+    try {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
+        payload: RequestStatus.loading(),
+      });
+
+      const result = await this.apiService.update(
+        `/playlists/unfollow/${playlistId}`,
+        { userId: userId },
+      );
+
+      result.handle({
+        onSuccess: (response) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
+            payload: RequestStatus.success(response.data),
+          });
+          // refetch playlist
+          this.getPlaylist(playlistId);
+        },
+        onFailure: (error) => {
+          this.dispatch({
+            type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
+            payload: RequestStatus.failure(error),
+          });
+        },
+      });
+    } catch (_) {
+      this.dispatch({
+        type: PlaylistStateActionType.CHANGE_RS_UNFOLLOW_PLAYLIST,
+        payload: RequestStatus.failure(new AppUnknownError()),
+      });
+    }
+  }
 }
