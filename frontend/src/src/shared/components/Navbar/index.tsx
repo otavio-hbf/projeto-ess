@@ -66,6 +66,7 @@ const Navbar = () => {
         title="Hot Page"
         path="/hot"
         icon={mdiFire}
+        dataCy="HotPage"
       />
     </Stack>
   );
@@ -76,12 +77,13 @@ interface NavItemProps {
   icon: string;
   title: string;
   location: Location<any>;
+  dataCy?: string;
 }
 
 const NavItem = (props: NavItemProps) => {
   const isInRoute = props.path == props.location.pathname;
   return (
-    <Link to={props.path}>
+    <Link to={props.path} data-cy={props.dataCy}>
       <Tooltip
         title={props.title}
         variant="outlined"
