@@ -26,7 +26,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const isFollowing =
     playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
   const [creatorName, setCreatorName] = useState<string>("");
-  
+
   useEffect(() => {
     const fetchCreatorName = async () => {
       try {
@@ -40,7 +40,6 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
 
     fetchCreatorName();
   }, [service, playlist.createdBy]);
-  
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
@@ -92,9 +91,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
                 Follow
               </Button>
             ) : null}
-            <Typography level="body-lg">
-              Created by: {creatorName}
-            </Typography>
+            <Typography level="body-lg">Created by: {creatorName}</Typography>
             <Typography
               level="body-lg"
               onClick={() => setFollowersModalOpen(true)}
