@@ -8,6 +8,7 @@ import { HistoryContext } from "../../../app/home/context/HistoryContext";
 import { useContext } from "react";
 import SongDeleteModal from "../../../app/home/components/SongDeleteModal";
 import { useSongContext } from "../../../app/home/context/SongContext";
+import Cookies from "universal-cookie";
 
 interface SongItemProps {
   song?: SongModel;
@@ -23,6 +24,7 @@ const SongItem = (props: SongItemProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { setSelectedSong } = useSongContext();
   const { service } = useContext(HistoryContext);
+  const cookies = new Cookies();
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -35,7 +37,10 @@ const SongItem = (props: SongItemProps) => {
   const handleClick = () => {
     if (props.song) {
       setSelectedSong(props.song);
-      service.createHistory({ user_id: "2", song_id: props.song.id }, "2");
+      service.createHistory(
+        { user_id: cookies.get("userId").toString(), song_id: props.song.id },
+        cookies.get("userId").toString(),
+      );
     }
   };
 

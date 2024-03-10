@@ -12,9 +12,6 @@ import Cookies from "universal-cookie";
  */
 const MostPlayedPage = () => {
   const { service, state } = useContext(HistoryContext);
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const userId = params.get("userId");
   const cookies = new Cookies();
 
   useEffect(() => {
