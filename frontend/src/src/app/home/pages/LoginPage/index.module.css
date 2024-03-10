@@ -1,18 +1,39 @@
 .container {
-  width: 300px;
-  padding: 20px;
+  width: 410px;
+  padding: 30px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: absolute; /* Para centralizar verticalmente */
-  top: 30%; /* Para centralizar verticalmente */
+  top: 50%; /* Para centralizar verticalmente */
   left: 50%; /* Para centralizar horizontalmente */
   transform: translate(-50%, -50%); /* Para centralizar verticalmente e horizontalmente */
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
+}
+
+.data{
+  height: 45px;
+  width: 100%;
+  margin: 40px 0;
+  font-size: 18px;
+}
+
+form .data input{
+  height: 100%;
+  width: 100%;
+  padding-left: 10px;
+  font-size: 17px;
+  border: 1px solid silver;
 }
 
 .form-group {
@@ -31,15 +52,25 @@ input[type="password"] {
   border-radius: 4px;
 }
 
-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 0;
-  border-radius: 4px;
+input[type="submit"] {
+  margin: 30px 0;
+  height: 45px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+input[type="submit"]:hover {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.link{
+  text-align: center;
+}
+.link a{
+  color: #3498db;
+  text-decoration: none;
+}
+.link a:hover{
+  text-decoration: underline;
 }
