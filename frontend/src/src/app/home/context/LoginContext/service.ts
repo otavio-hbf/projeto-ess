@@ -35,7 +35,7 @@ export default class PlaylistService {
 
       result.handle({
         onSuccess: (response) => {
-          const users = response.data; //TALVEZ ESTEJA ERRADO E EU DEVA USAR MAP (VER NO PLAYLISTSERVICE)
+          const users = response.data;
 
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USERS,
@@ -70,6 +70,7 @@ export default class PlaylistService {
       };
 
       const result = await this.apiService.post(`/users/login`, body);
+      console.log(result);
 
       result.handle({
         onSuccess: (response) => {
@@ -88,7 +89,7 @@ export default class PlaylistService {
           });
         },
         onFailure: (error) => {
-          alert("Falha no Login!");
+          alert("Usuário e/ou senha incorretos, tente novamente");
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_GET_USER,
             payload: RequestStatus.failure(error),
@@ -132,7 +133,9 @@ export default class PlaylistService {
           });
         },
         onFailure: (error) => {
-          alert("Ops! Algo deu errado no cadastro");
+          alert(
+            "Ops! Este email já está cadastrado, tente novamente com outro email.",
+          );
 
           this.dispatch({
             type: LoginStateActionType.CHANGE_RS_CREATE_USER,
