@@ -13,12 +13,12 @@ interface PlaylistProps {
 }
 
 const PlaylistHeader = ({ playlist }: PlaylistProps) => {
-  
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
-  const isFollowing = playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
+  const isFollowing =
+    playlist.followers.indexOf(cookies.get("userId").toString()) > -1;
 
   const handleAddFakeSong = (evt) => {
     let randomSongId: string;
