@@ -1,12 +1,13 @@
 import Header from "../../../../shared/components/Header";
 import { mdiBug, mdiRename } from "@mdi/js";
 import Icon from "@mdi/react";
-import { Button, Alert } from "@mui/joy";
+import { Button, Alert, Typography, Stack } from "@mui/joy";
 import { useContext, useState } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import RenamePlaylistModal from "../RenamePlaylistModal";
 import PlaylistModel from "../../models/PlaylistModel";
 import Cookies from "universal-cookie";
+import FollowersModal from "../FollowersModal";
 
 interface PlaylistProps {
   playlist: PlaylistModel;
@@ -15,6 +16,7 @@ interface PlaylistProps {
 const PlaylistHeader = ({ playlist }: PlaylistProps) => {
   const { service } = useContext(PlaylistContext);
   const [renamePlaylistOpen, setRenamePlaylistOpen] = useState<boolean>(false);
+  const [followersModalOpen, setFollowersModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const cookies = new Cookies();
   const isFollowing =
@@ -46,29 +48,41 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
       <Header
         title={playlist.name}
         button={
-          isFollowing ? (
-            <Button
-              onClick={(evt) => {
-                handleUnfollow(evt);
-              }}
-              variant="outlined"
-              color="warning"
-              data-cy="follow-playlist"
+          <Stack direction="row" spacing={3} alignItems="center">
+            {isFollowing ? (
+              <Button
+                onClick={(evt) => {
+                  handleUnfollow(evt);
+                }}
+                variant="outlined"
+                color="warning"
+                data-cy="follow-playlist"
+              >
+                Unfollow
+              </Button>
+            ) : playlist.createdBy !== cookies.get("userId").toString() ? (
+              <Button
+                onClick={(evt) => {
+                  handleFollow(evt);
+                }}
+                variant="outlined"
+                color="primary"
+                data-cy="follow-playlist"
+              >
+                Follow
+              </Button>
+            ) : null}
+            <Typography
+              level="body-lg"
+              onClick={() => setFollowersModalOpen(true)}
+              sx={{ cursor: "pointer" }}
             >
-              Unfollow
-            </Button>
-          ) : playlist.createdBy !== cookies.get("userId").toString() ? (
-            <Button
-              onClick={(evt) => {
-                handleFollow(evt);
-              }}
-              variant="outlined"
-              color="primary"
-              data-cy="follow-playlist"
-            >
-              Follow
-            </Button>
-          ) : null
+              Followers: {playlist?.followers.length}
+            </Typography>
+            <Typography level="body-lg">
+              Contributors: {playlist?.contributors.length}
+            </Typography>
+          </Stack>
         }
       >
         {errorMessage && <Alert>{errorMessage}</Alert>}
@@ -97,6 +111,11 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
       <RenamePlaylistModal
         open={renamePlaylistOpen}
         setOpen={setRenamePlaylistOpen}
+        playlist={playlist}
+      />
+      <FollowersModal
+        open={followersModalOpen}
+        setOpen={setFollowersModalOpen}
         playlist={playlist}
       />
     </>
