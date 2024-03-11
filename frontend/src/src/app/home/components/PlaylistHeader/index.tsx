@@ -96,6 +96,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
               level="body-lg"
               onClick={() => setFollowersModalOpen(true)}
               sx={{ cursor: "pointer" }}
+              data-cy="followers-count"
             >
               Followers: {playlist?.followers.length}
             </Typography>
@@ -103,6 +104,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
               level="body-lg"
               onClick={() => setContributorsModalOpen(true)}
               sx={{ cursor: "pointer" }}
+              data-cy="contributors-count"
             >
               Contributors: {playlist?.contributors.length}
             </Typography>

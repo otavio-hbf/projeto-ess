@@ -105,12 +105,16 @@ const ContributorsModal = (props: ContributorsModalProps) => {
           </Typography>
 
           {contributorsData.map((contributor, index) => (
-            <div key={index} style={{ display: "flex", alignItems: "center" }}>
+            <div
+              key={index}
+              style={{ display: "flex", alignItems: "center" }}
+              data-cy="contributor-name"
+            >
               <Typography sx={{ mb: 1 }}>{contributor.name}</Typography>
               {playlist.createdBy === cookies.get("userId").toString() && (
                 <IconButton
                   onClick={() => handleRemoveContributor(contributor.id)}
-                  //size="small"
+                  data-cy="remove-contributor"
                 >
                   <Icon
                     path={mdiCloseBox}
@@ -128,6 +132,7 @@ const ContributorsModal = (props: ContributorsModalProps) => {
               onClick={handleAddFakeContributor}
               variant="outlined"
               color="primary"
+              data-cy="add-contributor"
             >
               +Add random contributor
             </Button>
