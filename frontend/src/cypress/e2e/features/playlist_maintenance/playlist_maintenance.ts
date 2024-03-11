@@ -54,7 +54,7 @@ Then('there should be no playlist named {string}', (playlistName: string) => {
 
 //Scenario: Remove a Song from Playlist
 Given('the {string} list of {string} has {string} songs already', (container: string, playlistName: string, songCount: string) => {
-    cy.request('PUT', 'http://localhost:5001/api/playlists/addSong/4/9', { userId: "2" });
+    //cy.request('PUT', 'http://localhost:5001/api/playlists/addSong/4/9', { userId: "2" });
     cy.get(`[data-cy="playlist-item-${playlistName}"] [data-cy="view-songs"]`).click();
     cy.getDataCy(container).children().should("have.length", parseInt(songCount));
 });
