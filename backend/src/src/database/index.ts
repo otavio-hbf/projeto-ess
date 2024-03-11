@@ -246,7 +246,7 @@ export default class Database {
         new PlaylistEntity({
           id: "4",
           name: "Workout Beats",
-          songs: ["1", "3", "9"], // Song IDs ranging from 1 to 3
+          songs: ["1", "3"], // Song IDs ranging from 1 to 3
           createdBy: "2", // User ID 2 created this playlist
           private: true,
           followers: [],

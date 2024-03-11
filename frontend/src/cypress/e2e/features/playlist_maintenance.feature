@@ -44,10 +44,10 @@ Feature: Playlist Management
         Given the user is in the "MyPlaylists" page
         And there is an existing playlist named "Workout Beats"
         And the "playlist-songs" list of "Workout Beats" has "2" songs already
-        When the user clicks the "remove-song" button for "Many Men" song in the playlist
+        When the user clicks the "remove-song" button for "Peanut" song in the playlist
         And clicks the "confirm-remove-song" button in the modal
         Then the "playlist-songs" list of "Workout Beats" should display "1" songs
-        And there should be no song named "Many Men"
+        And there should be no song named "Peanut"
 
     Scenario: Attempt to Create a Playlist Without Name
         Given the user is in the "MyPlaylists" page
