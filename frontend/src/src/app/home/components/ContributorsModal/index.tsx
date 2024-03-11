@@ -1,4 +1,12 @@
-import { Modal, ModalClose, Sheet, Typography, Button, Alert, IconButton } from "@mui/joy";
+import {
+  Modal,
+  ModalClose,
+  Sheet,
+  Typography,
+  Button,
+  Alert,
+  IconButton,
+} from "@mui/joy";
 import PlaylistModel from "../../models/PlaylistModel";
 import UserModel from "../../models/UserModel";
 import { useContext, useEffect, useState } from "react";
@@ -57,11 +65,7 @@ const ContributorsModal = (props: ContributorsModalProps) => {
 
   const handleRemoveContributor = (contributorId) => {
     const userId = cookies.get("userId").toString();
-    service.removeContributorToPlaylist(
-      playlist.id,
-      contributorId,
-      userId
-    )
+    service.removeContributorToPlaylist(playlist.id, contributorId, userId);
     props.setOpen(false);
   };
 
@@ -102,16 +106,19 @@ const ContributorsModal = (props: ContributorsModalProps) => {
 
           {contributorsData.map((contributor, index) => (
             <div key={index} style={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{ mb: 1 }}>
-                {contributor.name}
-              </Typography>
+              <Typography sx={{ mb: 1 }}>{contributor.name}</Typography>
               {playlist.createdBy === cookies.get("userId").toString() && (
                 <IconButton
-                onClick={() => handleRemoveContributor(contributor.id)}
-                //size="small"
-              >
-                <Icon path={mdiCloseBox} size={1} color="red" style={{ display: "flex", alignItems: "center" }} />
-              </IconButton>
+                  onClick={() => handleRemoveContributor(contributor.id)}
+                  //size="small"
+                >
+                  <Icon
+                    path={mdiCloseBox}
+                    size={1}
+                    color="red"
+                    style={{ display: "flex", alignItems: "center" }}
+                  />
+                </IconButton>
               )}
             </div>
           ))}
