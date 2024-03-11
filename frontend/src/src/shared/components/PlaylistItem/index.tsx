@@ -41,7 +41,7 @@ const PlaylistItem = ({ playlist, userId }: PlaylistItemProps) => {
           </Sheet>
           <Stack justifyContent={"space-evenly"}>
             <Typography level="h2">{playlist?.name}</Typography>
-            <Link to={`/playlist?userId=${userId}&playlistId=${playlist?.id}`}>
+            <Link to={`/playlist?playlistId=${playlist?.id}`}>
               <IconButton data-cy="view-songs">
                 <Icon path={mdiPlayBoxMultiple} size={3} color="white" />
               </IconButton>

@@ -66,7 +66,7 @@ const FollowersModal = (props: FollowersModalProps) => {
         </Typography>
 
         {followersData.map((follower, index) => (
-          <Typography key={index} sx={{ mb: 1 }}>
+          <Typography key={index} sx={{ mb: 1 }} data-cy="followers-modal">
             {follower.name}
           </Typography>
         ))}

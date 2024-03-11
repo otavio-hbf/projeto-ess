@@ -75,7 +75,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
                 }}
                 variant="outlined"
                 color="warning"
-                data-cy="follow-playlist"
+                data-cy="unfollow-playlist"
               >
                 Unfollow
               </Button>
@@ -96,6 +96,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
               level="body-lg"
               onClick={() => setFollowersModalOpen(true)}
               sx={{ cursor: "pointer" }}
+              data-cy="followers-count"
             >
               Followers: {playlist?.followers.length}
             </Typography>
@@ -103,6 +104,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
               level="body-lg"
               onClick={() => setContributorsModalOpen(true)}
               sx={{ cursor: "pointer" }}
+              data-cy="contributors-count"
             >
               Contributors: {playlist?.contributors.length}
             </Typography>
@@ -110,27 +112,30 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
         }
       >
         {errorMessage && <Alert>{errorMessage}</Alert>}
-
-        <Button
-          onClick={(evt) => {
-            handleAddFakeSong(evt);
-          }}
-          variant="outlined"
-          color="warning"
-          data-cy="add-song"
-          startDecorator={<Icon path={mdiBug} size={1} />}
-        >
-          Add fake song
-        </Button>
-        <Button
-          onClick={() => setRenamePlaylistOpen(true)}
-          variant="outlined"
-          color="primary"
-          data-cy="rename-playlist"
-          startDecorator={<Icon path={mdiRename} size={1} />}
-        >
-          Renomear Playlist
-        </Button>
+        {cookies.get("userId").toString() == playlist.createdBy ? (
+          <Button
+            onClick={(evt) => {
+              handleAddFakeSong(evt);
+            }}
+            variant="outlined"
+            color="warning"
+            data-cy="add-song"
+            startDecorator={<Icon path={mdiBug} size={1} />}
+          >
+            Add fake song
+          </Button>
+        ) : null}
+        {cookies.get("userId").toString() == playlist.createdBy ? (
+          <Button
+            onClick={() => setRenamePlaylistOpen(true)}
+            variant="outlined"
+            color="primary"
+            data-cy="rename-playlist"
+            startDecorator={<Icon path={mdiRename} size={1} />}
+          >
+            Rename Playlist
+          </Button>
+        ) : null}
       </Header>
       <RenamePlaylistModal
         open={renamePlaylistOpen}

@@ -45,6 +45,10 @@ export const PlaylistProvider = ({ children }: PlaylistProviderProps) => {
     deletePlaylistRequestStatus: RequestStatus.idle(),
     addSongPlaylistRequestStatus: RequestStatus.idle(),
     removeSongPlaylistRequestStatus: RequestStatus.idle(),
+    followPlaylistRequestStatus: RequestStatus.idle(),
+    unfollowPlaylistRequestStatus: RequestStatus.idle(),
+    addContributorPlaylistRequestStatus: RequestStatus.idle(),
+    removeContributorPlaylistRequestStatus: RequestStatus.idle(),
   });
 
   const prevState = usePrevious(state);
