@@ -4,7 +4,6 @@ import PlaylistItem from "../../../../shared/components/PlaylistItem"; // Import
 import PlaylistHeader from "../../components/UserPlaylistsOptions"; // Importando o componente PlaylistHeader
 import { PlaylistContext } from "../../context/PlaylistContext";
 import styles from "./index.module.css";
-import { useLocation } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 /**
@@ -12,8 +11,6 @@ import Cookies from "universal-cookie";
  */
 const PlaylistPage = () => {
   const { service, state } = useContext(PlaylistContext);
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
   const cookies = new Cookies();
 
   useEffect(() => {
