@@ -1,9 +1,11 @@
-import { Modal, ModalClose, Sheet, Typography, Button, Alert } from "@mui/joy";
+import { Modal, ModalClose, Sheet, Typography, Button, Alert, IconButton } from "@mui/joy";
 import PlaylistModel from "../../models/PlaylistModel";
 import UserModel from "../../models/UserModel";
 import { useContext, useEffect, useState } from "react";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import Cookies from "universal-cookie";
+import Icon from "@mdi/react";
+import { mdiCloseBox } from "@mdi/js";
 
 interface ContributorsModalProps {
   open: boolean;
@@ -17,7 +19,6 @@ const ContributorsModal = (props: ContributorsModalProps) => {
   const [contributorsData, setContributorsData] = useState<UserModel[]>([]);
   const cookies = new Cookies();
   const [errorMessage, setErrorMessage] = useState<string>("");
-  
 
   useEffect(() => {
     const fetchContributorsData = async () => {
@@ -38,16 +39,30 @@ const ContributorsModal = (props: ContributorsModalProps) => {
   const handleAddFakeContributor = (evt) => {
     let randomContributorId: string;
     randomContributorId = ((evt.clientX % 3) + 1).toString();
-    const userId = cookies.get("userId");
+    const userId = cookies.get("userId").toString();
 
     if (playlist.contributors.includes(randomContributorId)) {
       setErrorMessage("The user is already a contributor");
-    } else if (cookies.get("userId").toString() === randomContributorId){
+    } else if (cookies.get("userId").toString() === randomContributorId) {
       setErrorMessage("The owner can't add itself as contributor");
     } else {
-      service.addContributorToPlaylist(playlist.id, randomContributorId, userId.toString());
+      service.addContributorToPlaylist(
+        playlist.id,
+        randomContributorId,
+        userId.toString(),
+      );
       setErrorMessage("");
     }
+  };
+
+  const handleRemoveContributor = (contributorId) => {
+    const userId = cookies.get("userId").toString();
+    service.removeContributorToPlaylist(
+      playlist.id,
+      contributorId,
+      userId
+    )
+    props.setOpen(false);
   };
 
   return (
@@ -86,20 +101,30 @@ const ContributorsModal = (props: ContributorsModalProps) => {
           </Typography>
 
           {contributorsData.map((contributor, index) => (
-            <Typography key={index} sx={{ mb: 1 }}>
-              {contributor.name}
-            </Typography>
+            <div key={index} style={{ display: "flex", alignItems: "center" }}>
+              <Typography sx={{ mb: 1 }}>
+                {contributor.name}
+              </Typography>
+              {playlist.createdBy === cookies.get("userId").toString() && (
+                <IconButton
+                onClick={() => handleRemoveContributor(contributor.id)}
+                //size="small"
+              >
+                <Icon path={mdiCloseBox} size={1} color="red" style={{ display: "flex", alignItems: "center" }} />
+              </IconButton>
+              )}
+            </div>
           ))}
           {errorMessage && <Alert>{errorMessage}</Alert>}
-          {playlist.createdBy !== cookies.get("userId").toString() ? 
-            null : (<Button
+          {playlist.createdBy !== cookies.get("userId").toString() ? null : (
+            <Button
               onClick={handleAddFakeContributor}
               variant="outlined"
               color="primary"
-              data-cy="confirm-rename-playlist"
             >
               +Add random contributor
-            </Button>)}
+            </Button>
+          )}
         </Sheet>
       </Modal>
     </>
@@ -107,3 +132,9 @@ const ContributorsModal = (props: ContributorsModalProps) => {
 };
 
 export default ContributorsModal;
+
+/*
+<IconButton onClick={handleOpenDeleteModal}
+  <Icon path={mdiCloseBox} size={1.5} color="red" />
+</IconButton>
+*/

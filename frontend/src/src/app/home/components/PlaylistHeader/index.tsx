@@ -75,7 +75,7 @@ const PlaylistHeader = ({ playlist }: PlaylistProps) => {
                 }}
                 variant="outlined"
                 color="warning"
-                data-cy="follow-playlist"
+                data-cy="unfollow-playlist"
               >
                 Unfollow
               </Button>
